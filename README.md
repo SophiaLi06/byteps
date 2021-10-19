@@ -1,4 +1,4 @@
-# BytePS
+# BytePS (Forked by SophiaLi)
 
 [![Build Status](https://travis-ci.org/bytedance/byteps.svg?branch=master)](https://travis-ci.org/bytedance/byteps)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
