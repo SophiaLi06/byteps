@@ -164,7 +164,7 @@ def worker(local_rank, local_size, command, allocation=None):
     if allocation:
         print("enable NUMA finetune...")
         retval = subprocess.call(
-            ["dpkg", "-s", "numactl"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            ["rpm", "-q", "numactl"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         if retval == 0:
             numa = "numactl --physcpubind "
             for cpu_set in allocation:
