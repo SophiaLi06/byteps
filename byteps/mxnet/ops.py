@@ -115,10 +115,19 @@ def byteps_declare_tensor(name, **kwargs):
         else:
             raise ValueError("Invalid %s of type %s of %s" %
                              (v, type(v), name))
-
+    ###Minghao
+    #print("C_LIB is:")
+    #print(dll_path)
+    #try:
+    ###
     check_call(MXNET_LIB_CTYPES.byteps_mxnet_declare_tensor(
         c_str(name),
         ctypes.c_int(len(args)),
         _create_c_style_string_array(list(args.keys())),
         _create_c_style_string_array(list(args.values()))
     ))
+    #except:
+    #    print(name)
+    #    print(len(args))
+    #    print(args.keys())
+    #    print(args.values())
