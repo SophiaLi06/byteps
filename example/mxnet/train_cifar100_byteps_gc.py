@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright 2019 Bytedance Inc. or its affiliates. All Rights Reserved.
 # Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #

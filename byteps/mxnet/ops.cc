@@ -17,6 +17,7 @@
 #include "ops.h"
 
 #include <atomic>
+#include <stdio.h>
 
 #include "../common/logging.h"
 #include "../common/operations.h"
@@ -135,26 +136,34 @@ extern "C" int byteps_mxnet_push_pull_async(NDArray* tensor, char* name,
   MX_API_END();
 }
 
-extern "C" void byteps_mxnet_declare_tensor(char* name, int num_args,
+/* Minghao: changed return type from void to int*/
+extern "C" int byteps_mxnet_declare_tensor(char* name, int num_args,
                                             char** args_keys,
                                             char** args_vals) {
   std::string tensor_name = GetOpName("byteps", name);
   common::IsTensorDeclared(tensor_name);
+  //printf("here1\n");
 
   std::unordered_map<std::string, std::string> kwargs;
   std::string key, val;
   std::string::size_type pos;
+  //printf("here2\n");
+  //printf("number of arguments %d\n", num_args);
   for (int i = 0; i < num_args; ++i) {
     key = args_keys[i];
     val = args_vals[i];
     kwargs[key] = val;
   }
+  //printf("here3\n");
 
   if (num_args > 0) {
     common::RegisterCompressor(tensor_name, kwargs);
   }
+  //printf("here4\n");
 
-  return;
+  //Minghao
+  //return;
+  return 0;
 }
 
 }  // namespace mxnet

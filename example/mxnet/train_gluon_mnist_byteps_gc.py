@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright 2019 Bytedance Inc. or its affiliates. All Rights Reserved.
 # Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
@@ -12,8 +14,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""This file is modified from `horovod/examples/mxnet_mnist.py`, using gluon
-style MNIST dataset and data_loader."""
+# This file is modified from horovod/examples/mxnet_mnist.py, using gluon
+# style MNIST dataset and data_loader.
+
 import argparse
 import logging
 import subprocess

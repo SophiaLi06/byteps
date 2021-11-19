@@ -131,3 +131,10 @@ def byteps_declare_tensor(name, **kwargs):
     #    print(len(args))
     #    print(args.keys())
     #    print(args.values())
+    #print(MXNET_LIB_CTYPES.byteps_mxnet_declare_tensor(
+    #    c_str(name),
+    #    ctypes.c_int(len(args)),
+    #    _create_c_style_string_array(list(args.keys())),
+    #    _create_c_style_string_array(list(args.values()))
+    #))
+
