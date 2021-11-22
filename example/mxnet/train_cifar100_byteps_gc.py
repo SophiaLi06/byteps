@@ -288,6 +288,11 @@ def main():
                 name, train_acc = train_metric.get()
                 iteration += 1
 
+                ##### Minghao
+                if i % 100 == 0:
+                    logger.info('[Epoch %d Batch %d] Training: %s=%f' %
+                        (epoch, i, name, acc))
+
             train_loss /= batch_size * num_batch
             name, train_acc = train_metric.get()
             throughput = int(batch_size * nworker * i / (time.time() - tic))
