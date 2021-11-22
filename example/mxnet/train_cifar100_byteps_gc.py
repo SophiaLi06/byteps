@@ -218,25 +218,25 @@ def main():
         net.initialize(mx.init.Xavier(), ctx=ctx)
 
         #####Minghao
-        train_data = gluon.data.DataLoader(
-            gluon.data.vision.CIFAR100(train=True, transform=transform_train),
-            batch_size=batch_size, shuffle=True, last_batch='discard',
-            num_workers=num_workers)
-
-        val_data = gluon.data.DataLoader(
-            gluon.data.vision.CIFAR100(train=False, transform=transform_test),
-            batch_size=batch_size, shuffle=False, num_workers=num_workers)
-
         # train_data = gluon.data.DataLoader(
-        #     gluon.data.vision.CIFAR100(train=True).shard(
-        #         nworker, rank).transform_first(transform_train),
+        #     gluon.data.vision.CIFAR100(train=True, transform=transform_train),
         #     batch_size=batch_size, shuffle=True, last_batch='discard',
         #     num_workers=num_workers)
 
         # val_data = gluon.data.DataLoader(
-        #     gluon.data.vision.CIFAR100(train=False).shard(
-        #         nworker, rank).transform_first(transform_test),
+        #     gluon.data.vision.CIFAR100(train=False, transform=transform_test),
         #     batch_size=batch_size, shuffle=False, num_workers=num_workers)
+
+        train_data = gluon.data.DataLoader(
+            gluon.data.vision.CIFAR100(train=True).shard(
+                nworker, rank).transform_first(transform_train),
+            batch_size=batch_size, shuffle=True, last_batch='discard',
+            num_workers=num_workers)
+
+        val_data = gluon.data.DataLoader(
+            gluon.data.vision.CIFAR100(train=False).shard(
+                nworker, rank).transform_first(transform_test),
+            batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
         params = net.collect_params()
 
