@@ -291,7 +291,7 @@ def main():
                 ##### Minghao
                 if i % 100 == 0:
                     logger.info('[Epoch %d Batch %d] Training: %s=%f' %
-                        (epoch, i, name, acc))
+                        (epoch, i, name, train_acc))
 
             train_loss /= batch_size * num_batch
             name, train_acc = train_metric.get()
