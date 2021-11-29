@@ -212,6 +212,9 @@ for epoch in range(args.epochs):
     bps.byteps_push_pull(acc, name="acc", is_average=False)
     acc /= bps.size()
     train_acc, val_acc = acc[0].asscalar(), acc[1].asscalar()
+    ###########################
+    # Minghao: only print train and validation if rank is 0 (i.e., root)
+    #the process from which parameters will be broadcasted to all other processes.
     if bps.rank() == 0:
         logger.info('Epoch[%d]\tTrain: %s=%f\tValidation: %s=%f', epoch, name,
                     train_acc, name, val_acc)

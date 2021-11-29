@@ -221,10 +221,17 @@ class DistributedTrainer(mx.gluon.Trainer):
             self._intra_compressors[param.name] = copy.deepcopy(
                 self._intra_compressor)
             if param.grad_req != 'null':
+                #########################
+                # Minghao: filter out parameters for the compressor
                 byteps_params = dict(
                     filter(lambda attr: attr[0].startswith(
                         "byteps_",), param.__dict__.items())
                 )
+                #########################
+                # Minghao:
+                print("compressor related parameters:")
+                print(byteps_params)
+                ########################
                 byteps_declare_tensor("gradient_" + str(i), **byteps_params)
 
     def __del__(self):
