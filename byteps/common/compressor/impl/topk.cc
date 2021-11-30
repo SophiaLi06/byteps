@@ -79,17 +79,17 @@ tensor_t TopkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // printf("_buf pointer: %p \n", dst);
 
   //print this->_k * sizeof(pair_t) byteps starting from dst
-  for (size_t i = 0; i < this._k; i++){
-    std::cout << "index: " << dst[2 * i] << "\n";
-    std::cout << "value: " << dst[2 * i + 1] << "\n";
-  }
+  // for (size_t i = 0; i < this->_k; i++){
+  //   std::cout << "index: " << dst[2 * i] << "\n";
+  //   std::cout << "value: " << reinterpret_cast<float*>(dst)[2 * i + 1] << "\n";
+  // }
 
   /////////////
   return {dst, this->_k * sizeof(pair_t)};
 }
 
 tensor_t TopkCompressor::Compress(tensor_t grad) {
-  std::cout << "gradient dtype: " << grad.dtype << "\n";
+  //std::cout << "gradient dtype: " << grad.dtype << "\n";
   std::cout << "gradient size: " << grad.size << "\n";
   //print original gradients
   // for (size_t i = 0; i < grad.size; i++){
@@ -120,6 +120,8 @@ tensor_t TopkCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     auto& pair = ptr[i];
     dst[pair.first] = pair.second;
   }
+
+  std::cout << "decompress to " << _size << "gradients\n";
 
   return {dst, _size};
 }
