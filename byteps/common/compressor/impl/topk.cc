@@ -74,17 +74,27 @@ tensor_t TopkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
     }
   }
   /* Minghao */
-  printf("size of the compressed data is %d \n", this->_k * sizeof(pair_t));
-  std::cout << "size of index_t: " << sizeof(index_t) << "\n";
-  printf("_buf pointer: %p \n", dst);
-  //TODO: read and print this->_k * sizeof(pair_t) byteps starting from dst
-  
+  // printf("size of the compressed data is %d \n", this->_k * sizeof(pair_t));
+  // std::cout << "size of index_t: " << sizeof(index_t) << "\n";
+  // printf("_buf pointer: %p \n", dst);
+
+  //print this->_k * sizeof(pair_t) byteps starting from dst
+  for (size_t i = 0; i < this._k; i++){
+    std::cout << "index: " << dst[2 * i] << "\n";
+    std::cout << "value: " << dst[2 * i + 1] << "\n";
+  }
 
   /////////////
   return {dst, this->_k * sizeof(pair_t)};
 }
 
 tensor_t TopkCompressor::Compress(tensor_t grad) {
+  std::cout << "gradient dtype: " << grad.dtype << "\n";
+  std::cout << "gradient size: " << grad.size << "\n";
+  //print original gradients
+  // for (size_t i = 0; i < grad.size; i++){
+  //   std::cout << "gradient data " << i << ": " << grad.data[i] << "\n";
+  // }
   COMPRESS_IMPL_SWITCH(grad.dtype, CompressImpl, _buf.get(), grad.data,
                        grad.size);
 }
