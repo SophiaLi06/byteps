@@ -15,6 +15,9 @@
 
 #include <cstring>
 #include <queue>
+#include <time.h>
+#include <stdio.h>
+#include <iostream>
 
 #include "../compressor_registry.h"
 #include "topk.h"
@@ -36,6 +39,8 @@ CompressorRegistry::Register reg(
       } else {
         k = static_cast<unsigned>(factor);
       }
+      /* Minghao */
+      printf("TopK compressor size: %d, k: %d\n", size, k);
       return std::unique_ptr<Compressor>(new TopkCompressor(size, dtype, k));
     });
 }
@@ -68,7 +73,14 @@ tensor_t TopkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
       }
     }
   }
+  /* Minghao */
+  printf("size of the compressed data is %d \n", this->_k * sizeof(pair_t));
+  std::cout << "size of index_t: " << sizeof(index_t) << "\n";
+  printf("_buf pointer: %p \n", dst);
+  //TODO: read and print this->_k * sizeof(pair_t) byteps starting from dst
+  
 
+  /////////////
   return {dst, this->_k * sizeof(pair_t)};
 }
 
