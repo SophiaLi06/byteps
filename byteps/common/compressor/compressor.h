@@ -60,8 +60,8 @@ class Compressor {
   virtual ~Compressor() {
     //std::cout << "Compress time: " << _compress_time << "\n";
     //std::cout << "Decompress time: " << _decompress_time << "\n";
-    std::cout << "Compress time: " << _compress_time << " milliseconds\n";
-    std::cout << "Decompress time: " << _decompress_time << " milliseconds\n";
+    std::cout << "Compress time: " << _compress_time << " nanoseconds\n";
+    std::cout << "Decompress time: " << _decompress_time << " nanoseconds\n";
   }
   //virtual ~Compressor() = default;
 
@@ -139,8 +139,8 @@ class Compressor {
   // is an unsigned int enough?
   unsigned int _compress_call;
   unsigned int _decompress_call;
-  unsigned int _compress_time;
-  unsigned int _decompress_time;
+  unsigned long long _compress_time;
+  unsigned long long _decompress_time;
 };
 
 }  // namespace compressor
