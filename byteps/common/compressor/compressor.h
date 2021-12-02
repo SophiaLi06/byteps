@@ -55,10 +55,13 @@ class Compressor {
  public:
  /* Minghao */
   Compressor(size_t size, DataType dtype)
-      : _size(size), _dtype(dtype), _buf(new byte_t[size]), _compress_time(0), _decompress_time(0){};
+      : _size(size), _dtype(dtype), _buf(new byte_t[size]),\
+       _compress_call(0), _decompress_call(0), _compress_time(0), _decompress_time(0){};
   virtual ~Compressor() {
-    std::cout << "Compress time: " << _compress_time << "\n";
-    std::cout << "Decompress time: " << _decompress_time << "\n";
+    //std::cout << "Compress time: " << _compress_time << "\n";
+    //std::cout << "Decompress time: " << _decompress_time << "\n";
+    std::cout << "Compress time: " << _compress_time << " milliseconds\n";
+    std::cout << "Decompress time: " << _decompress_time << " milliseconds\n";
   }
   //virtual ~Compressor() = default;
 
@@ -134,6 +137,8 @@ class Compressor {
   /* Minghao */
   /*! \brief time spent compressing and decompressing */
   // is an unsigned int enough?
+  unsigned int _compress_call;
+  unsigned int _decompress_call;
   unsigned int _compress_time;
   unsigned int _decompress_time;
 };

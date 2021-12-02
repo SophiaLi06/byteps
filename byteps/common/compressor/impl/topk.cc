@@ -96,10 +96,14 @@ tensor_t TopkCompressor::Compress(tensor_t grad) {
   //   std::cout << "gradient data " << i << ": " << grad.data[i] << "\n";
   // }
   /* Minghao */
-  this->_compress_time++;
+  //this->_compress_call++;
+  auto start = chrono::steady_clock::now();
   ///////////////
   COMPRESS_IMPL_SWITCH(grad.dtype, CompressImpl, _buf.get(), grad.data,
                        grad.size);
+  /* Minghao */
+  auto end = chrono::steady_clock::now();
+  this->_compress_time += (chrono::duration_cast<chrono::milliseconds>(end - start).count());
 }
 
 template <typename index_t, typename scalar_t>
@@ -137,10 +141,14 @@ tensor_t TopkCompressor::Decompress(tensor_t compressed) {
   auto dst = compressed.data;
 #endif
   /* Minghao */
-  this->_decompress_time++;
+  //this->_decompress_call++;
+  auto start = chrono::steady_clock::now();
   ///////////////
   DECOMPRESS_IMPL_SWITCH(_dtype, DecompressImpl, dst, compressed.data,
                          compressed.size);
+  /* Minghao */
+  auto end = chrono::steady_clock::now();
+  this->_decompress_time += (chrono::duration_cast<chrono::milliseconds>(end - start).count());
 }
 
 template <typename index_t, typename scalar_t>
