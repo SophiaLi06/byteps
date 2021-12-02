@@ -95,6 +95,9 @@ tensor_t TopkCompressor::Compress(tensor_t grad) {
   // for (size_t i = 0; i < grad.size; i++){
   //   std::cout << "gradient data " << i << ": " << grad.data[i] << "\n";
   // }
+  /* Minghao */
+  this->_compress_time++;
+  ///////////////
   COMPRESS_IMPL_SWITCH(grad.dtype, CompressImpl, _buf.get(), grad.data,
                        grad.size);
 }
@@ -133,6 +136,9 @@ tensor_t TopkCompressor::Decompress(tensor_t compressed) {
 #else
   auto dst = compressed.data;
 #endif
+  /* Minghao */
+  this->_decompress_time++;
+  ///////////////
   DECOMPRESS_IMPL_SWITCH(_dtype, DecompressImpl, dst, compressed.data,
                          compressed.size);
 }

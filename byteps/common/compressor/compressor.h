@@ -17,6 +17,7 @@
 #define BYTEPS_COMPRESSOR_COMPRESSOR_H
 
 #include <memory>
+#include <iostream>
 
 #include "../common.h"
 #include "../logging.h"
@@ -52,9 +53,14 @@ namespace compressor {
  */
 class Compressor {
  public:
+ /* Minghao */
   Compressor(size_t size, DataType dtype)
-      : _size(size), _dtype(dtype), _buf(new byte_t[size]){};
-  virtual ~Compressor() = default;
+      : _size(size), _dtype(dtype), _buf(new byte_t[size]), _compress_time(0), _decompress_time(0){};
+  virtual ~Compressor() {
+    std::cout << "Compress time: " << _compress_time << "\n";
+    std::cout << "Decompress time: " << _decompress_time << "\n";
+  }
+  //virtual ~Compressor() = default;
 
   /*!
    * \brief Compress function
@@ -124,6 +130,12 @@ class Compressor {
 
   /*! \brief buffer to store compressed grad */
   std::unique_ptr<byte_t[]> _buf;
+
+  /* Minghao */
+  /*! \brief time spent compressing and decompressing */
+  // is an unsigned int enough?
+  unsigned int _compress_time;
+  unsigned int _decompress_time;
 };
 
 }  // namespace compressor
