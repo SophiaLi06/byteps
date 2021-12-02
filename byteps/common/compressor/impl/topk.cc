@@ -48,6 +48,9 @@ CompressorRegistry::Register reg(
 template <typename index_t, typename scalar_t>
 tensor_t TopkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
                                       size_t len) {
+  /* Minghao */
+  auto start = std::chrono::high_resolution_clock::now();
+  /////////////
   static_assert(sizeof(index_t) == sizeof(scalar_t),
                 "index_t should be the same size as scalar_t");
   BPS_CHECK_LE(this->_k, len / 2);
@@ -83,6 +86,9 @@ tensor_t TopkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   //   std::cout << "index: " << dst[2 * i] << "\n";
   //   std::cout << "value: " << reinterpret_cast<float*>(dst)[2 * i + 1] << "\n";
   // }
+  /* Minghao */
+  auto end = std::chrono::high_resolution_clock::now();
+  this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 
   /////////////
   return {dst, this->_k * sizeof(pair_t)};
@@ -97,18 +103,21 @@ tensor_t TopkCompressor::Compress(tensor_t grad) {
   // }
   /* Minghao */
   //this->_compress_call++;
-  auto start = std::chrono::high_resolution_clock::now();
+  //auto start = std::chrono::high_resolution_clock::now();
   ///////////////
   COMPRESS_IMPL_SWITCH(grad.dtype, CompressImpl, _buf.get(), grad.data,
                        grad.size);
   /* Minghao */
-  auto end = std::chrono::high_resolution_clock::now();
-  this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
+  //auto end = std::chrono::high_resolution_clock::now();
+  //this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 }
 
 template <typename index_t, typename scalar_t>
 tensor_t TopkCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
                                         size_t compressed_size) {
+  /* Minghao */
+  auto start = std::chrono::high_resolution_clock::now();
+  /////////////
   static_assert(sizeof(index_t) == sizeof(scalar_t),
                 "index_t should be the same size as scalar_t");
   using pair_t = std::pair<index_t, scalar_t>;
@@ -130,6 +139,9 @@ tensor_t TopkCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
 
   //std::cout << "decompress to " << _size << " bytes\n";
   //std::cout << "Number of non-zero indices: " << len << "\n";
+  /* Minghao */
+  auto end = std::chrono::high_resolution_clock::now();
+  this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 
   return {dst, _size};
 }
@@ -142,13 +154,13 @@ tensor_t TopkCompressor::Decompress(tensor_t compressed) {
 #endif
   /* Minghao */
   //this->_decompress_call++;
-  auto start = std::chrono::high_resolution_clock::now();
+  //auto start = std::chrono::high_resolution_clock::now();
   ///////////////
   DECOMPRESS_IMPL_SWITCH(_dtype, DecompressImpl, dst, compressed.data,
                          compressed.size);
   /* Minghao */
-  auto end = std::chrono::high_resolution_clock::now();
-  this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
+  //auto end = std::chrono::high_resolution_clock::now();
+  //this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 }
 
 template <typename index_t, typename scalar_t>
