@@ -90,7 +90,7 @@ tensor_t TopkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
 
 tensor_t TopkCompressor::Compress(tensor_t grad) {
   //std::cout << "gradient dtype: " << grad.dtype << "\n";
-  std::cout << "gradient size: " << grad.size << "\n";
+  //std::cout << "gradient size: " << grad.size << "\n";
   //print original gradients
   // for (size_t i = 0; i < grad.size; i++){
   //   std::cout << "gradient data " << i << ": " << grad.data[i] << "\n";
@@ -121,7 +121,8 @@ tensor_t TopkCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     dst[pair.first] = pair.second;
   }
 
-  std::cout << "decompress to " << _size << "gradients\n";
+  //std::cout << "decompress to " << _size << " bytes\n";
+  //std::cout << "Number of non-zero indices: " << len << "\n";
 
   return {dst, _size};
 }
