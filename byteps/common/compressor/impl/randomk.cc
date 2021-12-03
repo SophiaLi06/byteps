@@ -47,6 +47,9 @@ CompressorRegistry::Register reg(
 template <typename index_t, typename scalar_t>
 tensor_t RandomkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
                                          size_t len) {
+  /* Minghao */
+  auto start = std::chrono::high_resolution_clock::now();
+  /////////////
   static_assert(sizeof(index_t) == sizeof(scalar_t),
                 "index_t should be the same size as scalar_t");
   BPS_CHECK_LE(this->_k, len / 2);
@@ -58,6 +61,11 @@ tensor_t RandomkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
     ptr[i] = std::make_pair(index, src[index]);
   }
 
+  /* Minghao */
+  auto end = std::chrono::high_resolution_clock::now();
+  this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
+
+  /////////////
   return {dst, this->_k * sizeof(pair_t)};
 }
 
@@ -69,6 +77,9 @@ tensor_t RandomkCompressor::Compress(tensor_t grad) {
 template <typename index_t, typename scalar_t>
 tensor_t RandomkCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
                                            size_t compressed_size) {
+  /* Minghao */
+  auto start = std::chrono::high_resolution_clock::now();
+  /////////////
   static_assert(sizeof(index_t) == sizeof(scalar_t),
                 "index_t should be the same size as scalar_t");
   using pair_t = std::pair<index_t, scalar_t>;
@@ -88,6 +99,10 @@ tensor_t RandomkCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     dst[pair.first] = pair.second;
   }
 
+  /* Minghao */
+  auto end = std::chrono::high_resolution_clock::now();
+  this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
+  /////////////
   return {dst, _size};
 }
 

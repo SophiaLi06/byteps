@@ -34,6 +34,9 @@ CompressorRegistry::Register reg("onebit_compressor", [](const kwargs_t& kwargs,
 template <typename index_t, typename scalar_t>
 tensor_t OnebitCompressor::CompressImpl(index_t* dst, const scalar_t* src,
                                         size_t len) {
+  /* Minghao */
+  auto start = std::chrono::high_resolution_clock::now();
+  /////////////
   static_assert(sizeof(index_t) == sizeof(scalar_t),
                 "index_t should be the same size as scalar_t");
   constexpr size_t PACKING_SIZE = sizeof(scalar_t) * 8;
@@ -62,6 +65,12 @@ tensor_t OnebitCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   float* p_scale = reinterpret_cast<float*>(&dst[chunk_len]);
   *p_scale = scale;
 
+  /* Minghao */
+  auto end = std::chrono::high_resolution_clock::now();
+  this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
+
+  /////////////
+
   return {dst, chunk_len * sizeof(index_t) + sizeof(float)};
 }  // namespace compressor
 
@@ -73,6 +82,9 @@ tensor_t OnebitCompressor::Compress(tensor_t grad) {
 template <typename scalar_t, typename index_t>
 tensor_t OnebitCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
                                           size_t compressed_size) {
+  /* Minghao */
+  auto start = std::chrono::high_resolution_clock::now();
+  /////////////
   static_assert(sizeof(scalar_t) == sizeof(index_t),
                 "scalar_t should be the same size as index_t");
   constexpr size_t PACKING_SIZE = sizeof(index_t) * 8;
@@ -97,6 +109,10 @@ tensor_t OnebitCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     }
   }
 
+  /* Minghao */
+  auto end = std::chrono::high_resolution_clock::now();
+  this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
+  /////////////
   return {dst, _size};
 }
 
