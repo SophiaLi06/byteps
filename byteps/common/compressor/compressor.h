@@ -56,12 +56,13 @@ class Compressor {
  /* Minghao */
   Compressor(size_t size, DataType dtype)
       : _size(size), _dtype(dtype), _buf(new byte_t[size]),\
-       _compress_call(0), _decompress_call(0), _compress_time(0), _decompress_time(0){};
+       _compress_call(0), _decompress_call(0), _compress_time(0), _decompress_time(0), _decompress_size(0){};
   virtual ~Compressor() {
     //std::cout << "Compress time: " << _compress_time << "\n";
     //std::cout << "Decompress time: " << _decompress_time << "\n";
     std::cout << "Compress time: " << _compress_time << " nanoseconds\n";
     std::cout << "Decompress time: " << _decompress_time << " nanoseconds\n";
+    std::cout << "The size of tensor to decompress: " << _decompress_size << "bytes\n";
   }
   //virtual ~Compressor() = default;
 
@@ -141,6 +142,9 @@ class Compressor {
   unsigned int _decompress_call;
   unsigned long long _compress_time;
   unsigned long long _decompress_time;
+  
+  size_t _decompress_size;
+  //////////////
 };
 
 }  // namespace compressor

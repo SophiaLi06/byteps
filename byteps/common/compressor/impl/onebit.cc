@@ -126,6 +126,10 @@ tensor_t OnebitCompressor::Decompress(tensor_t compressed) {
 #else
   auto dst = compressed.data;
 #endif
+  /* Minghao */
+  //this->_decompress_call++;
+  this->_decompress_size = compressed.size;
+  ///////////////
   DECOMPRESS_IMPL_SWITCH(_dtype, DecompressImpl, dst, compressed.data,
                          compressed.size);
 }
