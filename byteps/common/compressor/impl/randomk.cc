@@ -14,6 +14,7 @@
 // =============================================================================
 
 #include <cstring>
+#include <stdio.h>
 
 #include "../compressor_registry.h"
 #include "randomk.h"
@@ -38,6 +39,10 @@ CompressorRegistry::Register reg(
 
       auto seed = HyperParamFinder<unsigned>(kwargs, "seed", true,
                                              [](unsigned x) { return x != 0; });
+
+      /* Minghao */
+      printf("RandomK compressor size: %d, k: %d, dtype: %d\n", size, k, dtype);
+      //////////////
 
       return std::unique_ptr<Compressor>(
           new RandomkCompressor(size, dtype, k, seed));

@@ -14,6 +14,7 @@
 // =============================================================================
 
 #include <cstring>
+#include <stdio.h>
 
 #include "onebit.h"
 #include "../compressor_registry.h"
@@ -27,6 +28,9 @@ CompressorRegistry::Register reg("onebit_compressor", [](const kwargs_t& kwargs,
                                                          DataType dtype) {
   auto scaled =
       HyperParamFinder<bool>(kwargs, "compressor_onebit_scaling", true);
+  /* Minghao */
+  printf("Onebit compressor size: %d, dtype: %d\n", size, dtype);
+  /////////////
   return std::unique_ptr<Compressor>(new OnebitCompressor(size, dtype, scaled));
 });
 }
