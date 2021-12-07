@@ -18,6 +18,7 @@
 
 #include <memory>
 #include <iostream>
+#include <mutex>
 
 #include "../common.h"
 #include "../logging.h"
@@ -144,6 +145,9 @@ class Compressor {
   unsigned long long _decompress_time;
   
   size_t _decompress_size;
+
+  std::mutex _compress_mtx;
+  std::mutex _decompress_mtx;
   //////////////
 };
 

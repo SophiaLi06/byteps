@@ -88,6 +88,7 @@ tensor_t TopkCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // }
   /* Minghao */
   auto end = std::chrono::high_resolution_clock::now();
+  std::lock_guard<std::mutex> lock(this->_compress_mtx);
   this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 
   /////////////
@@ -137,6 +138,7 @@ tensor_t TopkCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   //std::cout << "Number of non-zero indices: " << len << "\n";
   /* Minghao */
   auto end = std::chrono::high_resolution_clock::now();
+  std::lock_guard<std::mutex> lock(this->_decompress_mtx);
   this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 
   return {dst, _size};
