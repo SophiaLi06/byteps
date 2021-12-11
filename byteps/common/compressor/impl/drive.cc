@@ -9,7 +9,7 @@ namespace byteps {
 namespace common {
 namespace compressor {
 namespace{
-CompressorRegistry:Register reg(
+CompressorRegistry::Register reg(
     "drive_compressor",
     [](const kwargs_t& kwargs, size_t size,
        DataType dtype) -> std::unique_ptr<Compressor>{
@@ -21,7 +21,7 @@ CompressorRegistry:Register reg(
       printf("Drive compressor size: %d, dtype: %d, seed: %d\n", size, dtype, seed);
       /////////////
       return std::unique_ptr<Compressor>(
-          new DriveCompressor(size, dtype, seed))
+          new DriveCompressor(size, dtype, seed));
     });
 }
 
@@ -35,16 +35,16 @@ CompressorRegistry:Register reg(
 template <typename index_t, typename scalar_t>
 void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
                                        size_t len) {
-  static_assert(len & (len-1) == 0,
-                "gradient's dimension must be a power of 2");
-  int h = 2;
-  int hf;
+  // TODO: add an error msg?
+  assert(len & (len-1) == 0);
+  size_t h = 2;
+  size_t hf;
   //TODO: can this process be paralleled in some way?
   while (h <= len){
     hf = h / 2;
     // view the gradient as a (len // h * h) tensor
-    for (int i = 0; i < len / h; i++){
-      for (int j = 0; j < hf; j++) {
+    for (size_t i = 0; i < len / h; i++){
+      for (size_t j = 0; j < hf; j++) {
         // update front half of each "row"
         dst[i * h + j] = src[i * h + j] + src[i * h + hf + j];
         // update back half of each "row"
@@ -53,7 +53,7 @@ void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
     }
   }
   float sqrt_d = std::sqrt(len);
-  for (int i = 0; i < len; i++) dst[i] /= sqrt_d; 
+  for (size_t i = 0; i < len; i++) dst[i] /= sqrt_d; 
 }
 
 template <typename index_t, typename scalar_t>
@@ -87,7 +87,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   }
 
   // Compute the scale
-  float norm1, norm2;
+  float norm1 = 0.0, norm2 = 0.0;
 
   // TODO: can this be paralleled?
   for (size_t i = 0; i < chunk_num; i++){
@@ -167,7 +167,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   }
 
   // scale and return
-  for (int i = 0; i < chunk_num * PACKING_SIZE; i++){
+  for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
     dst[i] *= scale;
   }
   return {dst, _size};
