@@ -224,4 +224,9 @@ if bps.rank() == 0 and epoch == args.epochs - 1:
     assert val_acc > 0.96, "Achieved accuracy (%f) is lower than expected\
                             (0.96)" % val_acc
 
+############### Minghao
+params_filename = "mnist-{compressor}-{k}.params".format(compressor=args.compressor, k=args.k)
+model.save_parameters()
+##############
+
 logger.info("total time=%.2f", total_time)
