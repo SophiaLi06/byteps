@@ -204,6 +204,13 @@ for epoch in range(args.epochs):
             logger.info('[Epoch %d Batch %d] Training: %s=%f' %
                         (epoch, i, name, acc))
 
+        if epoch == 0 and i == 0:
+            ############### Minghao
+            print("params_0_0")
+            params_0_0_filename = "mnist-{compressor}-{k}-e0i0-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+            model.save_parameters(params_0_0_filename)
+            ##############
+
         if epoch == 0 and i == 1:
             ############### Minghao
             print("params_0_1")
