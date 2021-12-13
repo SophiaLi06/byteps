@@ -154,6 +154,11 @@ model.initialize(mx.init.MSRAPrelu(), ctx=context)
 model.summary(nd.ones((1, 1, 28, 28), ctx=mx.gpu(bps.local_rank())))
 model.hybridize()
 
+############### Minghao
+print("init_params")
+params_init_filename = "mnist-{compressor}-{k}-init-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+model.save_parameters(params_init_filename)
+##############
 params = model.collect_params()
 
 # BytePS: create DistributedTrainer, a subclass of gluon.Trainer
@@ -199,6 +204,13 @@ for epoch in range(args.epochs):
             logger.info('[Epoch %d Batch %d] Training: %s=%f' %
                         (epoch, i, name, acc))
 
+        if epoch == 0 and i == 1:
+            ############### Minghao
+            print("params_0_1")
+            params_0_1_filename = "mnist-{compressor}-{k}-e0i1-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+            model.save_parameters(params_0_1_filename)
+            ##############
+
     elapsed = time.time() - tic
     total_time += elapsed
     speed = train_size * num_workers / elapsed
@@ -218,6 +230,12 @@ for epoch in range(args.epochs):
     if bps.rank() == 0:
         logger.info('Epoch[%d]\tTrain: %s=%f\tValidation: %s=%f', epoch, name,
                     train_acc, name, val_acc)
+        if epoch == 0:
+            ############### Minghao
+            print("params_e0")
+            params_e0_filename = "mnist-{compressor}-{k}-e0-0.params".format(compressor=args.compressor, k=args.k)
+            model.save_parameters(params_e0_filename)
+            ##############
 
 
 if bps.rank() == 0 and epoch == args.epochs - 1:
@@ -225,8 +243,9 @@ if bps.rank() == 0 and epoch == args.epochs - 1:
                             (0.96)" % val_acc
 
 ############### Minghao
-params_filename = "mnist-{compressor}-{k}.params".format(compressor=args.compressor, k=args.k)
-model.save_parameters()
+print("end_params_save")
+params_filename = "mnist-{compressor}-{k}-{rank}.params".format(compressor=args.compressor, k=args.k, rank = bps.rank())
+model.save_parameters(params_filename)
 ##############
 
 logger.info("total time=%.2f", total_time)
