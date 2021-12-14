@@ -164,6 +164,7 @@ params = model.collect_params()
 # BytePS: create DistributedTrainer, a subclass of gluon.Trainer
 optimizer_params = {'momentum': args.momentum, 'wd': args.wd,
                     'learning_rate': args.lr * num_workers}
+#optimizer_params = {'wd': args.wd, 'learning_rate': args.lr * num_workers}
 
 compression_params = {
     "compressor": args.compressor,
@@ -204,18 +205,32 @@ for epoch in range(args.epochs):
             logger.info('[Epoch %d Batch %d] Training: %s=%f' %
                         (epoch, i, name, acc))
 
-        if epoch == 0 and i == 0:
+        if bps.rank() == 0 and epoch == 0 and i == 0:
             ############### Minghao
-            print("params_0_0")
+            #print("params_0_0")
             params_0_0_filename = "mnist-{compressor}-{k}-e0i0-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
             model.save_parameters(params_0_0_filename)
             ##############
 
-        if epoch == 0 and i == 1:
+        if bps.rank() == 0 and epoch == 0 and i == 1:
             ############### Minghao
-            print("params_0_1")
+            #print("params_0_1")
             params_0_1_filename = "mnist-{compressor}-{k}-e0i1-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
             model.save_parameters(params_0_1_filename)
+            ##############
+
+        if bps.rank() == 0 and epoch == (args.epochs - 1) and i == (len(train_data) - 3):
+            ############### Minghao
+            #print("params_0_1")
+            params_f_f2_filename = "mnist-{compressor}-{k}-efif2-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+            model.save_parameters(params_f_f2_filename)
+            ##############
+
+        if bps.rank() == 0 and epoch == (args.epochs - 1) and i == (len(train_data) - 2):
+            ############### Minghao
+            #print("params_0_1")
+            params_f_f1_filename = "mnist-{compressor}-{k}-efif1-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+            model.save_parameters(params_f_f1_filename)
             ##############
 
     elapsed = time.time() - tic
