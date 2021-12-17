@@ -146,7 +146,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     index_t x = ptr[i];
     for (size_t j = PACKING_SIZE - 1; j >= 0; j--){
       // restore the sign
-      // (1 for positive, -2 for negative)
+      // (1 for positive, -1 for negative)
       // TODO: not casting to float should be fine? as it will then be
       // divided by the float "sqrt_d" in HadamardRotate?
       int sign = ((x & 0x01) << 1) - 1;

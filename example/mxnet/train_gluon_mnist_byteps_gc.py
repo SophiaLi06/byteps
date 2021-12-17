@@ -61,6 +61,10 @@ parser.add_argument('--scaling', action='store_true', default=False,
                     help='enable scaling for onebit compressor')
 parser.add_argument('--k', type=int, default=1,
                     help='topk or randomk')
+#####Minghao
+parser.add_argument('--seed', type=int, default=0,
+                    help='DRIVE or randomk')
+#####
 parser.add_argument('--fp16-pushpull', action='store_true', default=False,
                     help='use fp16 compression during pushpull')
 parser.add_argument('--logging-file', type=str, default='baseline',
@@ -172,7 +176,9 @@ compression_params = {
     "momentum": args.compress_momentum,
     "scaling": args.scaling,
     "k": args.k,
-    "fp16": args.fp16_pushpull
+    "fp16": args.fp16_pushpull,
+    #####Minghao
+    "seed": args.seed
 }
 
 trainer = bps.DistributedTrainer(
