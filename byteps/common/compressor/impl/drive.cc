@@ -139,6 +139,10 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
                 "scalar_t should be the same size as index_t");
   constexpr size_t PACKING_SIZE = sizeof(scalar_t) * 8;
   const size_t chunk_num = (compressed_size - sizeof(float)) / sizeof(index_t);
+  /* Minghao */
+  printf("Decompress here0\n");
+  printf("PACKING_SIZE: %d, chunk_num: %d\n", PACKING_SIZE, chunk_num);
+  /////////////
 
   auto* scale_ptr = reinterpret_cast<const float*>(src + chunk_num);
   float scale = *scale_ptr;
@@ -148,6 +152,10 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     ptr = reinterpret_cast<index_t*>(_buf.get());
     std::memcpy(ptr, src, compressed_size);
   }
+
+  /* Minghao */
+  printf("Decompress here1\n");
+  /////////////
 
   // TODO: can this be paralleled?
   for (size_t i = chunk_num - 1; i >= 0; i--){
@@ -163,8 +171,16 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     }
   }
 
+  /* Minghao */
+  printf("Decompress here2\n");
+  /////////////
+
   // in-place Hadamard Transform (inverse)
   HadamardRotate(dst, dst, chunk_num * PACKING_SIZE);
+  
+  /* Minghao */
+  printf("Decompress here3\n");
+  /////////////
 
   // if random number generator is not none
   if (_seed != 0){
@@ -173,6 +189,10 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
       dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
     }
   }
+
+  /* Minghao */
+  printf("Decompress here4\n");
+  /////////////
 
   // scale and return
   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
