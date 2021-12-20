@@ -57,9 +57,9 @@ void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
   float sqrt_d = std::sqrt(len);
   for (size_t i = 0; i < len; i++) dst[i] /= sqrt_d; 
   /* Minghao */
-  printf("Hadamard Rotate Complete\n");
-  std::cout << "dst: " << dst << "\n";
-  std::cout << "src: " << src << "\n";
+  //printf("Hadamard Rotate Complete\n");
+  //std::cout << "dst: " << dst << "\n";
+  //std::cout << "src: " << src << "\n";
   /////////////
 }
 
@@ -73,7 +73,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // (Each scalar value is represented by one bit, so 8 values in one byte
   // and sizeof(scalar_t) * 8 in one scalar_t)
   constexpr size_t PACKING_SIZE = sizeof(scalar_t) * 8;
-  size_t padding_len = (PACKING_SIZE - (len % PACKING_SIZE));
+  size_t padding_len = (PACKING_SIZE - (len % PACKING_SIZE)) % PACKING_SIZE;
   // The total number of chunks
   const size_t chunk_num = (len + padding_len) / PACKING_SIZE;
   
@@ -124,9 +124,9 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   *scale_ptr = scale;
 
   /* Minghao */
-  printf("Compress Complete\n");
-  std::cout << "dst: " << dst << "\n";
-  std::cout << "src: " << src << "\n";
+  //printf("Compress Complete\n");
+  //std::cout << "dst: " << dst << "\n";
+  //std::cout << "src: " << src << "\n";
   /////////////
 
   return {dst, chunk_num * sizeof(index_t) + sizeof(float)};
@@ -145,10 +145,10 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   constexpr size_t PACKING_SIZE = sizeof(scalar_t) * 8;
   const size_t chunk_num = (compressed_size - sizeof(float)) / sizeof(index_t);
   /* Minghao */
-  std::cout << "dst: " << dst << "\n";
-  std::cout << "src: " << src << "\n";
-  printf("Decompress here0\n");
-  printf("PACKING_SIZE: %d, chunk_num: %d\n", PACKING_SIZE, chunk_num);
+  //std::cout << "dst: " << dst << "\n";
+  //std::cout << "src: " << src << "\n";
+  //printf("Decompress here0\n");
+  //printf("PACKING_SIZE: %d, chunk_num: %d\n", PACKING_SIZE, chunk_num);
   /////////////
 
   auto* scale_ptr = reinterpret_cast<const float*>(src + chunk_num);
@@ -161,13 +161,13 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   }
 
   /* Minghao */
-  printf("Decompress here1\n");
+  //printf("Decompress here1\n");
   /////////////
 
   // TODO: can this be paralleled?
-  for (size_t i = chunk_num - 1; i >= 0; i--){
+  for (int i = chunk_num - 1; i >= 0; i--){
     index_t x = ptr[i];
-    for (size_t j = PACKING_SIZE - 1; j >= 0; j--){
+    for (int j = PACKING_SIZE - 1; j >= 0; j--){
       // restore the sign
       // (1 for positive, -1 for negative)
       // TODO: not casting to float should be fine? as it will then be
@@ -175,18 +175,19 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
       int sign = ((x & 0x01) << 1) - 1;
       dst[i * PACKING_SIZE + j] = sign;
       x >>= 1;
+      //std::cout << "i: " << i << "j: " << j << "\n";
     }
   }
 
   /* Minghao */
-  printf("Decompress here2\n");
+  //printf("Decompress here2\n");
   /////////////
 
   // in-place Hadamard Transform (inverse)
   HadamardRotate(dst, dst, chunk_num * PACKING_SIZE);
   
   /* Minghao */
-  printf("Decompress here3\n");
+  //printf("Decompress here3\n");
   /////////////
 
   // if random number generator is not none
@@ -198,7 +199,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   }
 
   /* Minghao */
-  printf("Decompress here4\n");
+  //printf("Decompress here4\n");
   /////////////
 
   // scale and return
@@ -206,7 +207,9 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     dst[i] *= scale;
   }
   /* Minghao */
-  printf("Decompress Complete\n");
+  //printf("Decompress Complete\n");
+  //std::cout << "dst after decompress: " << dst << "\n";
+  //std::cout << "size: " << _size << "\n";
   /////////////
   return {dst, _size};
 }
