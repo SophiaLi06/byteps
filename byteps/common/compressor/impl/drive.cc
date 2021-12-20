@@ -1,6 +1,7 @@
 #include <cstring>
 #include <stdio.h>
 #include <cmath>
+#include <iostream>
 
 #include "../compressor_registry.h"
 #include "drive.h"
@@ -57,6 +58,8 @@ void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
   for (size_t i = 0; i < len; i++) dst[i] /= sqrt_d; 
   /* Minghao */
   printf("Hadamard Rotate Complete\n");
+  std::cout << "dst: " << dst << "\n";
+  std::cout << "src: " << src << "\n";
   /////////////
 }
 
@@ -122,6 +125,8 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
 
   /* Minghao */
   printf("Compress Complete\n");
+  std::cout << "dst: " << dst << "\n";
+  std::cout << "src: " << src << "\n";
   /////////////
 
   return {dst, chunk_num * sizeof(index_t) + sizeof(float)};
@@ -140,6 +145,8 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   constexpr size_t PACKING_SIZE = sizeof(scalar_t) * 8;
   const size_t chunk_num = (compressed_size - sizeof(float)) / sizeof(index_t);
   /* Minghao */
+  std::cout << "dst: " << dst << "\n";
+  std::cout << "src: " << src << "\n";
   printf("Decompress here0\n");
   printf("PACKING_SIZE: %d, chunk_num: %d\n", PACKING_SIZE, chunk_num);
   /////////////
