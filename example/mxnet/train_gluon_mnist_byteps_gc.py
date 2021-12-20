@@ -159,9 +159,9 @@ model.summary(nd.ones((1, 1, 28, 28), ctx=mx.gpu(bps.local_rank())))
 model.hybridize()
 
 ############### Minghao
-print("init_params")
-params_init_filename = "mnist-{compressor}-{k}-init-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
-model.save_parameters(params_init_filename)
+#print("init_params")
+#params_init_filename = "mnist-{compressor}-{k}-init-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+#model.save_parameters(params_init_filename)
 ##############
 params = model.collect_params()
 
@@ -211,32 +211,32 @@ for epoch in range(args.epochs):
             logger.info('[Epoch %d Batch %d] Training: %s=%f' %
                         (epoch, i, name, acc))
 
-        if bps.rank() == 0 and epoch == 0 and i == 0:
+        #if bps.rank() == 0 and epoch == 0 and i == 0:
             ############### Minghao
             #print("params_0_0")
-            params_0_0_filename = "mnist-{compressor}-{k}-e0i0-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
-            model.save_parameters(params_0_0_filename)
+            #params_0_0_filename = "mnist-{compressor}-{k}-e0i0-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+            #model.save_parameters(params_0_0_filename)
             ##############
 
-        if bps.rank() == 0 and epoch == 0 and i == 1:
+        #if bps.rank() == 0 and epoch == 0 and i == 1:
             ############### Minghao
             #print("params_0_1")
-            params_0_1_filename = "mnist-{compressor}-{k}-e0i1-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
-            model.save_parameters(params_0_1_filename)
+            #params_0_1_filename = "mnist-{compressor}-{k}-e0i1-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+            #model.save_parameters(params_0_1_filename)
             ##############
 
-        if bps.rank() == 0 and epoch == (args.epochs - 1) and i == (len(train_data) - 3):
+        #if bps.rank() == 0 and epoch == (args.epochs - 1) and i == (len(train_data) - 3):
             ############### Minghao
             #print("params_0_1")
-            params_f_f2_filename = "mnist-{compressor}-{k}-efif2-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
-            model.save_parameters(params_f_f2_filename)
+            #params_f_f2_filename = "mnist-{compressor}-{k}-efif2-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+            #model.save_parameters(params_f_f2_filename)
             ##############
 
-        if bps.rank() == 0 and epoch == (args.epochs - 1) and i == (len(train_data) - 2):
+        #if bps.rank() == 0 and epoch == (args.epochs - 1) and i == (len(train_data) - 2):
             ############### Minghao
             #print("params_0_1")
-            params_f_f1_filename = "mnist-{compressor}-{k}-efif1-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
-            model.save_parameters(params_f_f1_filename)
+            #params_f_f1_filename = "mnist-{compressor}-{k}-efif1-{rank}.params".format(compressor=args.compressor, k=args.k, rank=bps.rank())
+            #model.save_parameters(params_f_f1_filename)
             ##############
 
     elapsed = time.time() - tic
@@ -258,11 +258,11 @@ for epoch in range(args.epochs):
     if bps.rank() == 0:
         logger.info('Epoch[%d]\tTrain: %s=%f\tValidation: %s=%f', epoch, name,
                     train_acc, name, val_acc)
-        if epoch == 0:
+        #if epoch == 0:
             ############### Minghao
-            print("params_e0")
-            params_e0_filename = "mnist-{compressor}-{k}-e0-0.params".format(compressor=args.compressor, k=args.k)
-            model.save_parameters(params_e0_filename)
+            #print("params_e0")
+            #params_e0_filename = "mnist-{compressor}-{k}-e0-0.params".format(compressor=args.compressor, k=args.k)
+            #model.save_parameters(params_e0_filename)
             ##############
 
 
@@ -271,9 +271,9 @@ if bps.rank() == 0 and epoch == args.epochs - 1:
                             (0.96)" % val_acc
 
 ############### Minghao
-print("end_params_save")
-params_filename = "mnist-{compressor}-{k}-{rank}.params".format(compressor=args.compressor, k=args.k, rank = bps.rank())
-model.save_parameters(params_filename)
+#print("end_params_save")
+#params_filename = "mnist-{compressor}-{k}-{rank}.params".format(compressor=args.compressor, k=args.k, rank = bps.rank())
+#model.save_parameters(params_filename)
 ##############
 
 logger.info("total time=%.2f", total_time)
