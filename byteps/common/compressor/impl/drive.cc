@@ -51,6 +51,7 @@ void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
         dst[i * h + hf + j] = dst[i * h + j] - 2 * src[i * h + hf + j];
       }
     }
+    h *= 2;
   }
   float sqrt_d = std::sqrt(len);
   for (size_t i = 0; i < len; i++) dst[i] /= sqrt_d; 
