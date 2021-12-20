@@ -55,6 +55,9 @@ void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
   }
   float sqrt_d = std::sqrt(len);
   for (size_t i = 0; i < len; i++) dst[i] /= sqrt_d; 
+  /* Minghao */
+  printf("Hadamard Rotate Complete\n");
+  /////////////
 }
 
 template <typename index_t, typename scalar_t>
@@ -117,6 +120,10 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   float* scale_ptr = reinterpret_cast<float*>(&dst[chunk_num]);
   *scale_ptr = scale;
 
+  /* Minghao */
+  printf("Compress Complete\n");
+  /////////////
+
   return {dst, chunk_num * sizeof(index_t) + sizeof(float)};
 }
 
@@ -171,6 +178,9 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
     dst[i] *= scale;
   }
+  /* Minghao */
+  printf("Decompress Complete\n");
+  /////////////
   return {dst, _size};
 }
 
