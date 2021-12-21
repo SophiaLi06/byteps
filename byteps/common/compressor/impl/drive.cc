@@ -94,19 +94,19 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   if (_seed != 0){
     // if random number generator is not none
     for (size_t i = 0; i < len; i++){
-      dst[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+      src[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
     }
-    HadamardRotate(dst, dst, len);
+    HadamardRotate(src, src, len);
   }
   else{
-    HadamardRotate(dst, src, len);
+    HadamardRotate(src, src, len);
   }
 
   // Compute the scale
-  float norm1 = 0.0, norm2 = 0.0;
+  double norm1 = 0.0f, norm2 = 0.0f;
   for (size_t i = 0; i < len; i++){
-    norm1 += std::abs(dst[i]);
-    norm2 += (dst[i] * dst[i]);
+    norm1 += std::abs(src[i]);
+    norm2 += (src[i] * src[i]);
   }
   //note norm2 is actually the square of the L2 norm
   float scale = norm2 / norm1;
@@ -114,8 +114,8 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // TODO: can this be paralleled?
   for (size_t i = 0; i < chunk_num; i++){
     size_t start_index = i * PACKING_SIZE;
-    index_t x = (dst[start_index] < 0);
-    //index_t x = src[start_index] < 0;
+    //index_t x = (dst[start_index] < 0);
+    index_t x = src[start_index] < 0;
     //norm1 += std::abs(dst[start_index]);
     //norm2 += (dst[start_index] * dst[start_index]);
 
@@ -125,10 +125,9 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
       
       x <<= 1;
       // take the sign
-      // ('1' for positve, '0' for negative)
-      x |= (dst[start_index + j] < 0);
-      //x |= (src[start_index + j] < 0);
-      //dst[start_index + j] = 1.0 - (2 * (dst[start_index + j] < 0));
+      // ('0' for positve, '1' for negative)
+      //x |= (dst[start_index + j] < 0);
+      x |= (src[start_index + j] < 0);
     }
     dst[i] = x;
   }
@@ -174,7 +173,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     std::memcpy(ptr, src, compressed_size);
   }
   //!!!!!!!!!!!!!! uncomment the line below!
-  else std::memcpy(dst, src, compressed_size - sizeof(float));
+  //else std::memcpy(dst, src, compressed_size - sizeof(float));
 
   // TODO: can this be paralleled?
   for (int i = chunk_num - 1; i >= 0; i--){
