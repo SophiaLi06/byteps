@@ -113,6 +113,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   float scale = norm2 / norm1;
 
   // TODO: can this be paralleled?
+#pragma omp parallel for simd
   for (size_t i = 0; i < chunk_num; i++){
     size_t start_index = i * PACKING_SIZE;
     //index_t x = (dst[start_index] < 0);
@@ -175,6 +176,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   }
 
   // TODO: can this be paralleled?
+#pragma omp parallel for simd
   for (int i = chunk_num - 1; i >= 0; i--){
     index_t x = ptr[i];
     for (int j = PACKING_SIZE - 1; j >= 0; j--){
