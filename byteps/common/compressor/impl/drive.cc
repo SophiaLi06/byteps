@@ -108,7 +108,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
     norm1 += std::abs(dst[i]);
     norm2 += (dst[i] * dst[i]);
   }
-  note norm2 is actually the square of the L2 norm
+  //note norm2 is actually the square of the L2 norm
   float scale = norm2 / norm1;
 
   // TODO: can this be paralleled?
