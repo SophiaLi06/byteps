@@ -87,8 +87,10 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   
   // In-Place 1D Hadamard Rotate
   // TODO: may need to modify len to make it into a power of 2?
+  
+  // !!!!!!!!!! uncomment the line below
+  // std::memcpy(dst, src, len);
 
-  std::memcpy(dst, src, len);
   // if (_seed != 0){
   //   // if random number generator is not none
   //   for (size_t i = 0; i < len; i++){
@@ -102,13 +104,11 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
 
   ///!!!!!!!!!!remove here
   float scale = 1.0f;
-  if (_use_scale) {
-    double sum = 0.0f;
-    for (size_t i = 0; i < len; ++i) {
-      sum += std::abs(src[i]);
-    }
-    scale = sum / len;
+  double sum = 0.0f;
+  for (size_t i = 0; i < len; ++i) {
+    sum += std::abs(src[i]);
   }
+  scale = sum / len;
   //////////////////////
 
   // Compute the scale
@@ -123,18 +123,22 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // TODO: can this be paralleled?
   for (size_t i = 0; i < chunk_num; i++){
     size_t start_index = i * PACKING_SIZE;
-    index_t x = (dst[start_index] >= 0);
+    //!!!!!!!!!!!! change the line below back to from dst
+    //index_t x = (dst[start_index] < 0);
+    index_t x = src[start_index] < 0;
     //norm1 += std::abs(dst[start_index]);
     //norm2 += (dst[start_index] * dst[start_index]);
 
-    for (size_t j = 1; i < PACKING_SIZE; i++){
+    for (size_t j = 1; j < PACKING_SIZE; j++){
       //norm1 += std::abs(dst[start_index + j]);
       //norm2 += (dst[start_index + j] * dst[start_index + j]);
       
       x <<= 1;
       // take the sign
       // ('1' for positve, '0' for negative)
-      x |= (dst[start_index + j] >= 0);
+      //!!!!!!!!!!!! change the line below back to from dst
+      //x |= (dst[start_index + j] < 0);
+      x |= (src[start_index + j] < 0);
       //dst[start_index + j] = 1.0 - (2 * (dst[start_index + j] < 0));
     }
     dst[i] = x;
@@ -180,7 +184,8 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     ptr = reinterpret_cast<index_t*>(_buf.get());
     std::memcpy(ptr, src, compressed_size);
   }
-  else std::memcpy(dst, src, compressed_size);
+  //!!!!!!!!!!!!!! uncomment the line below!
+  // else std::memcpy(dst, src, compressed_size);
 
   // TODO: can this be paralleled?
   for (int i = chunk_num - 1; i >= 0; i--){
@@ -190,7 +195,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
       // (1 for positive, -1 for negative)
       // TODO: not casting to float should be fine? as it will then be
       // divided by the float "sqrt_d" in HadamardRotate?
-      int sign = ((x & 0x01) << 1) - 1;
+      int sign = 1 - ((x & 0x01) << 1);
       dst[i * PACKING_SIZE + j] = sign;
       x >>= 1;
     }

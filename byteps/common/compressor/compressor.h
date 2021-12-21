@@ -57,7 +57,7 @@ class Compressor {
  /* Minghao */
   Compressor(size_t size, DataType dtype)
       : _size(size), _dtype(dtype), _buf(new byte_t[size]),\
-       _compress_call(0), _decompress_call(0), _compress_time(0), _decompress_time(0), _decompress_size(0){};
+       _compress_call(0), _decompress_call(0), _compress_time(0), _decompress_time(0), _decompress_size(0), _rotate_time(0){};
   virtual ~Compressor() {
     std::cout << "Compress calls: " << _compress_call << "\n";
     std::cout << "Decompress calls: " << _decompress_call << "\n";
