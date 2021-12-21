@@ -91,9 +91,9 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   std::memcpy(dst, src, len);
   if (_seed != 0){
     // if random number generator is not none
-    //for (size_t i = 0; i < len; i++){
-    //  dst[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
-    //}
+    for (size_t i = 0; i < len; i++){
+      dst[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+    }
     HadamardRotate(dst, dst, len);
   }
   else{
@@ -102,17 +102,21 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
 
   // Compute the scale
   float norm1 = 0.0, norm2 = 0.0;
+  for (size_t i = 0; i < len; i++){
+    norm1 += std::abs(dst[i]);
+    norm2 += (dst[i] * dst[i]);
+  }
 
   // TODO: can this be paralleled?
   for (size_t i = 0; i < chunk_num; i++){
     size_t start_index = i * PACKING_SIZE;
     index_t x = (dst[start_index] >= 0);
-    norm1 += std::abs(dst[start_index]);
-    norm2 += (dst[start_index] * dst[start_index]);
+    //norm1 += std::abs(dst[start_index]);
+    //norm2 += (dst[start_index] * dst[start_index]);
 
     for (size_t j = 1; i < PACKING_SIZE; i++){
-      norm1 += std::abs(dst[start_index + j]);
-      norm2 += (dst[start_index + j] * dst[start_index + j]);
+      //norm1 += std::abs(dst[start_index + j]);
+      //norm2 += (dst[start_index + j] * dst[start_index + j]);
       
       x <<= 1;
       // take the sign
@@ -186,12 +190,12 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   HadamardRotate(dst, dst, chunk_num * PACKING_SIZE);
 
   // if random number generator is not none
-  //if (_seed != 0){
+  if (_seed != 0){
     // if random number generator is not none
-    //for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
-    //  dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
-    //}
-  //}
+    for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
+      dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
+    }
+  }
 
   // scale and return
   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
