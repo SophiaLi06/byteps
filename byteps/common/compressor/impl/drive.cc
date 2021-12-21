@@ -88,25 +88,26 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // In-Place 1D Hadamard Rotate
   // TODO: may need to modify len to make it into a power of 2?
   
-  // !!!!!!!!!! uncomment the line below
-  // std::memcpy(dst, src, len);
+  index_t temp[len];
 
   if (_seed != 0){
     // if random number generator is not none
     for (size_t i = 0; i < len; i++){
-      src[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+      temp[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
     }
-    HadamardRotate(src, src, len);
   }
   else{
-    HadamardRotate(src, src, len);
+    for (size_t i = 0; i < len; i++){
+      temp[i] = src[i];
+    }
   }
+  HadamardRotate(temp, temp, len);
 
   // Compute the scale
   double norm1 = 0.0f, norm2 = 0.0f;
   for (size_t i = 0; i < len; i++){
-    norm1 += std::abs(src[i]);
-    norm2 += (src[i] * src[i]);
+    norm1 += std::abs(temp[i]);
+    norm2 += (temp[i] * temp[i]);
   }
   //note norm2 is actually the square of the L2 norm
   float scale = norm2 / norm1;
@@ -115,7 +116,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   for (size_t i = 0; i < chunk_num; i++){
     size_t start_index = i * PACKING_SIZE;
     //index_t x = (dst[start_index] < 0);
-    index_t x = src[start_index] < 0;
+    index_t x = temp[start_index] < 0;
     //norm1 += std::abs(dst[start_index]);
     //norm2 += (dst[start_index] * dst[start_index]);
 
@@ -127,7 +128,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
       // take the sign
       // ('0' for positve, '1' for negative)
       //x |= (dst[start_index + j] < 0);
-      x |= (src[start_index + j] < 0);
+      x |= (temp[start_index + j] < 0);
     }
     dst[i] = x;
   }
@@ -172,8 +173,6 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     ptr = reinterpret_cast<index_t*>(_buf.get());
     std::memcpy(ptr, src, compressed_size);
   }
-  //!!!!!!!!!!!!!! uncomment the line below!
-  //else std::memcpy(dst, src, compressed_size - sizeof(float));
 
   // TODO: can this be paralleled?
   for (int i = chunk_num - 1; i >= 0; i--){
