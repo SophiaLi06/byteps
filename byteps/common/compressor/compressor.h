@@ -61,9 +61,10 @@ class Compressor {
   virtual ~Compressor() {
     std::cout << "Compress calls: " << _compress_call << "\n";
     std::cout << "Decompress calls: " << _decompress_call << "\n";
-    std::cout << "Compress time: " << _compress_time << " nanoseconds\n";
-    std::cout << "Decompress time: " << _decompress_time << " nanoseconds\n";
+    std::cout << "Compress time: " << (_compress_time * 1e9) << " seconds\n";
+    std::cout << "Decompress time: " << _decompress_time * 1e9 << " seconds\n";
     std::cout << "The size of tensor to decompress: " << _decompress_size << "bytes\n";
+    if(_rotate_time > 0) std::cout << "Rotation time: " << _rotate_time * 1e9 << " seconds\n";
   }
   //virtual ~Compressor() = default;
 
@@ -143,11 +144,13 @@ class Compressor {
   unsigned int _decompress_call;
   unsigned long long _compress_time;
   unsigned long long _decompress_time;
+  unsigned long long _rotate_time;
   
   size_t _decompress_size;
 
   std::mutex _compress_mtx;
   std::mutex _decompress_mtx;
+  std::mutex _rotate_mtx;
   //////////////
 };
 

@@ -35,6 +35,10 @@ CompressorRegistry::Register reg(
 template <typename index_t, typename scalar_t>
 void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
                                        size_t len) {
+  /* Minghao */
+  auto start = std::chrono::high_resolution_clock::now();
+  /////////////
+  
   // TODO: add an error msg?
   assert(len & (len-1) == 0);
   size_t h = 2;
@@ -46,9 +50,9 @@ void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
     for (size_t i = 0; i < len / h; i++){
       for (size_t j = 0; j < hf; j++) {
         // update front half of each "row"
-        dst[i * h + j] = src[i * h + j] + src[i * h + hf + j];
+        dst[i * h + j] = dst[i * h + j] + dst[i * h + hf + j];
         // update back half of each "row"
-        dst[i * h + hf + j] = dst[i * h + j] - 2 * src[i * h + hf + j];
+        dst[i * h + hf + j] = dst[i * h + j] - 2 * dst[i * h + hf + j];
       }
     }
     h *= 2;
@@ -57,6 +61,9 @@ void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
   for (size_t i = 0; i < len; i++) dst[i] /= sqrt_d; 
   /* Minghao */
   //printf("Hadamard Rotate Complete\n");
+  auto end = std::chrono::high_resolution_clock::now();
+  std::lock_guard<std::mutex> lock(this->_rotate_mtx);
+  this->_rotate_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
   /////////////
 }
 
@@ -80,12 +87,13 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   
   // In-Place 1D Hadamard Rotate
   // TODO: may need to modify len to make it into a power of 2?
-  
+
+  std::memcpy(dst, src, len);
   if (_seed != 0){
     // if random number generator is not none
-    for (size_t i = 0; i < len; i++){
-      dst[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
-    }
+    //for (size_t i = 0; i < len; i++){
+    //  dst[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+    //}
     HadamardRotate(dst, dst, len);
   }
   else{
@@ -158,6 +166,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     ptr = reinterpret_cast<index_t*>(_buf.get());
     std::memcpy(ptr, src, compressed_size);
   }
+  else std::memcpy(dst, src, compressed_size);
 
   // TODO: can this be paralleled?
   for (int i = chunk_num - 1; i >= 0; i--){
@@ -177,12 +186,12 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   HadamardRotate(dst, dst, chunk_num * PACKING_SIZE);
 
   // if random number generator is not none
-  if (_seed != 0){
+  //if (_seed != 0){
     // if random number generator is not none
-    for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
-      dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
-    }
-  }
+    //for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
+    //  dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
+    //}
+  //}
 
   // scale and return
   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
