@@ -89,23 +89,36 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // TODO: may need to modify len to make it into a power of 2?
 
   std::memcpy(dst, src, len);
-  if (_seed != 0){
-    // if random number generator is not none
-    for (size_t i = 0; i < len; i++){
-      dst[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+  // if (_seed != 0){
+  //   // if random number generator is not none
+  //   for (size_t i = 0; i < len; i++){
+  //     dst[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+  //   }
+  //   HadamardRotate(dst, dst, len);
+  // }
+  // else{
+  //   HadamardRotate(dst, src, len);
+  // }
+
+  ///!!!!!!!!!!remove here
+  float scale = 1.0f;
+  if (_use_scale) {
+    double sum = 0.0f;
+    for (size_t i = 0; i < len; ++i) {
+      sum += std::abs(src[i]);
     }
-    HadamardRotate(dst, dst, len);
+    scale = sum / len;
   }
-  else{
-    HadamardRotate(dst, src, len);
-  }
+  //////////////////////
 
   // Compute the scale
-  float norm1 = 0.0, norm2 = 0.0;
-  for (size_t i = 0; i < len; i++){
-    norm1 += std::abs(dst[i]);
-    norm2 += (dst[i] * dst[i]);
-  }
+  // float norm1 = 0.0, norm2 = 0.0;
+  // for (size_t i = 0; i < len; i++){
+  //   norm1 += std::abs(dst[i]);
+  //   norm2 += (dst[i] * dst[i]);
+  // }
+  // note norm2 is actually the square of the L2 norm
+  // float scale = norm2 / norm1;
 
   // TODO: can this be paralleled?
   for (size_t i = 0; i < chunk_num; i++){
@@ -126,9 +139,6 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
     }
     dst[i] = x;
   }
-  
-  // note norm2 is actually the square of the L2 norm
-  float scale = norm2 / norm1;
 
   // append the scale to the end of the tensor
   float* scale_ptr = reinterpret_cast<float*>(&dst[chunk_num]);
@@ -186,16 +196,16 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     }
   }
 
-  // in-place Hadamard Transform (inverse)
-  HadamardRotate(dst, dst, chunk_num * PACKING_SIZE);
+  // // in-place Hadamard Transform (inverse)
+  // HadamardRotate(dst, dst, chunk_num * PACKING_SIZE);
 
-  // if random number generator is not none
-  if (_seed != 0){
-    // if random number generator is not none
-    for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
-      dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
-    }
-  }
+  // // if random number generator is not none
+  // if (_seed != 0){
+  //   // if random number generator is not none
+  //   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
+  //     dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
+  //   }
+  // }
 
   // scale and return
   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
