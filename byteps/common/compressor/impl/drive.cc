@@ -15,7 +15,7 @@ CompressorRegistry::Register reg(
        DataType dtype) -> std::unique_ptr<Compressor>{
 
       auto seed = HyperParamFinder<unsigned>(kwargs, "seed", true,
-                                            [](unsigned x) {return x != 0;});
+                                            [](unsigned x) {return x > 0;});
     
       /* Minghao */
       printf("Drive compressor size: %d, dtype: %d, seed: %d\n", size, dtype, seed);
@@ -98,7 +98,9 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   }
   else{
     for (size_t i = 0; i < len; i++){
-      temp[i] = src[i];
+      // TODO: restore the line below !!!!!!!!
+      //temp[i] = src[i];
+      temp[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
     }
   }
   HadamardRotate(temp, temp, len);
@@ -112,7 +114,6 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   //note norm2 is actually the square of the L2 norm
   float scale = norm2 / norm1;
 
-  // TODO: can this be paralleled?
 #pragma omp parallel for simd
   for (size_t i = 0; i < chunk_num; i++){
     size_t start_index = i * PACKING_SIZE;
@@ -175,7 +176,6 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     std::memcpy(ptr, src, compressed_size);
   }
 
-  // TODO: can this be paralleled?
 #pragma omp parallel for simd
   for (int i = chunk_num - 1; i >= 0; i--){
     index_t x = ptr[i];
@@ -193,12 +193,18 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   // in-place Hadamard Transform (inverse)
   HadamardRotate(dst, dst, chunk_num * PACKING_SIZE);
 
+  // TODO: restore the if clause below !!!!!!
   // if random number generator is not none
-  if (_seed != 0){
-    // if random number generator is not none
-    for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
-      dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
-    }
+  // if (_seed != 0){
+  //   // if random number generator is not none
+  //   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
+  //     dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
+  //   }
+  // }
+
+  // TODO: remove the for loop below !!!!!!!!
+  for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
+    dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
   }
 
   // scale and return

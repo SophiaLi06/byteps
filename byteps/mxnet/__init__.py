@@ -229,8 +229,7 @@ class DistributedTrainer(mx.gluon.Trainer):
                 )
                 #########################
                 # Minghao:
-                print("compressor related parameters:")
-                print(byteps_params)
+                print("rank: {rank}, compressor related parameters: {param}".format(rank=rank(), param=byteps_params))
                 ########################
                 byteps_declare_tensor("gradient_" + str(i), **byteps_params)
 
