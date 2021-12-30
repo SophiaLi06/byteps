@@ -348,8 +348,8 @@ class DistributedTrainer(mx.gluon.Trainer):
                                  name="gradient_" + str(i), priority=-i)
                 param._grad[0][:] = self._intra_compressors[param.name].decompress(
                     compressed, ctx, x=param._data[0])
-                print("compressed and decompressed gradient_" + str(i))
-                print(param._grad[0][:])
+                #print("compressed and decompressed gradient_" + str(i))
+                #print(param._grad[0][:])
 
     def _init_params(self):
         tensors = []

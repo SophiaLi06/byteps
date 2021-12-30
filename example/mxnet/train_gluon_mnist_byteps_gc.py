@@ -62,7 +62,7 @@ parser.add_argument('--scaling', action='store_true', default=False,
 parser.add_argument('--k', type=int, default=1,
                     help='topk or randomk')
 #####Minghao
-parser.add_argument('--seed', type=int, default=0,
+parser.add_argument('--seed', type=int, default=None,
                     help='DRIVE or randomk')
 #####
 parser.add_argument('--fp16-pushpull', action='store_true', default=False,
