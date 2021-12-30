@@ -70,6 +70,7 @@ tensor_t OnebitCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   *p_scale = scale;
 
   /* Minghao */
+  printf("onebit compress scale: %.6f", scale);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_compress_mtx);
   this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
@@ -115,6 +116,7 @@ tensor_t OnebitCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   }
 
   /* Minghao */
+  printf("onebit decompress scale: %.6f", scale);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_decompress_mtx);
   this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());

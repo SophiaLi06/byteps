@@ -140,6 +140,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   *scale_ptr = scale;
 
   /* Minghao */
+  printf("drive compress scale: %.6f", scale);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_compress_mtx);
   this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
@@ -212,6 +213,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     dst[i] *= scale;
   }
   /* Minghao */
+  printf("drive decompress scale: %.6f", scale);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_decompress_mtx);
   this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
