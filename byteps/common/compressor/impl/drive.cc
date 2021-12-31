@@ -115,7 +115,9 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
       //if (i == 0) printf("temp[0]: %f, src[0]: %f\n", temp[i], src[i]);
     }
   }
+  printf("temp[0] before rotation: %f\n", temp[0]);
   HadamardRotate(temp, temp, len);
+  printf("temp[0] after rotation: %f\n", temp[0]);
 
   // Compute the scale
   double norm1 = 0.0f, norm2 = 0.0f;
@@ -153,7 +155,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   *scale_ptr = scale;
 
   /* Minghao */
-  //printf("drive compress scale: %.6f, norm1: %.6f, norm2: %.6f\n", scale, norm1, norm2);
+  printf("drive compress scale: %f, norm1: %f, norm2: %f\n", scale, norm1, norm2);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_compress_mtx);
   this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
