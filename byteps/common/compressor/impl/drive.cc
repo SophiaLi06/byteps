@@ -57,10 +57,16 @@ void DriveCompressor::HadamardRotate(index_t* dst, const scalar_t* src,
     }
     h *= 2;
   }
-  float sqrt_d = std::sqrt(len);
-  for (size_t i = 0; i < len; i++) dst[i] /= sqrt_d; 
+  //float sqrt_d = std::sqrt(len);
+  //printf("dst[0]: %f\n", dst[0]);
+  //for (size_t i = 0; i < len; i++) {
+  //  dst[i] /= sqrt_d;
+    // Minghao
+    //printf("rotation dst %d: %.6f, ", i, dst[i]);
+  //} 
   /* Minghao */
   //printf("Hadamard Rotate Complete\n");
+  //printf("dst[0]: %f\n", dst[0]);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_rotate_mtx);
   this->_rotate_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
@@ -89,6 +95,9 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // TODO: may need to modify len to make it into a power of 2?
   
   index_t temp[len];
+  // TODO: originally is sqaure root of len, but I need to keep this the same
+  // for both compress and decompress, so add a padding_len? Confirm this!!!
+  float sqrt_d = std::sqrt(len);
 
   if (_seed != 0){
     // if random number generator is not none
@@ -100,7 +109,10 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
     for (size_t i = 0; i < len; i++){
       // TODO: restore the line below !!!!!!!!
       //temp[i] = src[i];
-      temp[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+      if (_rng.Bernoulli(0.5)) {temp[i] = src[i]/sqrt_d;}
+      else {temp[i] = -src[i]/sqrt_d;}
+      //printf("temp %d: %.6f, ", i, temp[i]);
+      //if (i == 0) printf("temp[0]: %f, src[0]: %f\n", temp[i], src[i]);
     }
   }
   HadamardRotate(temp, temp, len);
@@ -108,6 +120,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // Compute the scale
   double norm1 = 0.0f, norm2 = 0.0f;
   for (size_t i = 0; i < len; i++){
+    //printf("After rotation temp %d: %.6f, ", i, temp[i]);
     norm1 += std::abs(temp[i]);
     norm2 += (temp[i] * temp[i]);
   }
@@ -140,7 +153,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   *scale_ptr = scale;
 
   /* Minghao */
-  printf("drive compress scale: %.6f", scale);
+  //printf("drive compress scale: %.6f, norm1: %.6f, norm2: %.6f\n", scale, norm1, norm2);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_compress_mtx);
   this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
@@ -203,9 +216,11 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   //   }
   // }
 
+  float sqrt_d = std::sqrt(chunk_num * PACKING_SIZE);
   // TODO: remove the for loop below !!!!!!!!
   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
-    dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
+    if (_rng.Bernoulli(0.5)) {dst[i] = dst[i]/sqrt_d;}
+    else {dst[i] = -dst[i]/sqrt_d;}
   }
 
   // scale and return
@@ -213,7 +228,7 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
     dst[i] *= scale;
   }
   /* Minghao */
-  printf("drive decompress scale: %.6f", scale);
+  //printf("drive decompress scale: %.6f", scale);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_decompress_mtx);
   this->_decompress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
