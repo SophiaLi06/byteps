@@ -94,7 +94,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   // In-Place 1D Hadamard Rotate
   // TODO: may need to modify len to make it into a power of 2?
   
-  index_t temp[len];
+  scalar_t temp[len];
   // TODO: originally is sqaure root of len, but I need to keep this the same
   // for both compress and decompress, so add a padding_len? Confirm this!!!
   float sqrt_d = std::sqrt(len);
@@ -109,15 +109,16 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
     for (size_t i = 0; i < len; i++){
       // TODO: restore the line below !!!!!!!!
       //temp[i] = src[i];
-      if (_rng.Bernoulli(0.5)) {temp[i] = src[i]/sqrt_d;}
-      else {temp[i] = -src[i]/sqrt_d;}
+      if (_rng.Bernoulli(0.5)) {temp[i] = src[i];}
+      else {temp[i] = -src[i];}
+      temp[i] /= sqrt_d;
       //printf("temp %d: %.6f, ", i, temp[i]);
       //if (i == 0) printf("temp[0]: %f, src[0]: %f\n", temp[i], src[i]);
     }
   }
-  printf("temp[0] before rotation: %f\n", temp[0]);
+  //printf("temp[0] before rotation: %f\n", temp[0]);
   HadamardRotate(temp, temp, len);
-  printf("temp[0] after rotation: %f\n", temp[0]);
+  //printf("temp[0] after rotation: %f\n", temp[0]);
 
   // Compute the scale
   double norm1 = 0.0f, norm2 = 0.0f;
@@ -155,7 +156,7 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   *scale_ptr = scale;
 
   /* Minghao */
-  printf("drive compress scale: %f, norm1: %f, norm2: %f\n", scale, norm1, norm2);
+  //printf("drive compress scale: %f, norm1: %f, norm2: %f\n", scale, norm1, norm2);
   auto end = std::chrono::high_resolution_clock::now();
   std::lock_guard<std::mutex> lock(this->_compress_mtx);
   this->_compress_time += (std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
