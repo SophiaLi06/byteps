@@ -53,6 +53,7 @@ class FP16Compressor(Compressor):
         if tensor.dtype.is_floating_point:
             # Only allow compression from other floating point types
             tensor_compressed = tensor.type(torch.float16)
+        print("torch fp16 compress")
         return tensor_compressed, tensor.dtype
 
     @staticmethod
@@ -62,6 +63,7 @@ class FP16Compressor(Compressor):
         dtype = ctx
         if dtype.is_floating_point:
             tensor_decompressed = tensor.type(dtype)
+        print("torch fp16 decompress")
         return tensor_decompressed
 
 
