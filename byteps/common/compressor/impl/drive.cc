@@ -94,15 +94,18 @@ tensor_t DriveCompressor::CompressImpl(index_t* dst, const scalar_t* src,
   if (_seed != 0){
     // if random number generator is not none
     for (size_t i = 0; i < len; i++){
-      temp[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+      //temp[i] = src[i] * (2 * _rng.Bernoulli(0.5) - 1);
+      if (_rng.Bernoulli(0.5)) {temp[i] = src[i]; this->_bernoulli++;}
+      else {temp[i] = -src[i];}
+      temp[i] /= sqrt_d;
     }
   }
   else{
     for (size_t i = 0; i < len; i++){
-      // TODO: restore the line below !!!!!!!!
-      if (_rng.Bernoulli(0.5)) {temp[i] = src[i];}
-      else {temp[i] = -src[i];}
-      temp[i] /= sqrt_d;
+      // if (_rng.Bernoulli(0.5)) {temp[i] = src[i];}
+      // else {temp[i] = -src[i];}
+      // temp[i] /= sqrt_d;
+      temp[i] = src[i]/sqrt_d;
     }
   }
 
@@ -188,21 +191,27 @@ tensor_t DriveCompressor::DecompressImpl(scalar_t* dst, const index_t* src,
   // in-place Hadamard Transform (inverse)
   HadamardRotate(dst, dst, chunk_num * PACKING_SIZE);
 
-  // TODO: restore the if clause below !!!!!!
-  // if random number generator is not none
-  // if (_seed != 0){
-  //   // if random number generator is not none
-  //   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
-  //     dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
-  //   }
-  // }
-
   float sqrt_d = std::sqrt(chunk_num * PACKING_SIZE);
-  // TODO: remove the for loop below !!!!!!!!
-  for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
-    if (_rng.Bernoulli(0.5)) {dst[i] = dst[i]/sqrt_d;}
-    else {dst[i] = -dst[i]/sqrt_d;}
+
+  if (_seed != 0){
+    // if random number generator is not none
+    for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
+      if (_rng.Bernoulli(0.5)) {dst[i] = dst[i]/sqrt_d;}
+      else {dst[i] = -dst[i]/sqrt_d;}
+      //dst[i] = dst[i] * (2 * _rng.Bernoulli(0.5) - 1);
+    }
   }
+  else{
+    for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
+      dst[i] = dst[i]/sqrt_d;
+    }
+  }
+
+  // TODO: remove the for loop below !!!!!!!!
+  // for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
+  //   if (_rng.Bernoulli(0.5)) {dst[i] = dst[i]/sqrt_d;}
+  //   else {dst[i] = -dst[i]/sqrt_d;}
+  // }
 
   // scale and return
   for (size_t i = 0; i < chunk_num * PACKING_SIZE; i++){
