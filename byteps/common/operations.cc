@@ -270,15 +270,15 @@ Status EnqueueTensor(BPSContext &context, std::shared_ptr<Tensor> input,
     task->key = context.key_list[i];  // assign the key now
     BPS_CHECK(task->tensor_name != "");
     /* Minghao */
-    std::cout << "EnqueueTensor: " << (task->tensor_name)
-                   << ", key=" << (task->key) << ", offset=" << (task->offset)
-                   << ", len=" << (task->len) << ", device=" << (task->device)
-                   << " rank=" << BytePSGlobal::GetLocalRank() << "\n";
-    // BPS_LOG(TRACE) << "EnqueueTensor: " << (task->tensor_name)
+    // std::cout << "EnqueueTensor: " << (task->tensor_name)
     //                << ", key=" << (task->key) << ", offset=" << (task->offset)
     //                << ", len=" << (task->len) << ", device=" << (task->device)
-    //                << " rank=" << BytePSGlobal::GetLocalRank();
-    //////////////////
+    //                << " rank=" << BytePSGlobal::GetLocalRank() << "\n";
+    BPS_LOG(TRACE) << "EnqueueTensor: " << (task->tensor_name)
+                   << ", key=" << (task->key) << ", offset=" << (task->offset)
+                   << ", len=" << (task->len) << ", device=" << (task->device)
+                   << " rank=" << BytePSGlobal::GetLocalRank();
+    ////////////////
 
     BytePSGlobal::GetScheduledQueue(e->queue_list[0])->addTask(task);
     accumulated += task->len;
