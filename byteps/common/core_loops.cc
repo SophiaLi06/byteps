@@ -19,6 +19,10 @@
 #include <chrono>
 #include <memory>
 
+//Minghao
+#include <iostream>
+//////////
+
 #include "common.h"
 #include "compressor/compressor.h"
 #include "core_loops.h"
@@ -555,6 +559,7 @@ bool RunPushLoopOnce() {
       // get metadata
       const int dtype = task->tensor->dtype();
 
+      /* Minghao */
       // use compressed data/len
       if (task->compressed) {
         BPS_LOG(DEBUG) << "PUSH with gradient compression. key=" << task->key;
@@ -753,6 +758,9 @@ bool RunNonRootCopyHost2DeviceLoopOnce() {
 }
 
 void CoordinateReduceLoop() {
+  // Minghao
+  std::cout << "CoordinateReduceLoop\n";
+  /////////////////
   while (RunCoordinateLoopOnce(COORDINATE_REDUCE) &&
          !BytePSGlobal::ShouldShutdown()) {
   }
@@ -760,6 +768,9 @@ void CoordinateReduceLoop() {
 }
 
 void CoordinateBroadcastLoop() {
+  // Minghao
+  std::cout << "CoordinateBroadbastLoop\n";
+  /////////////////
   while (RunCoordinateLoopOnce(COORDINATE_BROADCAST) &&
          !BytePSGlobal::ShouldShutdown()) {
   }
@@ -767,6 +778,9 @@ void CoordinateBroadcastLoop() {
 }
 
 void CoordinatePushLoop() {
+  // Minghao
+  std::cout << "CoordinatePushLoop\n";
+  /////////////////
   while (RunCoordinateLoopOnce(COORDINATE_PUSH) &&
          !BytePSGlobal::ShouldShutdown()) {
   }
@@ -774,6 +788,9 @@ void CoordinatePushLoop() {
 }
 
 void PcieReduceLoop() {
+  // Minghao
+  std::cout << "PcieReduceLoop\n";
+  /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunPcieReduceLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
@@ -781,6 +798,9 @@ void PcieReduceLoop() {
 }
 
 void RootNcclLoop() {
+  // Minghao
+  std::cout << "RootNcclLoop\n";
+  /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunRootNcclLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
@@ -788,6 +808,9 @@ void RootNcclLoop() {
 }
 
 void NonRootNcclLoop() {
+  // Minghao
+  std::cout << "NonRootNcclLoop\n";
+  /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunNonRootNcclLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
@@ -795,6 +818,9 @@ void NonRootNcclLoop() {
 }
 
 void SyncNcclLoop() {
+  // Minghao
+  std::cout << "SyncNcclLoop\n";
+  /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunSyncNcclOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
@@ -802,6 +828,9 @@ void SyncNcclLoop() {
 }
 
 void CopyDevice2HostLoop() {
+  // Minghao
+  std::cout << "CopyDevice2HostLoop\n";
+  /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunCopyDevice2HostLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
@@ -815,12 +844,18 @@ void CompressLoop() {
 }
 
 void PushLoop() {
+  // Minghao
+  std::cout << "PushLoop\n";
+  /////////////////
   while (RunPushLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
   BytePSGlobal::ReportThreadFinish();
 }
 
 void PullLoop() {
+  // Minghao
+  std::cout << "PullLoop\n";
+  /////////////////
   while (RunPullLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
   BytePSGlobal::ReportThreadFinish();
@@ -833,6 +868,9 @@ void DecompressLoop() {
 }
 
 void RootCopyHost2DeviceLoop() {
+  // Minghao
+  std::cout << "RootCopyHost2DeviceLoop\n";
+  /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunRootCopyHost2DeviceLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
@@ -840,6 +878,9 @@ void RootCopyHost2DeviceLoop() {
 }
 
 void NonRootCopyListenLoop() {
+  // Minghao
+  std::cout << "NonRootCopyListenLoop\n";
+  /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunNonRootCopyListenLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
@@ -847,6 +888,9 @@ void NonRootCopyListenLoop() {
 }
 
 void NonRootCopyHost2DeviceLoop() {
+  // Minghao
+  std::cout << "NonRootCopyHost2DeviceLoop\n";
+  /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunNonRootCopyHost2DeviceLoopOnce() &&
          !BytePSGlobal::ShouldShutdown()) {
