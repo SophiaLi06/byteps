@@ -317,6 +317,9 @@ bool RunRootNcclLoopOnce() {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }
 
+  /* Minghao */
+  std::cout << "RunRootNcclLoopOnce"
+  /////////////
   return true;
 }
 
@@ -360,6 +363,9 @@ bool RunNonRootNcclLoopOnce() {
 
   nccl_entry->RecordEvents();
   BytePSGlobal::GetNccl()->EnqueueGroup(nccl_entry);
+  /* Minghao */
+  std::cout << "RunNonRootNcclLoopOnce"
+  /////////////
   return true;
 }
 
