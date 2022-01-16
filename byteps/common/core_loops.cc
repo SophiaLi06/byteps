@@ -318,7 +318,7 @@ bool RunRootNcclLoopOnce() {
   }
 
   /* Minghao */
-  std::cout << "RunRootNcclLoopOnce\n";
+  //std::cout << "RunRootNcclLoopOnce\n";
   /////////////
   return true;
 }
@@ -364,7 +364,7 @@ bool RunNonRootNcclLoopOnce() {
   nccl_entry->RecordEvents();
   BytePSGlobal::GetNccl()->EnqueueGroup(nccl_entry);
   /* Minghao */
-  std::cout << "RunNonRootNcclLoopOnce\n";
+  //std::cout << "RunNonRootNcclLoopOnce\n";
   /////////////
   return true;
 }
@@ -589,6 +589,9 @@ bool RunPushLoopOnce() {
   } else {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }
+  /* Minghao */
+  std::cout << "RunPushLoopOnce\n";
+  /////////////
   return true;
 }
 
@@ -625,6 +628,9 @@ bool RunPullLoopOnce() {
   } else {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }
+  /* Minghao */
+  std::cout << "RunPullLoopOnce\n";
+  /////////////
   return true;
 }
 
