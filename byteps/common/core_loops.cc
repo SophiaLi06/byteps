@@ -318,7 +318,7 @@ bool RunRootNcclLoopOnce() {
   }
 
   /* Minghao */
-  std::cout << "RunRootNcclLoopOnce"
+  std::cout << "RunRootNcclLoopOnce\n";
   /////////////
   return true;
 }
@@ -364,7 +364,7 @@ bool RunNonRootNcclLoopOnce() {
   nccl_entry->RecordEvents();
   BytePSGlobal::GetNccl()->EnqueueGroup(nccl_entry);
   /* Minghao */
-  std::cout << "RunNonRootNcclLoopOnce"
+  std::cout << "RunNonRootNcclLoopOnce\n";
   /////////////
   return true;
 }
