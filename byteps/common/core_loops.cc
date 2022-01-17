@@ -590,7 +590,7 @@ bool RunPushLoopOnce() {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }
   /* Minghao */
-  std::cout << "RunPushLoopOnce\n";
+  //std::cout << "RunPushLoopOnce\n";
   /////////////
   return true;
 }
@@ -629,7 +629,7 @@ bool RunPullLoopOnce() {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }
   /* Minghao */
-  std::cout << "RunPullLoopOnce\n";
+  //std::cout << "RunPullLoopOnce\n";
   /////////////
   return true;
 }
