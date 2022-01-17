@@ -293,6 +293,9 @@ bool RunRootNcclLoopOnce() {
       if (!task) {
         break;
       }
+      /* Minghao */
+      std::cout << "InRunRootNcclLoopOnce\n";
+      /////////////
       tasks.push_back(task);
       queues.push_back(q);
 
@@ -341,6 +344,9 @@ bool RunNonRootNcclLoopOnce() {
     if (msg.signal == DO_GROUP) {
       break;
     }
+    /* Minghao */
+    std::cout << "InRunNonRootNcclLoopOnce\n";
+    /////////////
     QueueType this_op = REDUCE;
     if (msg.signal == DO_BROADCAST) {
       this_op = BROADCAST;
@@ -550,6 +556,9 @@ bool RunPushLoopOnce() {
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
   auto task = q->getTask();
   if (task) {
+    /* Minghao */
+    std::cout << "RunPushLoopOnce\n";
+    /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
 
@@ -600,6 +609,9 @@ bool RunPullLoopOnce() {
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
   auto task = q->getTask();
   if (task) {
+    /* Minghao */
+    std::cout << "RunPullLoopOnce\n";
+    /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PULL loop";
     // TODO: allow merging
