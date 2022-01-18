@@ -88,7 +88,7 @@ void byteps_lazy_init() {
     func.push_back(CoordinateBroadcastLoop);
     func.push_back(NonRootNcclLoop);
   }
-
+  // Minghao annotation: start the loop functions in func, one thread each loop function
   BytePSGlobal::Start(func);
   return;
 }
@@ -373,6 +373,7 @@ void InitTensor(BPSContext &context, size_t size, int dtype, void *cpubuff) {
   size_t i = 0;
   BPS_LOG(INFO) << "tensor size=" << size;
   // small tensor does not need to be compressed
+  // Minghao highlight
   if (size < BytePSGlobal::GetMinCompressBound()) {
     context.kwargs.clear();
   }
@@ -391,7 +392,9 @@ void InitTensor(BPSContext &context, size_t size, int dtype, void *cpubuff) {
       // blocking push, also as a global barrirer
       ps->Wait(ps->ZPush(pskv.keys, vals, pskv.lens, cmd));
 
-      /* Minghao: not registering */
+      /* Minghao: not registering. Otherwise, the context.compressor_list is not empty
+                  and in EnqueueTensor they will try to insert queues for 
+                  COMPRESS and DECOMPRESS into queue_list */
       // register
       // if (!context.kwargs.empty()) {
       //   auto compressor_ptr = compressor::CompressorRegistry::Create(
