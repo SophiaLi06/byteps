@@ -228,10 +228,17 @@ inline void PostNcclCalls(
   }
 
   BPS_CHECK(task->tensor_name != "");
-  BPS_LOG(TRACE) << task->tensor_name << " calling NCCL " << LogStrings[this_op]
+  /* Minghao */
+  BPS_LOG(INFO) << task->tensor_name << " calling NCCL " << LogStrings[this_op]
                  << " (rank=" << nccl_rank << ") key=" << key
                  << ", elements=" << len / unit_len
                  << ", device=" << task->device;
+  
+  // BPS_LOG(TRACE) << task->tensor_name << " calling NCCL " << LogStrings[this_op]
+  //                << " (rank=" << nccl_rank << ") key=" << key
+  //                << ", elements=" << len / unit_len
+  //                << ", device=" << task->device;
+  /////////////
 
   if (this_op == REDUCE) {
     // We reduce to task->output except that it is a CPU tensor
@@ -294,7 +301,7 @@ bool RunRootNcclLoopOnce() {
         break;
       }
       /* Minghao */
-      std::cout << "InRunRootNcclLoopOnce\n";
+      //std::cout << "InRunRootNcclLoopOnce\n";
       /////////////
       tasks.push_back(task);
       queues.push_back(q);
@@ -345,7 +352,7 @@ bool RunNonRootNcclLoopOnce() {
       break;
     }
     /* Minghao */
-    std::cout << "InRunNonRootNcclLoopOnce\n";
+    //std::cout << "InRunNonRootNcclLoopOnce\n";
     /////////////
     QueueType this_op = REDUCE;
     if (msg.signal == DO_BROADCAST) {
@@ -557,7 +564,7 @@ bool RunPushLoopOnce() {
   auto task = q->getTask();
   if (task) {
     /* Minghao */
-    std::cout << "RunPushLoopOnce\n";
+    //std::cout << "RunPushLoopOnce\n";
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
@@ -610,7 +617,7 @@ bool RunPullLoopOnce() {
   auto task = q->getTask();
   if (task) {
     /* Minghao */
-    std::cout << "RunPullLoopOnce\n";
+    //std::cout << "RunPullLoopOnce\n";
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PULL loop";
