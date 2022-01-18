@@ -248,6 +248,9 @@ inline void PostNcclCalls(
     }
 
     if (num_elem_per_gpu) {
+      /* Minghao */
+      BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!"
+      //////////////
       NCCLCHECK(ncclReduceScatter(
           (const void *)p,
           (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len),
@@ -256,6 +259,9 @@ inline void PostNcclCalls(
           (cudaStream_t)nccl_stream));
     }
     if (left_elem) {
+      /* Minghao */
+      BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!"
+      //////////////
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
                            (void *)(out_p + len - left_elem * unit_len),
                            (size_t)left_elem, (ncclDataType_t)nccl_dtype,
@@ -264,12 +270,16 @@ inline void PostNcclCalls(
     }
   } else {
     if (num_elem_per_gpu) {
+      /* Minghao */
+      BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!!"
+      //////////////
       NCCLCHECK(ncclAllGather(
           (const void *)(p + nccl_rank * num_elem_per_gpu * unit_len),
           (void *)p, (size_t)num_elem_per_gpu, (ncclDataType_t)nccl_dtype,
           (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
     }
     if (left_elem) {
+      BPS_LOG(INFO) << "!!!!!!!!ncclBroadcast!!!!!!!!!!!!"
       NCCLCHECK(ncclBroadcast((const void *)(p + len - left_elem * unit_len),
                               (void *)(p + len - left_elem * unit_len),
                               (size_t)left_elem, (ncclDataType_t)nccl_dtype,
