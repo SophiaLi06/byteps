@@ -136,6 +136,10 @@ class _DistributedOptimizer(torch.optim.Optimizer):
         else:
             tensor = p.grad
             tensor_compressed, ctx = self._compression.compress(tensor)
+            #########Minghao
+            #########TODO: do "weighted sum" here?
+            print("in _push_pull_grad_async")
+            #########
             handle = byteps_push_pull(tensor_compressed, average=True, name="Gradient."+name)
         return handle, ctx
 
@@ -205,6 +209,10 @@ class _DistributedOptimizer(torch.optim.Optimizer):
                         name = self._parameter_names.get(p)
                     handle = byteps_push_pull(p, average=False, name="AsyncParam."+name)
                     _, ctx = self._compression.compress(p)
+                    ############Minghao
+                    # TODO: need to do anything here?
+                    print("in step after compress")
+                    ###############
                     self._handles[p] = (handle, ctx)
 
             self.synchronize()
