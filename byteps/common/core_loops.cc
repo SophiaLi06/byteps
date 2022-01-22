@@ -229,10 +229,10 @@ inline void PostNcclCalls(
 
   BPS_CHECK(task->tensor_name != "");
   /* Minghao */
-  BPS_LOG(INFO) << task->tensor_name << " calling NCCL " << LogStrings[this_op]
-                 << " (rank=" << nccl_rank << ") key=" << key
-                 << ", elements=" << len / unit_len
-                 << ", device=" << task->device;
+  // BPS_LOG(INFO) << task->tensor_name << " calling NCCL " << LogStrings[this_op]
+  //                << " (rank=" << nccl_rank << ") key=" << key
+  //                << ", elements=" << len / unit_len
+  //                << ", device=" << task->device;
   
   // BPS_LOG(TRACE) << task->tensor_name << " calling NCCL " << LogStrings[this_op]
   //                << " (rank=" << nccl_rank << ") key=" << key
@@ -249,7 +249,7 @@ inline void PostNcclCalls(
 
     if (num_elem_per_gpu) {
       /* Minghao */
-      BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
       //////////////
       NCCLCHECK(ncclReduceScatter(
           (const void *)p,
@@ -260,7 +260,7 @@ inline void PostNcclCalls(
     }
     if (left_elem) {
       /* Minghao */
-      BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
       //////////////
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
                            (void *)(out_p + len - left_elem * unit_len),
@@ -271,7 +271,7 @@ inline void PostNcclCalls(
   } else {
     if (num_elem_per_gpu) {
       /* Minghao */
-      BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!!";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!!";
       //////////////
       NCCLCHECK(ncclAllGather(
           (const void *)(p + nccl_rank * num_elem_per_gpu * unit_len),
@@ -279,7 +279,7 @@ inline void PostNcclCalls(
           (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
     }
     if (left_elem) {
-      BPS_LOG(INFO) << "!!!!!!!!ncclBroadcast!!!!!!!!!!!!";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclBroadcast!!!!!!!!!!!!";
       NCCLCHECK(ncclBroadcast((const void *)(p + len - left_elem * unit_len),
                               (void *)(p + len - left_elem * unit_len),
                               (size_t)left_elem, (ncclDataType_t)nccl_dtype,
