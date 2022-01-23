@@ -140,8 +140,8 @@ class _DistributedOptimizer(torch.optim.Optimizer):
             ######### do "weighted sum" here?
             #print("in _push_pull_grad_async")
             #print(tensor_compressed)
-            tensor_compressed = torch.mul(tensor_compressed, 2)
-            print("tensor_compressed")
+            #tensor_compressed = torch.mul(tensor_compressed, 2)
+            #print("tensor_compressed")
             #########
             handle = byteps_push_pull(tensor_compressed, average=True, name="Gradient."+name)
         return handle, ctx
@@ -214,7 +214,7 @@ class _DistributedOptimizer(torch.optim.Optimizer):
                     _, ctx = self._compression.compress(p)
                     ############Minghao
                     # TODO: need to do anything here?
-                    print("in step after compress")
+                    # print("in step after compress")
                     ###############
                     self._handles[p] = (handle, ctx)
 
