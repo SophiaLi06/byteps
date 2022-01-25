@@ -8,6 +8,9 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 import torch.utils.data.distributed
 import byteps.torch as bps
+#######Minghao
+import time
+#######
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
@@ -165,7 +168,13 @@ def test():
         print('\nTest set: Average loss: {:.4f}, Accuracy: {:.2f}%\n'.format(
             test_loss, 100. * test_accuracy))
 
-
+#####Minghao
+start_time = time.time()
+#####
 for epoch in range(1, args.epochs + 1):
     train(epoch)
     test()
+#####Minghao
+total_time = time.time() - start_time
+print("Total Time: " + str(total_time))
+#####
