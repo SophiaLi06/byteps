@@ -289,8 +289,13 @@ Status EnqueueTensor(BPSContext &context, std::shared_ptr<Tensor> input,
   BPS_CHECK_EQ(accumulated, tensor->size())
       << "accumulated partition size not equal to original tensor size";
 
-  BPS_LOG(TRACE) << "EnqueueTensor finished: " << name
+  // Minghao
+  BPS_LOG(INFO) << "EnqueueTensor finished: " << name
                  << ", rank=" << BytePSGlobal::GetLocalRank();
+  
+  // BPS_LOG(TRACE) << "EnqueueTensor finished: " << name
+  //                << ", rank=" << BytePSGlobal::GetLocalRank();
+  ////////////
   return Status::OK();
 }
 
