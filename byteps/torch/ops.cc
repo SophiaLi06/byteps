@@ -67,6 +67,10 @@ void StartTask(::torch::Tensor tensor, ::torch::Tensor output, int average,
                       ? const_cast<void*>(byteps_input->data())
                       : nullptr);
 
+  // Minghao annotation: the GetPushQueueList returns a list containing queues for all
+  // operations before pushing (e.g., REDUCE, COPYD2H) and PUSH
+  // the GetPullQueueList returns a list containing PULL and queues for all operations
+  // after pulling (e.g., COPYH2D, BROADCAST). See operations.c line 455-511
   auto queue_list = common::GetPushQueueList(device);
   auto queue_list_pull = common::GetPullQueueList(device);
   queue_list->insert(queue_list->end(), queue_list_pull->begin(),

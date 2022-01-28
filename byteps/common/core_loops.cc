@@ -36,6 +36,9 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
   auto &queue_list = task->queue_list;
   BPS_CHECK_GE(queue_list.size(), 1);
   auto this_op = queue_list[0];
+  // Minghao
+  BPS_LOG(INFO) << "FinishOrProceed op: " << LogStrings[this_op];
+  //////////////////////
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
   q->reportFinish(task->len);
   if (BytePSGlobal::IsTensorSampled(task->key)) {
@@ -415,7 +418,7 @@ bool RunCopyDevice2HostLoopOnce() {
 
   if (task) {
     /* Minghao */
-    BPS_LOG(INFO) << "RunCopyDevice2HostLoopOnce. rank=" << BytePSGlobal::GetLocalRank();
+    //BPS_LOG(INFO) << "RunCopyDevice2HostLoopOnce. rank=" << BytePSGlobal::GetLocalRank();
     /////////////
     auto copy_d2h_Stream = BytePSGlobal::GetCopyDevice2HostStream();
     // If we ran NCCL reduce, we should copy from task->output
@@ -749,7 +752,7 @@ bool RunRootCopyHost2DeviceLoopOnce() {
 
   if (task) {
     /* Minghao */
-    BPS_LOG(INFO) << "RunRootCopyHost2DeviceLoopOnce. rank=" << BytePSGlobal::GetLocalRank();
+    //BPS_LOG(INFO) << "RunRootCopyHost2DeviceLoopOnce. rank=" << BytePSGlobal::GetLocalRank();
     /////////////
     auto key = task->key;
     int local_rank = BytePSGlobal::GetLocalRank();
@@ -797,7 +800,7 @@ bool RunNonRootCopyHost2DeviceLoopOnce() {
 
   if (task) {
     /* Minghao */
-    BPS_LOG(INFO) << "RunNonRootCopyHost2DeviceLoopOnce. rank=" << BytePSGlobal::GetLocalRank();
+    //BPS_LOG(INFO) << "RunNonRootCopyHost2DeviceLoopOnce. rank=" << BytePSGlobal::GetLocalRank();
     /////////////
     CopyHost2Device(task);
     FinishOrProceed(task);
