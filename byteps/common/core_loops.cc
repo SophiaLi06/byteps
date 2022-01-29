@@ -37,7 +37,7 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
   BPS_CHECK_GE(queue_list.size(), 1);
   auto this_op = queue_list[0];
   // Minghao
-  BPS_LOG(INFO) << "FinishOrProceed op: " << LogStrings[this_op];
+  //BPS_LOG(INFO) << "FinishOrProceed op: " << LogStrings[this_op];
   //////////////////////
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
   q->reportFinish(task->len);
@@ -581,6 +581,7 @@ bool RunPushLoopOnce() {
   if (task) {
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
+    BPS_LOG(INFO) << "Push Tensor GPU ptr: " << task->gpu_ptr << "\n";
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
