@@ -585,8 +585,8 @@ bool RunPushLoopOnce() {
     if (task->cpubuff) BPS_LOG(INFO) << "Push Tensor CPU buff: " << task->cpubuff << "\n";
     auto tensor = task->tensor;
     if (tensor){
-      auto gpu_addr = (char *)(tensor->data()) + task->offset;
-      BPS_LOG(INFO) << "Push Tensor GPU Addr: " << gpu_addr << "\n";
+      //auto gpu_addr = (char *)(tensor->data()) + task->offset;
+      BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
@@ -645,8 +645,8 @@ bool RunPullLoopOnce() {
     if (task->cpubuff) BPS_LOG(INFO) << "Pull Tensor CPU buff: " << task->cpubuff << "\n";
     auto tensor = task->tensor;
     if (tensor){
-      auto gpu_addr = (char *)(tensor->data()) + task->offset;
-      BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << gpu_addr << "\n";
+      //auto gpu_addr = (char *)(tensor->data()) + task->offset;
+      BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
