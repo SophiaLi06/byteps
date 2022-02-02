@@ -21,7 +21,7 @@
 
 //Minghao
 #include <iostream>
-//#include "test/test.cuh"
+#include "test/test.cuh"
 //////////
 
 #include "common.h"
@@ -31,7 +31,7 @@
 #include "logging.h"
 
 //Minghao
-extern "C" void test_wrapper(void);
+//void test_wrapper(void);
 
 namespace byteps {
 namespace common {
