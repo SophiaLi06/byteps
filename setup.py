@@ -369,6 +369,9 @@ def build_server(build_ext, options):
         ['-DBYTEPS_BUILDING_SERVER']
     server_lib.extra_link_args = options['LINK_FLAGS']
     server_lib.extra_objects = options['EXTRA_OBJECTS']
+    # Minghao: removed the CUDA object from the list of extra objects 
+    server_lib.extra_objects.remove('byteps/common/test/test.o')
+    ##########
     server_lib.library_dirs = options['LIBRARY_DIRS']
 
     # auto-detect rdma
