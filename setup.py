@@ -335,6 +335,8 @@ def get_common_options(build_ext):
     # ps-lite
     EXTRA_OBJECTS = ['3rdparty/ps-lite/build/libps.a',
                      '3rdparty/ps-lite/deps/lib/libzmq.a']
+    # Minghao: can I add the nvcc compiled objects here?
+    EXTRA_OBJECTS += ['byteps/common/test/test.o']
 
     return dict(MACROS=MACROS,
                 INCLUDES=INCLUDES,

@@ -21,6 +21,7 @@
 
 //Minghao
 #include <iostream>
+//#include "test/test.cuh"
 //////////
 
 #include "common.h"
@@ -28,6 +29,9 @@
 #include "core_loops.h"
 #include "global.h"
 #include "logging.h"
+
+//Minghao
+extern "C" void test_wrapper(void);
 
 namespace byteps {
 namespace common {
@@ -323,6 +327,7 @@ bool RunRootNcclLoopOnce() {
         //auto gpu_addr = (char *)(tensor->data()) + task->offset;
         BPS_LOG(INFO) << "RootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
       }
+      test_wrapper();
       /////////////
       tasks.push_back(task);
       queues.push_back(q);
@@ -396,6 +401,7 @@ bool RunNonRootNcclLoopOnce() {
       //auto gpu_addr = (char *)(tensor->data()) + task->offset;
       BPS_LOG(INFO) << "NonRootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     }
+    test_wrapper();
     //////////////
 
     tasks.push_back(task);
