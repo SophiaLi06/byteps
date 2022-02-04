@@ -1020,6 +1020,11 @@ class custom_build_ext(build_ext):
             raise DistutilsSetupError('An ERROR occured while building the server module.\n\n'
                                       '%s' % traceback.format_exc())
 
+        # Minghao
+        print("!!!!!!!!!Setup Options:")
+        print(options)
+        ################
+
         # If PyTorch is installed, it must be imported before others, otherwise
         # we may get an error: dlopen: cannot load any more object with static TLS
         if not without_pytorch():
