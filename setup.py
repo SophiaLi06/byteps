@@ -1021,6 +1021,7 @@ class custom_build_ext(build_ext):
                                       '%s' % traceback.format_exc())
 
         # Minghao
+        options['EXTRA_OBJECTS'] += ['byteps/common/test/test.o']
         print("!!!!!!!!!Setup Options:")
         print(options)
         ################
