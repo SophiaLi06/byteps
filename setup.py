@@ -336,7 +336,9 @@ def get_common_options(build_ext):
     EXTRA_OBJECTS = ['3rdparty/ps-lite/build/libps.a',
                      '3rdparty/ps-lite/deps/lib/libzmq.a']
     # Minghao: can I add the nvcc compiled objects here?
-    EXTRA_OBJECTS += ['byteps/common/test/test.so']
+    #EXTRA_OBJECTS += ['byteps/common/test/test.so']
+    LIBRARIES += ['test']
+    LIBRARY_DIRS += [f'{os.getcwd()}/byteps/common/test']
 
     return dict(MACROS=MACROS,
                 INCLUDES=INCLUDES,
@@ -370,7 +372,7 @@ def build_server(build_ext, options):
     server_lib.extra_link_args = options['LINK_FLAGS']
     server_lib.extra_objects = options['EXTRA_OBJECTS']
     # Minghao: removed the CUDA object from the list of extra objects 
-    server_lib.extra_objects.remove('byteps/common/test/test.so')
+    #server_lib.extra_objects.remove('byteps/common/test/test.so')
     ##########
     server_lib.library_dirs = options['LIBRARY_DIRS']
 
@@ -1021,7 +1023,7 @@ class custom_build_ext(build_ext):
                                       '%s' % traceback.format_exc())
 
         # Minghao
-        options['EXTRA_OBJECTS'] += ['byteps/common/test/test.so']
+        #options['EXTRA_OBJECTS'] += ['byteps/common/test/test.so']
         print("!!!!!!!!!Setup Options:")
         print(options)
         ################
