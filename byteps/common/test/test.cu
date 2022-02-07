@@ -1,4 +1,5 @@
 #include "test.cuh"
+#include <stdio.h>
 
 // assume the data type is float 32 for now. In the future, better do dtype check
 __global__ void test_kernel(void){}
@@ -6,9 +7,9 @@ __global__ void test_kernel(void){}
 __global__ void test_mul(const void* p, size_t len){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(p));
     for(size_t i = 0; i < len; i++) {
-        std::cout << "before: " << ptr[i] << std::endl;
+        printf("Before %f\n", ptr[i]);
         ptr[i] = ptr[i] * 2;
-        std::cout << "after: " << ptr[i] << std::endl;
+        printf("After %f\n", ptr[i]);
     }
 }
 
