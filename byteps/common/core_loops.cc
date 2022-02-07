@@ -230,8 +230,12 @@ inline void PostNcclCalls(
     nccl_root = BytePSGlobal::GetReduceRootByKey(key);
     num_elem_per_gpu = 0;
     left_elem = len / unit_len;
-    BPS_LOG(TRACE) << "Reduce key=" << key << " to root=" << nccl_root
+    // Minghao
+    BPS_LOG(INFO) << "Reduce key=" << key << " to root=" << nccl_root
                    << " rank=" << BytePSGlobal::GetLocalRank();
+    // BPS_LOG(TRACE) << "Reduce key=" << key << " to root=" << nccl_root
+    //                << " rank=" << BytePSGlobal::GetLocalRank();
+    //////////////
   }
 
   BPS_CHECK(task->tensor_name != "");
@@ -256,7 +260,7 @@ inline void PostNcclCalls(
 
     if (num_elem_per_gpu) {
       /* Minghao */
-      //BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
+      BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
       //////////////
       NCCLCHECK(ncclReduceScatter(
           (const void *)p,
@@ -267,7 +271,7 @@ inline void PostNcclCalls(
     }
     if (left_elem) {
       /* Minghao */
-      //BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
+      BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
       //////////////
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
                            (void *)(out_p + len - left_elem * unit_len),
@@ -278,7 +282,7 @@ inline void PostNcclCalls(
   } else {
     if (num_elem_per_gpu) {
       /* Minghao */
-      //BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!!";
+      BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!!";
       //////////////
       NCCLCHECK(ncclAllGather(
           (const void *)(p + nccl_rank * num_elem_per_gpu * unit_len),
@@ -286,7 +290,7 @@ inline void PostNcclCalls(
           (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
     }
     if (left_elem) {
-      //BPS_LOG(INFO) << "!!!!!!!!ncclBroadcast!!!!!!!!!!!!";
+      BPS_LOG(INFO) << "!!!!!!!!ncclBroadcast!!!!!!!!!!!!";
       NCCLCHECK(ncclBroadcast((const void *)(p + len - left_elem * unit_len),
                               (void *)(p + len - left_elem * unit_len),
                               (size_t)left_elem, (ncclDataType_t)nccl_dtype,
@@ -320,13 +324,13 @@ bool RunRootNcclLoopOnce() {
       /* Minghao */
       //std::cout << "InRunRootNcclLoopOnce\n";
       // TODO: check this_op, if it is REDUCE, do weighted sum and modify the task->tensor?
-      if (task->gpu_ptr) BPS_LOG(INFO) << "RootNccl Tensor GPU ptr: " << task->gpu_ptr << "\n";
-      if (task->cpubuff) BPS_LOG(INFO) << "RootNccl Tensor CPU buff: " << task->cpubuff << "\n";
+      //if (task->gpu_ptr) BPS_LOG(INFO) << "RootNccl Tensor GPU ptr: " << task->gpu_ptr << "\n";
+      //if (task->cpubuff) BPS_LOG(INFO) << "RootNccl Tensor CPU buff: " << task->cpubuff << "\n";
       auto tensor = task->tensor;
-      if (tensor){
-        //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-        BPS_LOG(INFO) << "RootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-      }
+      // if (tensor){
+      //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
+      //   BPS_LOG(INFO) << "RootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
+      // }
       test_wrapper(task->gpu_ptr, task->tensor->data(), task->offset);
       /////////////
       tasks.push_back(task);
@@ -394,13 +398,13 @@ bool RunNonRootNcclLoopOnce() {
     BPS_CHECK(task);
     /* Minghao */
     // TODO: check this_op, if it is REDUCE, do weighted sum and modify the task->tensor?
-    if (task->gpu_ptr) BPS_LOG(INFO) << "NonRootNccl Tensor GPU ptr: " << task->gpu_ptr << "\n";
-    if (task->cpubuff) BPS_LOG(INFO) << "NonRootNccl Tensor CPU buff: " << task->cpubuff << "\n";
-    auto tensor = task->tensor;
-    if (tensor){
-      //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-      BPS_LOG(INFO) << "NonRootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-    }
+    // if (task->gpu_ptr) BPS_LOG(INFO) << "NonRootNccl Tensor GPU ptr: " << task->gpu_ptr << "\n";
+    // if (task->cpubuff) BPS_LOG(INFO) << "NonRootNccl Tensor CPU buff: " << task->cpubuff << "\n";
+    // auto tensor = task->tensor;
+    // if (tensor){
+    //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
+    //   BPS_LOG(INFO) << "NonRootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
+    // }
     test_wrapper(task->gpu_ptr, task->tensor->data(), task->offset);
     //////////////
 
