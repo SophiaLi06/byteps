@@ -5,7 +5,11 @@ __global__ void test_kernel(void){}
 
 __global__ void test_mul(const void* p, size_t len){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(p));
-    for(size_t i = 0; i < len; i++) ptr[i] = ptr[i] * 2;
+    for(size_t i = 0; i < len; i++) {
+        std::cout << "before: " << ptr[i] << std::endl;
+        ptr[i] = ptr[i] * 2;
+        std::cout << "after: " << ptr[i] << std::endl;
+    }
 }
 
 void test_wrapper(void){
@@ -26,5 +30,7 @@ void test_wrapper(void* gpu_ptr, const void* data_ptr, int offset){
 
 void test_mul_wrapper(const void* p, size_t len){
     test_mul <<<1, 1>>> (p, len);
+    // Wait for GPU to finish
+    cudaDeviceSynchronize();
     std::cout << "Tested CUDA multiply" << std::endl;
 }
