@@ -11,5 +11,5 @@ void test_wrapper(void){
 
 void test_wrapper(void* gpu_ptr){
     test_kernel <<<1, 1>>> ();
-    std::cout << "GPU address: " << gpu_ptr << std::endl;
+    if(gpu_ptr) std::cout << "GPU address: " << gpu_ptr << std::endl;
 }
