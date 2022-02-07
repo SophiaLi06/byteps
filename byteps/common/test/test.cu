@@ -1,6 +1,12 @@
 #include "test.cuh"
 
+// assume the data type is float 32 for now. In the future, better do dtype check
 __global__ void test_kernel(void){}
+
+__global__ void test_mul(const void* p, size_t len){
+    float* ptr = reinterpret_cast<float*>(const_cast<void*>(p));
+    for(size_t i = 0; i < len; i++) ptr[i] = ptr[i] * 2;
+}
 
 void test_wrapper(void){
     test_kernel <<<1, 1>>> ();
@@ -16,4 +22,9 @@ void test_wrapper(void* gpu_ptr, const void* data_ptr, int offset){
     test_kernel <<<1, 1>>> ();
     if(gpu_ptr) std::cout << "GPU address: " << gpu_ptr << std::endl;
     if(data_ptr) std::cout << "Data pointer: " << data_ptr << "offset: " << offset << std::endl;
+}
+
+void test_mul_wrapper(const void* p, size_t len){
+    test_mul <<<1, 1>>> (p, len);
+    std::cout << "Tested CUDA multiply" << std::endl;
 }

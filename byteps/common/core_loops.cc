@@ -231,10 +231,11 @@ inline void PostNcclCalls(
     num_elem_per_gpu = 0;
     left_elem = len / unit_len;
     // Minghao
-    BPS_LOG(INFO) << "Reduce key=" << key << " to root=" << nccl_root
-                   << " rank=" << BytePSGlobal::GetLocalRank();
-    // BPS_LOG(TRACE) << "Reduce key=" << key << " to root=" << nccl_root
+    // NOTE: it seems that we DON'T have this set by default!!!
+    // BPS_LOG(INFO) << "Reduce key=" << key << " to root=" << nccl_root
     //                << " rank=" << BytePSGlobal::GetLocalRank();
+    BPS_LOG(TRACE) << "Reduce key=" << key << " to root=" << nccl_root
+                   << " rank=" << BytePSGlobal::GetLocalRank();
     //////////////
   }
 
@@ -261,6 +262,7 @@ inline void PostNcclCalls(
     if (num_elem_per_gpu) {
       /* Minghao */
       BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
+      test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
       //////////////
       NCCLCHECK(ncclReduceScatter(
           (const void *)p,
@@ -272,6 +274,7 @@ inline void PostNcclCalls(
     if (left_elem) {
       /* Minghao */
       BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
+      test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
       //////////////
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
                            (void *)(out_p + len - left_elem * unit_len),
