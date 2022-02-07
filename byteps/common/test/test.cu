@@ -12,7 +12,7 @@ void test_wrapper(void* gpu_ptr){
     if(gpu_ptr) std::cout << "GPU address: " << gpu_ptr << std::endl;
 }
 
-void test_wrapper(void* gpu_ptr, void* data_ptr, int offset){
+void test_wrapper(void* gpu_ptr, const void* data_ptr, int offset){
     test_kernel <<<1, 1>>> ();
     if(gpu_ptr) std::cout << "GPU address: " << gpu_ptr << std::endl;
     if(data_ptr) std::cout << "Data pointer: " << data_ptr << "offset: " << offset << std::endl;
