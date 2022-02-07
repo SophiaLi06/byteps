@@ -327,7 +327,7 @@ bool RunRootNcclLoopOnce() {
         //auto gpu_addr = (char *)(tensor->data()) + task->offset;
         BPS_LOG(INFO) << "RootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
       }
-      test_wrapper(task->gpu_ptr);
+      test_wrapper(task->gpu_ptr, task->tensor->data(), task->offset);
       /////////////
       tasks.push_back(task);
       queues.push_back(q);
@@ -401,7 +401,7 @@ bool RunNonRootNcclLoopOnce() {
       //auto gpu_addr = (char *)(tensor->data()) + task->offset;
       BPS_LOG(INFO) << "NonRootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     }
-    test_wrapper(task->gpu_ptr);
+    test_wrapper(task->gpu_ptr, task->tensor->data(), task->offset);
     //////////////
 
     tasks.push_back(task);
