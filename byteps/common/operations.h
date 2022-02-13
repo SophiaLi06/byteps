@@ -16,6 +16,8 @@
 #ifndef BYTEPS_OPERATIONS_H
 #define BYTEPS_OPERATIONS_H
 
+#define CPU_COMPRESS
+
 #include <functional>
 #include "common.h"
 
