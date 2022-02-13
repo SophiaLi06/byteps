@@ -263,7 +263,7 @@ inline void PostNcclCalls(
       /* Minghao */
       BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
-      if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
+      //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
       #endif
       //////////////
       NCCLCHECK(ncclReduceScatter(
@@ -277,7 +277,7 @@ inline void PostNcclCalls(
       /* Minghao */
       BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
-      if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
+      //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
       #endif
       //////////////
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
