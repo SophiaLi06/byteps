@@ -16,6 +16,8 @@
 #ifndef BYTEPS_CORE_LOOPS_H
 #define BYTEPS_CORE_LOOPS_H
 
+//#define CPU_COMPRESS
+
 namespace byteps {
 namespace common {
 
