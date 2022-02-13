@@ -231,7 +231,7 @@ inline void PostNcclCalls(
     num_elem_per_gpu = 0;
     left_elem = len / unit_len;
     // Minghao
-    // NOTE: it seems that we DON'T have this set by default!!!
+    // NOTE: it seems that we DON'T have this "IsUsingReduce" set by default!!!
     // BPS_LOG(INFO) << "Reduce key=" << key << " to root=" << nccl_root
     //                << " rank=" << BytePSGlobal::GetLocalRank();
     BPS_LOG(TRACE) << "Reduce key=" << key << " to root=" << nccl_root

@@ -175,9 +175,9 @@ void PartitionTensor(
     e->counter_ptr = entry->counter_ptr;
     e->total_partnum = entry->total_partnum;
     /* Minghao: not using the compressor*/
-    // if (!entry->context->compressor_list.empty()) {
-    //   e->compressor = entry->context->compressor_list[i];
-    // }
+    if (!entry->context->compressor_list.empty()) {
+      e->compressor = entry->context->compressor_list[i];
+    }
 
     accumulated += e->len;
     ++i;
@@ -203,13 +203,13 @@ Status EnqueueTensor(BPSContext &context, std::shared_ptr<Tensor> input,
   }
 
   /* Minghao */
-  // // add queue
-  // if (BytePSGlobal::IsRootDevice() && !context.compressor_list.empty()) {
-  //   auto it = std::find(queue_list->begin(), queue_list->end(), PUSH);
-  //   it = queue_list->insert(it, COMPRESS);  // before PUSH
-  //   it = std::find(queue_list->begin(), queue_list->end(), PULL);
-  //   queue_list->insert(it + 1, DECOMPRESS);  // after PULL
-  // }
+  // add queue
+  if (BytePSGlobal::IsRootDevice() && !context.compressor_list.empty()) {
+    auto it = std::find(queue_list->begin(), queue_list->end(), PUSH);
+    it = queue_list->insert(it, COMPRESS);  // before PUSH
+    it = std::find(queue_list->begin(), queue_list->end(), PULL);
+    queue_list->insert(it + 1, DECOMPRESS);  // after PULL
+  }
 
   std::shared_ptr<TensorTableEntry> e(new TensorTableEntry);
   e->tensor_name = name;
@@ -401,11 +401,11 @@ void InitTensor(BPSContext &context, size_t size, int dtype, void *cpubuff) {
                   and in EnqueueTensor they will try to insert queues for 
                   COMPRESS and DECOMPRESS into queue_list */
       // register
-      // if (!context.kwargs.empty()) {
-      //   auto compressor_ptr = compressor::CompressorRegistry::Create(
-      //       context.kwargs, Align(len, dtype), static_cast<DataType>(dtype));
-      //   context.compressor_list.push_back(std::move(compressor_ptr));
-      // }
+      if (!context.kwargs.empty()) {
+        auto compressor_ptr = compressor::CompressorRegistry::Create(
+            context.kwargs, Align(len, dtype), static_cast<DataType>(dtype));
+        context.compressor_list.push_back(std::move(compressor_ptr));
+      }
       ///////////////////////////////
     }
 
@@ -419,19 +419,19 @@ void InitTensor(BPSContext &context, size_t size, int dtype, void *cpubuff) {
   /* Minghao: TODO: check we need to modify what is sent to the server
               For now, just not sending*/
   // send to server
-  // if (!context.kwargs.empty() && BytePSGlobal::IsDistributed() &&
-  //     BytePSGlobal::IsRootDevice()) {
-  //   auto ps = BytePSGlobal::GetOrInitPS();
-  //   auto content = compressor::Serialize(context.kwargs);
-  //   auto len = content.size();
-  //   auto data = const_cast<char *>(content.c_str());
-  //   for (auto key : key_list) {
-  //     auto &kv = BytePSGlobal::EncodeDefaultKey(key, len);
-  //     ps::SArray<char> vals(data, len, false);
-  //     int cmd = GetCommandType(RequestType::kCompressedPushPull, dtype);
-  //     ps->Wait(ps->ZPush(kv.keys, vals, kv.lens, cmd));
-  //   }
-  // }
+  if (!context.kwargs.empty() && BytePSGlobal::IsDistributed() &&
+      BytePSGlobal::IsRootDevice()) {
+    auto ps = BytePSGlobal::GetOrInitPS();
+    auto content = compressor::Serialize(context.kwargs);
+    auto len = content.size();
+    auto data = const_cast<char *>(content.c_str());
+    for (auto key : key_list) {
+      auto &kv = BytePSGlobal::EncodeDefaultKey(key, len);
+      ps::SArray<char> vals(data, len, false);
+      int cmd = GetCommandType(RequestType::kCompressedPushPull, dtype);
+      ps->Wait(ps->ZPush(kv.keys, vals, kv.lens, cmd));
+    }
+  }
 
   context.initialized = true;
 
