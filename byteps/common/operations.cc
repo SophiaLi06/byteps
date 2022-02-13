@@ -53,7 +53,7 @@ void byteps_lazy_init() {
     if (BytePSGlobal::IsRootDevice()) {
       func.push_back(PullLoop);
       /* Minghao */
-      //func.push_back(DecompressLoop);
+      func.push_back(DecompressLoop);
     }
   }
 
@@ -70,7 +70,7 @@ void byteps_lazy_init() {
       // Or a dummy barrier in cross-pcie-switch mode
       func.push_back(PushLoop);
       /* Minghao */
-      //func.push_back(CompressLoop);
+      func.push_back(CompressLoop);
       func.push_back(RootCopyHost2DeviceLoop);
     } else {
       func.push_back(CoordinatePushLoop);
