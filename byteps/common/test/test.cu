@@ -8,9 +8,23 @@ __global__ void test_mul(const void* p, size_t len){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(p));
     for(size_t i = 0; i < len; i++) {
         //printf("Before %f\n", ptr[i]);
-        ptr[i] = ptr[i] * 2;
+        ptr[i] = ptr[i] * 2.0;
         //printf("After %f\n", ptr[i]);
     }
+}
+
+__global__ void test_div(const void* p, size_t len){
+    float* ptr = reinterpret_cast<float*>(const_cast<void*>(p));
+    for(size_t i = 0; i < len; i++) {
+        //printf("Before %f\n", ptr[i]);
+        ptr[i] = ptr[i] / 2.0;
+        //printf("After %f\n", ptr[i]);
+    }
+}
+
+__global__ void test_unclip(const void* p, size_t len){
+    float* ptr = reinterpret_cast<float*>(const_cast<void*>(p));
+    size_t compressed_len = len / 4;
 }
 
 void test_wrapper(void){
@@ -34,4 +48,17 @@ void test_mul_wrapper(const void* p, size_t len){
     // Wait for GPU to finish
     cudaDeviceSynchronize();
     //std::cout << "Tested CUDA multiply" << std::endl;
+}
+
+void test_div_wrapper(const void* p, size_t len){
+    test_div <<<1, 1>>> (p, len);
+    // Wait for GPU to finish
+    cudaDeviceSynchronize();
+    //std::cout << "Tested CUDA multiply" << std::endl;
+}
+
+void test_clipping(const void* p, size_t len){
+    test_unclip <<<1, 1>>> (p, len);
+    // Wait for GPU to finish
+    cudaDeviceSynchronize();
 }

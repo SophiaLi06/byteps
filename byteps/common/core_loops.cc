@@ -263,7 +263,8 @@ inline void PostNcclCalls(
       /* Minghao */
       BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
-      //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
+      if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
+      // TODO: test clipping here by changing the size field in ncclReduceScatter
       #endif
       //////////////
       NCCLCHECK(ncclReduceScatter(
@@ -277,7 +278,8 @@ inline void PostNcclCalls(
       /* Minghao */
       BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
-      //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
+      if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
+      // TODO: test clipping here by changing the size field in ncclReduceScatter
       #endif
       //////////////
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
@@ -789,6 +791,12 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
         (size_t)copy_len, (cudaMemcpyKind)cudaMemcpyHostToDevice,
         (cudaStream_t)*copy_h2d_stream));
     CUDA_CALL(cudaStreamSynchronize(*copy_h2d_stream));
+    /* Minghao */
+    #ifndef CPU_COMPRESS
+    if(tensor->dtype() == BYTEPS_FLOAT32) {
+      test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
+    }
+    #endif
   }
 
   return;
