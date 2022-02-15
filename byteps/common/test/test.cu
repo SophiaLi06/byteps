@@ -31,10 +31,10 @@ __global__ void test_quan(const void* p, size_t len){
     for(size_t i = 0; i < len; ++i) {
         if (ptr[i] > max_val) max_val = ptr[i];
     }
-    printf("max_val %f\n", max_val);
+    //printf("max_val %f\n", max_val);
     for(size_t i = 0; i < len; ++i) {
         res_ptr[i] = uint8_t(ptr[i] / max_val);
-        printf("After %hhu\n", res_ptr[i]);
+        //printf("After %hhu\n", res_ptr[i]);
     }
     ptr[len/4] = max_val;
 }
@@ -47,7 +47,7 @@ __global__ void test_unclip(const void* p, size_t len){
     for(size_t i = len - 1; i >= 0; --i) {
         //printf("Before %f\n", ptr[i]);
         ptr[i] = (float(quan_ptr[i]) / float(256) * max_val);
-        printf("After %f\n", ptr[i]);
+        //printf("After %f\n", ptr[i]);
     }
 }
 
