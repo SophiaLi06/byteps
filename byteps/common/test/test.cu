@@ -27,7 +27,10 @@ __global__ void test_div(const void* p, size_t len){
 __global__ void test_quan(const void* p, size_t len){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(p));
     uint8_t* res_ptr = reinterpret_cast<uint8_t*>(const_cast<void*>(p));
-    float max_val = *(std::max_element(ptr, ptr+len));
+    float max_val = 0;
+    for(size_t i = 0; i < len; ++i) {
+        if (ptr[i] > max_val) max_val = ptr[i];
+    }
     printf("max_val %f\n", max_val);
     for(size_t i = 0; i < len; ++i) {
         res_ptr[i] = uint8_t(ptr[i] / max_val);
