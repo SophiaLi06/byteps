@@ -12,3 +12,5 @@ void test_mul_wrapper(const void* p, size_t len);
 void test_div_wrapper(const void* p, size_t len);
 
 void test_clipping(const void* p, size_t len);
+
+void test_quan_wrapper(const void* p, size_t len);
