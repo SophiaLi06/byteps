@@ -1,5 +1,6 @@
 #include "test.cuh"
 #include <stdio.h>
+#include <stdint.h>
 #include <algorithm>
 
 // assume the data type is float 32 for now. In the future, better do dtype check
