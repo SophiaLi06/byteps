@@ -263,30 +263,56 @@ inline void PostNcclCalls(
       /* Minghao */
       BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
-      if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
-      // TODO: test clipping here by changing the size field in ncclReduceScatter
-      #endif
-      //////////////
+      //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
+      //nccl_dtype = getNcclDataType(BYTEPS_UINT8);
+      // test clipping here by changing the size field in ncclReduceScatter
+      NCCLCHECK(ncclReduceScatter(
+          (const void *)p,
+          (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len),
+          (size_t)num_elem_per_gpu / 4, (ncclDataType_t)nccl_dtype,
+          (ncclRedOp_t)ncclSum, (ncclComm_t)nccl_comm,
+          (cudaStream_t)nccl_stream));
+      #else
       NCCLCHECK(ncclReduceScatter(
           (const void *)p,
           (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len),
           (size_t)num_elem_per_gpu, (ncclDataType_t)nccl_dtype,
           (ncclRedOp_t)ncclSum, (ncclComm_t)nccl_comm,
           (cudaStream_t)nccl_stream));
+      #endif
+      // NCCLCHECK(ncclReduceScatter(
+      //     (const void *)p,
+      //     (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len),
+      //     (size_t)num_elem_per_gpu, (ncclDataType_t)nccl_dtype,
+      //     (ncclRedOp_t)ncclSum, (ncclComm_t)nccl_comm,
+      //     (cudaStream_t)nccl_stream));
+      //////////////
     }
     if (left_elem) {
       /* Minghao */
       BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
-      if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
+      //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
+      //nccl_dtype = getNcclDataType(BYTEPS_UINT8);
       // TODO: test clipping here by changing the size field in ncclReduceScatter
-      #endif
-      //////////////
+      NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
+                           (void *)(out_p + len - left_elem * unit_len),
+                           (size_t)left_elem / 4, (ncclDataType_t)nccl_dtype,
+                           (ncclRedOp_t)ncclSum, (int)nccl_root,
+                           (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
+      #else
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
                            (void *)(out_p + len - left_elem * unit_len),
                            (size_t)left_elem, (ncclDataType_t)nccl_dtype,
                            (ncclRedOp_t)ncclSum, (int)nccl_root,
                            (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
+      #endif
+      // NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
+      //                      (void *)(out_p + len - left_elem * unit_len),
+      //                      (size_t)left_elem, (ncclDataType_t)nccl_dtype,
+      //                      (ncclRedOp_t)ncclSum, (int)nccl_root,
+      //                      (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
+      //////////////
     }
   } else {
     if (num_elem_per_gpu) {
@@ -794,9 +820,10 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     /* Minghao */
     #ifndef CPU_COMPRESS
     if(tensor->dtype() == BYTEPS_FLOAT32) {
-      test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
+      test_clipping((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
     }
     #endif
+    /////////////
   }
 
   return;

@@ -25,6 +25,11 @@ __global__ void test_div(const void* p, size_t len){
 __global__ void test_unclip(const void* p, size_t len){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(p));
     size_t compressed_len = len / 4;
+    for(size_t i = compressed_len; i < len; i++) {
+        //printf("Before %f\n", ptr[i]);
+        ptr[i] = 0;
+        //printf("After %f\n", ptr[i]);
+    }
 }
 
 void test_wrapper(void){
