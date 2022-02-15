@@ -264,13 +264,13 @@ inline void PostNcclCalls(
       BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
       //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
-      if(tensor->dtype() == BYTEPS_FLOAT32) test_quan_wrapper((const void *)p, (size_t)num_elem_per_gpu);
+      //if(tensor->dtype() == BYTEPS_FLOAT32) test_quan_wrapper((const void *)p, (size_t)num_elem_per_gpu);
       nccl_dtype = getNcclDataType(BYTEPS_UINT8);
       // test clipping here by changing the size field in ncclReduceScatter
       NCCLCHECK(ncclReduceScatter(
           (const void *)p,
           (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len),
-          (size_t)num_elem_per_gpu, (ncclDataType_t)nccl_dtype,
+          (size_t)num_elem_per_gpu * 4, (ncclDataType_t)nccl_dtype,
           (ncclRedOp_t)ncclSum, (ncclComm_t)nccl_comm,
           (cudaStream_t)nccl_stream));
       #else
@@ -294,12 +294,12 @@ inline void PostNcclCalls(
       BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
       //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
-      if(tensor->dtype() == BYTEPS_FLOAT32) test_quan_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
+      //if(tensor->dtype() == BYTEPS_FLOAT32) test_quan_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
       nccl_dtype = getNcclDataType(BYTEPS_UINT8);
       // TODO: test clipping here by changing the size field in ncclReduceScatter
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
                            (void *)(out_p + len - left_elem * unit_len),
-                           (size_t)left_elem, (ncclDataType_t)nccl_dtype,
+                           (size_t)left_elem * 4, (ncclDataType_t)nccl_dtype,
                            (ncclRedOp_t)ncclSum, (int)nccl_root,
                            (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
       #else
@@ -821,9 +821,9 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     CUDA_CALL(cudaStreamSynchronize(*copy_h2d_stream));
     /* Minghao */
     #ifndef CPU_COMPRESS
-    if(tensor->dtype() == BYTEPS_FLOAT32) {
-      test_clipping((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
-    }
+    // if(tensor->dtype() == BYTEPS_FLOAT32) {
+    //   test_clipping((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
+    // }
     #endif
     /////////////
   }
