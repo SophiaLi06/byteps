@@ -9,20 +9,18 @@ __global__ void setup_kernel(curandState *state)
     curand_init(1234, id, 0, &state[id]);
 }
 
-__global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curandState *state){
+__global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curandState *state, float grad_max){
+    //threadIdx.x contains the index of the current thread within its block, 
+    //and blockDim.x contains the number of threads in the block
     int id = threadIdx.x + blockIdx.x * blockDim.x;
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
     float x;
+    int index = threadIdx.x;
+    int stride = blockDim.x;
     /* Copy state to local memory for efficiency */
     curandState localState = state[id];
-    float grad_max = fabsf(ptr[0]);
-    float grad_abs;
-    for(size_t i = 0; i < len; i++){
-        grad_abs = fabsf(ptr[i]);
-        if (grad_abs > grad_max) grad_max = grad_abs;
-    }
     /* Generate pseudo-random uniforms */
-    for(size_t i = 0; i < len; i++) {
+    for(size_t i = index; i < len; i+=stride) {
         x = curand_uniform(&localState);
         if(x < fabsf(ptr[i])/grad_max) {
             if (ptr[i] > 0) ptr[i] = 1.0;
@@ -35,12 +33,26 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
 }
 
 void terngrad_compress(const void* gpu_ptr, size_t len){
+    float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
+    float grad_max = fabsf(ptr[0]);
+    float grad_abs;
+    for(size_t i = 0; i < len; i++){
+        grad_abs = fabsf(ptr[i]);
+        if (grad_abs > grad_max) grad_max = grad_abs;
+    }
+    const unsigned int threadsPerBlock = 64;
+    // TODO: first try one block, then increase block number
+    const unsigned int blockCount = 1;
+    //const unsigned int blockCount = (len + threadsPerBlock - 1) / threadsPerBlock;
+    const unsigned int totalThreads = threadsPerBlock * blockCount;
     curandState *devStates;
+    // /* Allocate space for results on host */
+    // hostResults = (unsigned int *)calloc(totalThreads, sizeof(int));
     /* Allocate space for prng states on device */
-    cudaMalloc((void**)&devStates, sizeof(curandState));
+    cudaMalloc((void**)&devStates, totalThreads * sizeof(curandState));
     /* Setup prng states */
-    setup_kernel<<<1, 1>>>(devStates);
-    terngrad_compress_kernel<<<1, 1>>>(gpu_ptr, len, devStates);
+    setup_kernel<<<blockCount, threadsPerBlock>>>(devStates);
+    terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
     /* Cleanup */
     cudaFree(devStates);
 }
