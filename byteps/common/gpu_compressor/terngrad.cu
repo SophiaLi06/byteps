@@ -12,6 +12,7 @@ __global__ void setup_kernel(curandState *state)
 __global__ void terngrad_compress(const void* gpu_ptr, size_t len, curandState *state){
     int id = threadIdx.x + blockIdx.x * blockDim.x;
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
+    float x;
     /* Copy state to local memory for efficiency */
     curandState localState = state[id];
     float grad_max = fabsf(ptr[0]);
