@@ -11,6 +11,20 @@ __global__ void setup_kernel(curandState *state)
     curand_init(1234, id, 0, &state[id]);
 }
 
+__global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
+    float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
+    float grad_max;
+    if (ptr[0] >= 0) grad_max = ptr[0];
+    else grad_max = -ptr[0];
+    float grad_abs;
+    for(size_t i = 0; i < len; i++){
+        if (ptr[i] >= 0) grad_abs = ptr[i];
+        else grad_abs = -ptr[i];
+        if (grad_abs > grad_max) grad_max = grad_abs;
+    }
+    *result = grad_max;
+}
+
 __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curandState *state, float grad_max){
     //threadIdx.x contains the index of the current thread within its block, 
     //and blockDim.x contains the number of threads in the block
@@ -38,15 +52,13 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
 void terngrad_compress(const void* gpu_ptr, size_t len){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
     float grad_max;
-    if (ptr[0] >= 0) grad_max = ptr[0];
-    else grad_max = -ptr[0];
-    float grad_abs;
-    for(size_t i = 0; i < len; i++){
-        if (ptr[i] >= 0) grad_abs = ptr[i];
-        else grad_abs = -ptr[i];
-        if (grad_abs > grad_max) grad_max = grad_abs;
-    }
+    float* grad_max_answer;
+    cudaMalloc(&grad_max_answer, sizeof(float));
+    find_grad_max<<<1, 1>>>(gpu_ptr, len, grad_max_answer);
+    cudaMemcpy(&grad_max, grad_max_answer, sizeof(float), cudaMemcpyDeviceToHost);
+    cudaFree(grad_max_answer);
     std::cout << "grad_max: " << grad_max << std::endl;
+    
     const unsigned int threadsPerBlock = 64;
     // TODO: first try one block, then increase block number
     const unsigned int blockCount = 1;
