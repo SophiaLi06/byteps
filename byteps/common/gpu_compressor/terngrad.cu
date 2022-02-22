@@ -37,12 +37,16 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
 
 void terngrad_compress(const void* gpu_ptr, size_t len){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
-    float grad_max = std::abs(ptr[0]);
+    float grad_max;
+    if (ptr[0] >= 0) grad_max = ptr[0];
+    else grad_max = -ptr[0];
     float grad_abs;
     for(size_t i = 0; i < len; i++){
-        grad_abs = std::abs(ptr[i]);
+        if (ptr[i] >= 0) grad_abs = ptr[i];
+        else grad_abs = -ptr[i];
         if (grad_abs > grad_max) grad_max = grad_abs;
     }
+    std::cout << "grad_max: " << grad_max << std::endl;
     const unsigned int threadsPerBlock = 64;
     // TODO: first try one block, then increase block number
     const unsigned int blockCount = 1;
