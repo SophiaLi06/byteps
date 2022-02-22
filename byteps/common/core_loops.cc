@@ -22,6 +22,7 @@
 //Minghao
 #include <iostream>
 #include "test/test.cuh"
+#include "gpu_compressor/terngrad.cuh"
 //////////
 
 #include "common.h"
@@ -534,8 +535,15 @@ bool RunCopyDevice2HostLoopOnce() {
     if (copy_len) {
       /* Minghao */
       #ifndef CPU_COMPRESS
+      // if(tensor->dtype() == BYTEPS_FLOAT32) {
+      //   test_mul_wrapper((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+      // }
+      // NOTE: 65536 is the defualt minimum number of byteps to compress.
+      // And we don't want to blindly modify all tensors, otherwise those for accuracy
+      // also get modified? 
+      // TODO: not modifying, say tensors containing less than 100 byteps 
       if(tensor->dtype() == BYTEPS_FLOAT32) {
-        test_mul_wrapper((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       }
       #endif
       /////////////
@@ -828,8 +836,11 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     CUDA_CALL(cudaStreamSynchronize(*copy_h2d_stream));
     /* Minghao */
     #ifndef CPU_COMPRESS
+    // if(tensor->dtype() == BYTEPS_FLOAT32) {
+    //   test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
+    // }
     if(tensor->dtype() == BYTEPS_FLOAT32) {
-      test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
+      terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
     }
     #endif
     /////////////

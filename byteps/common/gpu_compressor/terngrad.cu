@@ -9,7 +9,7 @@ __global__ void setup_kernel(curandState *state)
     curand_init(1234, id, 0, &state[id]);
 }
 
-__global__ void terngrad_compress(const void* gpu_ptr, size_t len, curandState *state){
+__global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curandState *state){
     int id = threadIdx.x + blockIdx.x * blockDim.x;
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
     float x;
@@ -34,18 +34,18 @@ __global__ void terngrad_compress(const void* gpu_ptr, size_t len, curandState *
     state[id] = localState;
 }
 
-void compress(const void* gpu_ptr, size_t len){
+void terngrad_compress(const void* gpu_ptr, size_t len){
     curandState *devStates;
     /* Allocate space for prng states on device */
     cudaMalloc((void**)&devStates, sizeof(curandState));
     /* Setup prng states */
     setup_kernel<<<1, 1>>>(devStates);
-    terngrad_compress<<<1, 1>>>(gpu_ptr, len, devStates);
+    terngrad_compress_kernel<<<1, 1>>>(gpu_ptr, len, devStates);
     /* Cleanup */
     cudaFree(devStates);
 }
 
-void decompress(const void* gpu_ptr, float scale, size_t len){
+void terngrad_decompress(const void* gpu_ptr, float scale, size_t len){
     // TODO: time the gradient with a scale
     // For now, just do nothing as I haven't figured out where to put scale
 }

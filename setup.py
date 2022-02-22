@@ -337,8 +337,8 @@ def get_common_options(build_ext):
                      '3rdparty/ps-lite/deps/lib/libzmq.a']
     # Minghao: can I add the nvcc compiled objects here?
     #EXTRA_OBJECTS += ['byteps/common/test/test.so']
-    LIBRARIES += ['test']
-    LIBRARY_DIRS += [f'{os.getcwd()}/byteps/common/test']
+    LIBRARIES += ['test', 'terngrad']
+    LIBRARY_DIRS += [f'{os.getcwd()}/byteps/common/test', f'{os.getcwd()}/byteps/common/gpu_compressor']
 
     return dict(MACROS=MACROS,
                 INCLUDES=INCLUDES,
