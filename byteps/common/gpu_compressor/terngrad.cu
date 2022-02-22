@@ -1,5 +1,7 @@
 #include "terngrad.cuh"
 #include "math.h"
+#include <stdio.h>
+#include <iostream>
 
 __global__ void setup_kernel(curandState *state)
 {
@@ -27,6 +29,7 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
             else ptr[i] = -1.0;
         }
         else ptr[i] = 0.0;
+        printf("Done index %d\n", i);
     }
     /* Copy state back to global memory */
     state[id] = localState;
@@ -52,6 +55,7 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     cudaMalloc((void**)&devStates, totalThreads * sizeof(curandState));
     /* Setup prng states */
     setup_kernel<<<blockCount, threadsPerBlock>>>(devStates);
+    std::cout << "Done setup" << std::endl;
     terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
     /* Cleanup */
     cudaFree(devStates);
