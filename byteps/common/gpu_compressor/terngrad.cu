@@ -43,7 +43,7 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
             else ptr[i] = -1.0;
         }
         else ptr[i] = 0.0;
-        printf("Done index %d\n", i);
+        //printf("Done index %d\n", i);
     }
     /* Copy state back to global memory */
     state[id] = localState;
@@ -57,8 +57,8 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     find_grad_max<<<1, 1>>>(gpu_ptr, len, grad_max_answer);
     cudaMemcpy(&grad_max, grad_max_answer, sizeof(float), cudaMemcpyDeviceToHost);
     cudaFree(grad_max_answer);
-    std::cout << "grad_max: " << grad_max << std::endl;
-    
+    //std::cout << "grad_max: " << grad_max << std::endl;
+
     const unsigned int threadsPerBlock = 64;
     // TODO: first try one block, then increase block number
     const unsigned int blockCount = 1;
@@ -69,10 +69,10 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     // hostResults = (unsigned int *)calloc(totalThreads, sizeof(int));
     /* Allocate space for prng states on device */
     cudaMalloc((void**)&devStates, totalThreads * sizeof(curandState));
-    std::cout << "Done mallocing for devStates" << std::endl;
+    //std::cout << "Done mallocing for devStates" << std::endl;
     /* Setup prng states */
     setup_kernel<<<blockCount, threadsPerBlock>>>(devStates);
-    std::cout << "Done setup" << std::endl;
+    //std::cout << "Done setup" << std::endl;
     terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
     /* Cleanup */
     cudaFree(devStates);
