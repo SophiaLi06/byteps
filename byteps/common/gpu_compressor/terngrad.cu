@@ -53,6 +53,7 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     // hostResults = (unsigned int *)calloc(totalThreads, sizeof(int));
     /* Allocate space for prng states on device */
     cudaMalloc((void**)&devStates, totalThreads * sizeof(curandState));
+    std::cout << "Done mallocing for devStates" << std::endl;
     /* Setup prng states */
     setup_kernel<<<blockCount, threadsPerBlock>>>(devStates);
     std::cout << "Done setup" << std::endl;
