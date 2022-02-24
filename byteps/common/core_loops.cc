@@ -543,7 +543,7 @@ bool RunCopyDevice2HostLoopOnce() {
       // also get modified? 
       // TODO: not modifying, say tensors containing less than 100 byteps 
       if(tensor->dtype() == BYTEPS_FLOAT32) {
-        //terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       }
       #endif
       /////////////
@@ -840,7 +840,7 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     //   test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
     // }
     if(tensor->dtype() == BYTEPS_FLOAT32) {
-      //terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
+      terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
     }
     #endif
     /////////////
