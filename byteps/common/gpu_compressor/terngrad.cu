@@ -23,6 +23,7 @@ __global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
         if (grad_abs > grad_max) grad_max = grad_abs;
     }
     *result = grad_max;
+    // TODO: maybe append grad_max (i.e., the scale at the end here)
 }
 
 __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curandState *state, float grad_max){
@@ -47,6 +48,7 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
     }
     /* Copy state back to global memory */
     state[id] = localState;
+    // TODO: change data type from float to uint8
 }
 
 void terngrad_compress(const void* gpu_ptr, size_t len){
@@ -61,7 +63,7 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
 
     const unsigned int threadsPerBlock = 64;
     // TODO: first try one block, then increase block number
-    const unsigned int blockCount = 1;
+    const unsigned int blockCount = 64;
     //const unsigned int blockCount = (len + threadsPerBlock - 1) / threadsPerBlock;
     const unsigned int totalThreads = threadsPerBlock * blockCount;
     curandState *devStates;
