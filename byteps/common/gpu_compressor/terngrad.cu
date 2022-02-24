@@ -29,11 +29,12 @@ __global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
 __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curandState *state, float grad_max){
     //threadIdx.x contains the index of the current thread within its block, 
     //and blockDim.x contains the number of threads in the block
+    //and gridDim.x gives the number of blocks in a grid
     int id = threadIdx.x + blockIdx.x * blockDim.x;
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
     float x;
-    int index = threadIdx.x;
-    int stride = blockDim.x;
+    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    int stride = blockDim.x * gridDim.x;
     /* Copy state to local memory for efficiency */
     curandState localState = state[id];
     /* Generate pseudo-random uniforms */
