@@ -17,7 +17,9 @@ __global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
     if (ptr[0] >= 0) grad_max = ptr[0];
     else grad_max = -ptr[0];
     float grad_abs;
-    for(size_t i = 0; i < len; i++){
+    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    int stride = blockDim.x * gridDim.x;
+    for(size_t i = index; i < len; i+=stride){
         if (ptr[i] >= 0) grad_abs = ptr[i];
         else grad_abs = -ptr[i];
         if (grad_abs > grad_max) grad_max = grad_abs;
@@ -57,12 +59,13 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     float grad_max;
     float* grad_max_answer;
     cudaMalloc(&grad_max_answer, sizeof(float));
-    find_grad_max<<<1, 1>>>(gpu_ptr, len, grad_max_answer);
+    find_grad_max<<<64, 64>>>(gpu_ptr, len, grad_max_answer);
+    //find_grad_max<<<1, 1>>>(gpu_ptr, len, grad_max_answer);
     cudaMemcpy(&grad_max, grad_max_answer, sizeof(float), cudaMemcpyDeviceToHost);
     cudaFree(grad_max_answer);
     //std::cout << "grad_max: " << grad_max << std::endl;
 
-    const unsigned int threadsPerBlock = 64;
+    const unsigned int threadsPerBlock = 256;
     // TODO: first try one block, then increase block number
     const unsigned int blockCount = 64;
     //const unsigned int blockCount = (len + threadsPerBlock - 1) / threadsPerBlock;
