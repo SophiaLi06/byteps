@@ -28,6 +28,37 @@ __global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
     // TODO: maybe append grad_max (i.e., the scale at the end here)
 }
 
+__global__ void para_max(const void* gpu_ptr, size_t len, float* result){
+    extern __shared__ float res_cache[];
+
+    float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
+
+    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    int stride = blockDim.x * gridDim.x;
+    int cacheIndex = threadIdx.x;
+
+    float res = -1.0;
+    for(size_t i = index; i < len; i+=stride){
+        if (fabsf(ptr[i]) > res) res = fabsf(ptr[i]);
+    }
+
+    res_cache[cacheIndex] = res; // set the result cache value
+    __syncthreads();
+
+    // Perform parallel reduction
+    int inc = blockDim.x / 2;
+    while (inc != 0){
+        if (cacheIndex < inc && res_cache[cacheIndex + inc] > res_cache[cacheIndex]) {
+            res_cache[cacheIndex] = res_cache[cacheIndex + inc];
+        }
+
+        __syncthreads();
+        inc /= 2;
+    }
+
+    if (cacheIndex == 0) result[blockIdx.x] = res_cache[0];
+}
+
 __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curandState *state, float grad_max){
     //threadIdx.x contains the index of the current thread within its block, 
     //and blockDim.x contains the number of threads in the block
@@ -56,13 +87,35 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
 
 void terngrad_compress(const void* gpu_ptr, size_t len){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
-    float grad_max;
-    float* grad_max_answer;
-    cudaMalloc(&grad_max_answer, sizeof(float));
-    find_grad_max<<<64, 64>>>(gpu_ptr, len, grad_max_answer);
-    //find_grad_max<<<1, 1>>>(gpu_ptr, len, grad_max_answer);
-    cudaMemcpy(&grad_max, grad_max_answer, sizeof(float), cudaMemcpyDeviceToHost);
-    cudaFree(grad_max_answer);
+    
+    float grad_max = 0.0;
+    float *host_max_res, *dev_max_res;
+
+    const unsigned int maxBlockCount = 32;
+    const unsigned int maxThreadPerBlock = 128;
+    
+    // Allocate space for result on host
+    host_max_res = (float*)calloc(maxBlockCount, sizeof(float));
+    // Allocate space for result on device
+    cudaMalloc(&dev_max_res, maxBlockCount * sizeof(float));
+    
+    para_max<<<maxBlockCount, maxThreadPerBlock, maxThreadPerBlock * sizeof(float)>>>(gpu_ptr, len, dev_max_res);
+    // Copy device result to host
+    cudaMemcpy(host_max_res, dev_max_res, maxBlockCount * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaFree(dev_max_res);
+
+    // Find the maximum value across all blocks
+    for (int i = 0; i < maxBlockCount; ++i){
+        if (host_max_res[i] > grad_max) grad_max = host_max_res[i];
+    }
+
+    // float grad_max;
+    // float* grad_max_answer;
+    // cudaMalloc(&grad_max_answer, sizeof(float));
+    // find_grad_max<<<64, 64>>>(gpu_ptr, len, grad_max_answer);
+    // //find_grad_max<<<1, 1>>>(gpu_ptr, len, grad_max_answer);
+    // cudaMemcpy(&grad_max, grad_max_answer, sizeof(float), cudaMemcpyDeviceToHost);
+    // cudaFree(grad_max_answer);
     //std::cout << "grad_max: " << grad_max << std::endl;
 
     const unsigned int threadsPerBlock = 256;
