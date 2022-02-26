@@ -99,13 +99,15 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     // Allocate space for result on device
     cudaMalloc(&dev_max_res, maxBlockCount * sizeof(float));
 
+#ifdef TIME_CUDA
     // Create the timer
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
-    
+
     // Start the timer
     cudaEventRecord(start, 0);
+#endif
     
     para_max<<<maxBlockCount, maxThreadPerBlock, maxThreadPerBlock * sizeof(float)>>>(gpu_ptr, len, dev_max_res);
 
@@ -118,13 +120,14 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
         if (host_max_res[i] > grad_max) grad_max = host_max_res[i];
     }
 
+#ifdef TIME_CUDA
     // Stop the timer
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
     float find_max_time;
     cudaEventElapsedTime(&find_max_time, start, stop);
     std::cout << "Time to find grad_max: " << find_max_time << std::endl;
-
+#endif
     // float grad_max;
     // float* grad_max_answer;
     // cudaMalloc(&grad_max_answer, sizeof(float));
@@ -145,14 +148,29 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     /* Allocate space for prng states on device */
     cudaMalloc((void**)&devStates, totalThreads * sizeof(curandState));
     //std::cout << "Done mallocing for devStates" << std::endl;
+
+#ifdef TIME_CUDA
+    // Start the timer
+    cudaEventRecord(start, 0);
+#endif
     /* Setup prng states */
     setup_kernel<<<blockCount, threadsPerBlock>>>(devStates);
     //std::cout << "Done setup" << std::endl;
     terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
+#ifdef TIME_CUDA
+    // Stop the timer
+    cudaEventRecord(stop, 0);
+    cudaEventSynchronize(stop);
+    float find_terngrad_time;
+    cudaEventElapsedTime(&find_terngrad_time, start, stop);
+    std::cout << "Time to compress w/ terngrad: " << find_terngrad_time << std::endl;
+#endif
     /* Cleanup */
     cudaFree(devStates);
+#ifdef TIME_CUDA
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
+#endif
 }
 
 void terngrad_decompress(const void* gpu_ptr, float scale, size_t len){
