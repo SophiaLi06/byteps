@@ -86,6 +86,15 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
 }
 
 void terngrad_compress(const void* gpu_ptr, size_t len){
+#ifdef TOTAL_TIME_CUDA
+    // Create the timer
+    cudaEvent_t total_start, total_stop;
+    cudaEventCreate(&total_start);
+    cudaEventCreate(&total_stop);
+
+    // Start the timer
+    cudaEventRecord(total_start, 0);
+#endif
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
     
     float grad_max = 0.0;
@@ -165,11 +174,23 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     cudaEventElapsedTime(&find_terngrad_time, start, stop);
     std::cout << "Time to compress w/ terngrad: " << find_terngrad_time << std::endl;
 #endif
+#ifdef TOTAL_TIME_CUDA
+    // Stop the timer
+    cudaEventRecord(total_stop, 0);
+    cudaEventSynchronize(total_stop);
+    float total_terngrad_time;
+    cudaEventElapsedTime(&total_terngrad_time, total_start, total_stop);
+    std::cout << "Total time to compress w/ terngrad: " << total_terngrad_time << std::endl;
+#endif
     /* Cleanup */
     cudaFree(devStates);
 #ifdef TIME_CUDA
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
+#endif
+#ifdef TOTAL_TIME_CUDA
+    cudaEventDestroy(total_start);
+    cudaEventDestroy(total_stop);
 #endif
 }
 
