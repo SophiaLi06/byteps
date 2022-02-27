@@ -543,7 +543,7 @@ bool RunCopyDevice2HostLoopOnce() {
       // also get modified? 
       // TODO: not modifying, say tensors containing less than 100 byteps 
       if(tensor->dtype() == BYTEPS_FLOAT32) {
-        //terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       }
       #endif
       /////////////
