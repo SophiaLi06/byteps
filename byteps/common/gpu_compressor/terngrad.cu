@@ -121,7 +121,7 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     if (len > 200){
         float *host_max_res, *dev_max_res;
 
-        const unsigned int maxBlockCount = 32;
+        const unsigned int maxBlockCount = 64;
         const unsigned int maxThreadPerBlock = 256;
     
         // Allocate space for result on host
