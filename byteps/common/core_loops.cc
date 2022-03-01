@@ -542,9 +542,9 @@ bool RunCopyDevice2HostLoopOnce() {
       // And we don't want to blindly modify all tensors, otherwise those for accuracy
       // also get modified? 
       // TODO: not modifying, say tensors containing less than 100 byteps 
-      if(tensor->dtype() == BYTEPS_FLOAT32) {
-        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
-      }
+      // if(tensor->dtype() == BYTEPS_FLOAT32) {
+      //   terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+      // }
       #endif
       /////////////
       CUDA_CALL(cudaMemcpyAsync(
@@ -669,6 +669,9 @@ bool RunPushLoopOnce() {
     //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
     //   BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     // }
+    if(tensor->dtype() == BYTEPS_FLOAT32) {
+      terngrad_compress((void *)(tensor->data()), (size_t)tensor->size());
+    }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
@@ -724,11 +727,14 @@ bool RunPullLoopOnce() {
     //std::cout << "RunPushLoopOnce\n";
     // if (task->gpu_ptr) BPS_LOG(INFO) << "Pull Tensor GPU ptr: " << task->gpu_ptr << "\n";
     // if (task->cpubuff) BPS_LOG(INFO) << "Pull Tensor CPU buff: " << task->cpubuff << "\n";
-    // auto tensor = task->tensor;
+    auto tensor = task->tensor;
     // if (tensor){
     //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
     //   BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     // }
+    if(tensor->dtype() == BYTEPS_FLOAT32) {
+      terngrad_decompress((void *)(tensor->data()), 0.0, (size_t)tensor->size());
+    }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PULL loop";
