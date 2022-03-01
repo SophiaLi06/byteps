@@ -661,13 +661,14 @@ bool RunPushLoopOnce() {
   if (task) {
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
-    if (task->gpu_ptr) BPS_LOG(INFO) << "Push Tensor GPU ptr: " << task->gpu_ptr << "\n";
-    if (task->cpubuff) BPS_LOG(INFO) << "Push Tensor CPU buff: " << task->cpubuff << "\n";
+    // if (task->gpu_ptr) BPS_LOG(INFO) << "Push Tensor GPU ptr: " << task->gpu_ptr << "\n";
+    // if (task->cpubuff) BPS_LOG(INFO) << "Push Tensor CPU buff: " << task->cpubuff << "\n";
     auto tensor = task->tensor;
-    if (tensor){
-      //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-      BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-    }
+    BPS_LOG(INFO) << "Push Tensor len: " << tensor->size() << "Task len: " << task->len << "\n";
+    // if (tensor){
+    //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
+    //   BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
+    // }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
@@ -721,13 +722,13 @@ bool RunPullLoopOnce() {
   if (task) {
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
-    if (task->gpu_ptr) BPS_LOG(INFO) << "Pull Tensor GPU ptr: " << task->gpu_ptr << "\n";
-    if (task->cpubuff) BPS_LOG(INFO) << "Pull Tensor CPU buff: " << task->cpubuff << "\n";
-    auto tensor = task->tensor;
-    if (tensor){
-      //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-      BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-    }
+    // if (task->gpu_ptr) BPS_LOG(INFO) << "Pull Tensor GPU ptr: " << task->gpu_ptr << "\n";
+    // if (task->cpubuff) BPS_LOG(INFO) << "Pull Tensor CPU buff: " << task->cpubuff << "\n";
+    // auto tensor = task->tensor;
+    // if (tensor){
+    //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
+    //   BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
+    // }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PULL loop";
