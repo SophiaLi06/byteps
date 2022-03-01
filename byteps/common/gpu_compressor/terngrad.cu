@@ -167,9 +167,9 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     // cudaFree(grad_max_answer);
     //std::cout << "grad_max: " << grad_max << std::endl;
 
-    const unsigned int threadsPerBlock = 256;
+    const unsigned int threadsPerBlock = 128;
     // TODO: first try one block, then increase block number
-    const unsigned int blockCount = 64;
+    const unsigned int blockCount = 32;
     //const unsigned int blockCount = (len + threadsPerBlock - 1) / threadsPerBlock;
     const unsigned int totalThreads = threadsPerBlock * blockCount;
     curandState *devStates;
