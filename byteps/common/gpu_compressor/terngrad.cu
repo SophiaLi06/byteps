@@ -121,8 +121,8 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     if (len > 200){
         float *host_max_res, *dev_max_res;
 
-        const unsigned int maxBlockCount = 64;
-        const unsigned int maxThreadPerBlock = 256;
+        const unsigned int maxBlockCount = 32;
+        const unsigned int maxThreadPerBlock = 128;
     
         // Allocate space for result on host
         host_max_res = (float*)calloc(maxBlockCount, sizeof(float));
@@ -167,10 +167,10 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     // cudaFree(grad_max_answer);
     //std::cout << "grad_max: " << grad_max << std::endl;
 
-    const unsigned int threadsPerBlock = 128;
+    const unsigned int threadsPerBlock = 512;
     // TODO: first try one block, then increase block number
-    const unsigned int blockCount = 32;
-    //const unsigned int blockCount = (len + threadsPerBlock - 1) / threadsPerBlock;
+    //const unsigned int blockCount = 64;
+    const unsigned int blockCount = (len + threadsPerBlock - 1) / threadsPerBlock;
     const unsigned int totalThreads = threadsPerBlock * blockCount;
     curandState *devStates;
     // /* Allocate space for results on host */
