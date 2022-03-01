@@ -262,7 +262,7 @@ inline void PostNcclCalls(
 
     if (num_elem_per_gpu) {
       /* Minghao */
-      BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
       //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
       //if(tensor->dtype() == BYTEPS_FLOAT32) test_quan_wrapper((const void *)p, (size_t)num_elem_per_gpu);
@@ -292,7 +292,7 @@ inline void PostNcclCalls(
     }
     if (left_elem) {
       /* Minghao */
-      BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
       //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
       //if(tensor->dtype() == BYTEPS_FLOAT32) test_quan_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
@@ -320,7 +320,7 @@ inline void PostNcclCalls(
   } else {
     if (num_elem_per_gpu) {
       /* Minghao */
-      BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!!";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!!";
       //////////////
       NCCLCHECK(ncclAllGather(
           (const void *)(p + nccl_rank * num_elem_per_gpu * unit_len),
@@ -328,7 +328,7 @@ inline void PostNcclCalls(
           (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
     }
     if (left_elem) {
-      BPS_LOG(INFO) << "!!!!!!!!ncclBroadcast!!!!!!!!!!!!";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclBroadcast!!!!!!!!!!!!";
       NCCLCHECK(ncclBroadcast((const void *)(p + len - left_elem * unit_len),
                               (void *)(p + len - left_elem * unit_len),
                               (size_t)left_elem, (ncclDataType_t)nccl_dtype,
@@ -661,13 +661,13 @@ bool RunPushLoopOnce() {
   if (task) {
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
-    // if (task->gpu_ptr) BPS_LOG(INFO) << "Push Tensor GPU ptr: " << task->gpu_ptr << "\n";
-    // if (task->cpubuff) BPS_LOG(INFO) << "Push Tensor CPU buff: " << task->cpubuff << "\n";
-    // auto tensor = task->tensor;
-    // if (tensor){
-    //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-    //   BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-    // }
+    if (task->gpu_ptr) BPS_LOG(INFO) << "Push Tensor GPU ptr: " << task->gpu_ptr << "\n";
+    if (task->cpubuff) BPS_LOG(INFO) << "Push Tensor CPU buff: " << task->cpubuff << "\n";
+    auto tensor = task->tensor;
+    if (tensor){
+      //auto gpu_addr = (char *)(tensor->data()) + task->offset;
+      BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
+    }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
@@ -721,13 +721,13 @@ bool RunPullLoopOnce() {
   if (task) {
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
-    // if (task->gpu_ptr) BPS_LOG(INFO) << "Pull Tensor GPU ptr: " << task->gpu_ptr << "\n";
-    // if (task->cpubuff) BPS_LOG(INFO) << "Pull Tensor CPU buff: " << task->cpubuff << "\n";
-    // auto tensor = task->tensor;
-    // if (tensor){
-    //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-    //   BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-    // }
+    if (task->gpu_ptr) BPS_LOG(INFO) << "Pull Tensor GPU ptr: " << task->gpu_ptr << "\n";
+    if (task->cpubuff) BPS_LOG(INFO) << "Pull Tensor CPU buff: " << task->cpubuff << "\n";
+    auto tensor = task->tensor;
+    if (tensor){
+      //auto gpu_addr = (char *)(tensor->data()) + task->offset;
+      BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
+    }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PULL loop";
