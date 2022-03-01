@@ -542,9 +542,9 @@ bool RunCopyDevice2HostLoopOnce() {
       // And we don't want to blindly modify all tensors, otherwise those for accuracy
       // also get modified? 
       // TODO: not modifying, say tensors containing less than 100 byteps 
-      // if(tensor->dtype() == BYTEPS_FLOAT32) {
-      //   terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
-      // }
+      if(tensor->dtype() == BYTEPS_FLOAT32) {
+        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+      }
       #endif
       /////////////
       CUDA_CALL(cudaMemcpyAsync(
@@ -670,7 +670,7 @@ bool RunPushLoopOnce() {
     //   BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     // }
     if(tensor->dtype() == BYTEPS_FLOAT32) {
-      terngrad_compress((void *)(tensor->data()), (size_t)tensor->size());
+      //terngrad_compress((void *)(tensor->data()), (size_t)tensor->size());
     }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
@@ -733,7 +733,7 @@ bool RunPullLoopOnce() {
     //   BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     // }
     if(tensor->dtype() == BYTEPS_FLOAT32) {
-      terngrad_decompress((void *)(tensor->data()), 0.0, (size_t)tensor->size());
+      //terngrad_decompress((void *)(tensor->data()), 0.0, (size_t)tensor->size());
     }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
@@ -846,9 +846,9 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     // if(tensor->dtype() == BYTEPS_FLOAT32) {
     //   test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
     // }
-    // if(tensor->dtype() == BYTEPS_FLOAT32) {
-    //   terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
-    // }
+    if(tensor->dtype() == BYTEPS_FLOAT32) {
+      terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
+    }
     #endif
     /////////////
   }

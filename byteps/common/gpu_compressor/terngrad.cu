@@ -74,10 +74,10 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
     for(size_t i = index; i < len; i+=stride) {
         x = curand_uniform(&localState);
         if(x < fabsf(ptr[i])/grad_max) {
-            //if (ptr[i] > 0) ptr[i] = 1.0;
-            //else ptr[i] = -1.0;
+            if (ptr[i] > 0) ptr[i] = 1.0;
+            else ptr[i] = -1.0;
         }
-        //else ptr[i] = 0.0;
+        else ptr[i] = 0.0;
         //printf("Done index %d\n", i);
     }
     /* Copy state back to global memory */
@@ -166,9 +166,9 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
 #endif
     /* Setup prng states */
     setup_kernel<<<blockCount, threadsPerBlock>>>(devStates);
-    std::cout << "Done setup" << std::endl;
+    //std::cout << "Done setup" << std::endl;
     terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
-    std::cout << "DOne compress" << std::endl;
+    //std::cout << "DOne compress" << std::endl;
 #ifdef TIME_CUDA
     // Stop the timer
     cudaEventRecord(stop, 0);
@@ -205,6 +205,6 @@ void terngrad_compress1(const void* gpu_ptr, size_t len){
 void terngrad_decompress(const void* gpu_ptr, float scale, size_t len){
     // TODO: time the gradient with a scale
     // For now, just do nothing as I haven't figured out where to put scale
-    std::cout << "Done decompress" << std::endl;
+    //std::cout << "Done decompress" << std::endl;
     return;
 }
