@@ -542,9 +542,9 @@ bool RunCopyDevice2HostLoopOnce() {
       // And we don't want to blindly modify all tensors, otherwise those for accuracy
       // also get modified? 
       // TODO: not modifying, say tensors containing less than 100 byteps 
-      if(tensor->dtype() == BYTEPS_FLOAT32) {
-        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
-      }
+      // if(tensor->dtype() == BYTEPS_FLOAT32) {
+      //   terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+      // }
       #endif
       /////////////
       CUDA_CALL(cudaMemcpyAsync(
@@ -664,14 +664,14 @@ bool RunPushLoopOnce() {
     // if (task->gpu_ptr) BPS_LOG(INFO) << "Push Tensor GPU ptr: " << task->gpu_ptr << "\n";
     // if (task->cpubuff) BPS_LOG(INFO) << "Push Tensor CPU buff: " << task->cpubuff << "\n";
     auto tensor = task->tensor;
-    BPS_LOG(INFO) << "Push Tensor len: " << tensor->size() << "Task len: " << task->len << "\n";
+    //BPS_LOG(INFO) << "Push Tensor len: " << tensor->size() << "Task len: " << task->len << "\n";
     // if (tensor){
     //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
     //   BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     // }
-    if(tensor->dtype() == BYTEPS_FLOAT32) {
-      //terngrad_compress((void *)(tensor->data()), (size_t)tensor->size());
-    }
+    // if(tensor->dtype() == BYTEPS_FLOAT32) {
+    //   //terngrad_compress((void *)(tensor->data()), (size_t)tensor->size());
+    // }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
@@ -732,9 +732,9 @@ bool RunPullLoopOnce() {
     //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
     //   BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     // }
-    if(tensor->dtype() == BYTEPS_FLOAT32) {
-      //terngrad_decompress((void *)(tensor->data()), 0.0, (size_t)tensor->size());
-    }
+    // if(tensor->dtype() == BYTEPS_FLOAT32) {
+    //   //terngrad_decompress((void *)(tensor->data()), 0.0, (size_t)tensor->size());
+    // }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PULL loop";
@@ -846,9 +846,9 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     // if(tensor->dtype() == BYTEPS_FLOAT32) {
     //   test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
     // }
-    if(tensor->dtype() == BYTEPS_FLOAT32) {
-      terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
-    }
+    // if(tensor->dtype() == BYTEPS_FLOAT32) {
+    //   terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
+    // }
     #endif
     /////////////
   }
