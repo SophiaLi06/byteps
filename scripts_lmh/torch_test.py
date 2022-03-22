@@ -10,7 +10,6 @@ start = time.time()
 b = torch.bernoulli(gpu_tensor)
 end = time.time()
 print(end - start)
-print(start, end)
 
 start1 = time.time()
 for i in range(100000):
