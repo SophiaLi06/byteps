@@ -85,7 +85,7 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
     // TODO: change data type from float to uint8
 }
 
-void terngrad_compress(const void* gpu_ptr, size_t len){
+void terngrad_compress1(const void* gpu_ptr, size_t len){
     //std::cout << "compress len: " << len << std::endl;
 #ifdef TOTAL_TIME_CUDA
     // Create the timer
@@ -216,7 +216,7 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
 #endif
 }
 
-void terngrad_compress1(const void* gpu_ptr, size_t len){
+void terngrad_compress(const void* gpu_ptr, size_t len){
     // TODO: placeholder, remove later!!!
     return;
 }
