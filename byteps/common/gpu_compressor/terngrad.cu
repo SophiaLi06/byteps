@@ -87,7 +87,7 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
     // TODO: change data type from float to uint8
 }
 
-__global__ void terngrad_decompress(const void* gpu_ptr, size_t len){
+__global__ void terngrad_decompress_kernel(const void* gpu_ptr, size_t len){
     //threadIdx.x contains the index of the current thread within its block, 
     //and blockDim.x contains the number of threads in the block
     //and gridDim.x gives the number of blocks in a grid
