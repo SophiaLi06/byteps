@@ -80,12 +80,35 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
         else ptr[i] = 0.0;
         //printf("Done index %d\n", i);
     }
+    /* use the last value of gpu_ptr to store the "scaling factor" grad_max */
+    ptr[len-1] = grad_max;
     /* Copy state back to global memory */
     state[id] = localState;
     // TODO: change data type from float to uint8
 }
 
+__global__ void terngrad_decompress(const void* gpu_ptr, size_t len){
+    //threadIdx.x contains the index of the current thread within its block, 
+    //and blockDim.x contains the number of threads in the block
+    //and gridDim.x gives the number of blocks in a grid
+    int id = threadIdx.x + blockIdx.x * blockDim.x;
+    float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
+    float scale = ptr[len-1];
+    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    int stride = blockDim.x * gridDim.x;
+
+    for(size_t i = index; i < len-1; i+=stride) {
+        ptr[i] *= scale;
+        //printf("Done index %d\n", i);
+    }
+    /* set the last value of gpu_ptr to be 0 */
+    ptr[len-1] = 0.0;
+}
+
 void terngrad_compress(const void* gpu_ptr, size_t len){
+    // This is a tensor used for push-pulling the accuracy
+    // TODO: in the future. just don't call terngrad_compress and decompress on it
+    if (len <= 2) return; 
 #ifdef TOTAL_TIME_CUDA
     // Create the timer
     cudaEvent_t total_start, total_stop;
@@ -198,7 +221,17 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
 }
 
 void terngrad_decompress(const void* gpu_ptr, float scale, size_t len){
-    // TODO: time the gradient with a scale
+    // This is a tensor used for push-pulling the accuracy
+    // TODO: in the future. just don't call terngrad_compress and decompress on it
+    if (len <= 2) return;
 
+    // maybe we can just "throw away" the last floating point value of the old
+    // gradient (assume it's zero) and use that space to store the scale
+    // Later we can just play with the size of the tensor when we initailze them (shrink for compression
+    // + 1 for storing the scale)
+    const unsigned int threadsPerBlock = 512;
+    //const unsigned int blockCount = 64;
+    const unsigned int blockCount = (len + threadsPerBlock - 1) / threadsPerBlock;
+    terngrad_decompress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len);
     return;
 }

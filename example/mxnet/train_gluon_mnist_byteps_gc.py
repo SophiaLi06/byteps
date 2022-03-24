@@ -249,6 +249,12 @@ for epoch in range(args.epochs):
     _, train_acc = metric.get()
     name, val_acc = evaluate(model, val_data, context)
     acc = mx.nd.array([train_acc, val_acc], ctx=context)
+    ###########################
+    # Minghao:
+    if bps.rank() == 0:
+        logger.info('Before push-pull Epoch[%d]\tTrain: %s=%f\tValidation: %s=%f', epoch, name,
+                    train_acc, name, val_acc)
+    ###########################
     bps.byteps_push_pull(acc, name="acc", is_average=False)
     acc /= bps.size()
     train_acc, val_acc = acc[0].asscalar(), acc[1].asscalar()
