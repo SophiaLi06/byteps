@@ -669,9 +669,9 @@ bool RunPushLoopOnce() {
     //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
     //   BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     // }
-    // if(tensor->dtype() == BYTEPS_FLOAT32) {
-    //   //terngrad_compress((void *)(tensor->data()), (size_t)tensor->size());
-    // }
+    if(tensor->dtype() == BYTEPS_FLOAT32) {
+      terngrad_compress((void *)(tensor->data()), (size_t)tensor->size());
+    }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
@@ -732,9 +732,9 @@ bool RunPullLoopOnce() {
     //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
     //   BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
     // }
-    // if(tensor->dtype() == BYTEPS_FLOAT32) {
-    //   //terngrad_decompress((void *)(tensor->data()), 0.0, (size_t)tensor->size());
-    // }
+    if(tensor->dtype() == BYTEPS_FLOAT32) {
+      terngrad_decompress((void *)(tensor->data()), 0.0, (size_t)tensor->size());
+    }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PULL loop";
