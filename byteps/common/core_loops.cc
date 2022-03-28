@@ -31,9 +31,6 @@
 #include "global.h"
 #include "logging.h"
 
-//Minghao
-//void test_wrapper(void);
-
 namespace byteps {
 namespace common {
 
@@ -382,6 +379,9 @@ bool RunRootNcclLoopOnce() {
         struct BytePSCommMsg msg = {
             rank, (this_op == REDUCE) ? DO_REDUCE : DO_BROADCAST, task->key};
         signal_comm->broadcastSignal(&msg, sizeof(BytePSCommMsg));
+        // Minghao
+        BPS_LOG(INFO) << "RootNcclRank: " << rank << " Task Tensor: " << task->tensor_name << "out pointer: " << task->output->data()+task->offset << "\n";
+        //////////
         PostNcclCalls(task, this_op);
       }
     }
@@ -452,6 +452,9 @@ bool RunNonRootNcclLoopOnce() {
     tasks.push_back(task);
     queues.push_back(q);
 
+    // Minghao
+    BPS_LOG(INFO) << "NonRootNccl Rank: " << rank <<  " Task Tensor: " << task->tensor_name << "out pointer: " << task->output->data()+task->offset << "\n";
+    ///////////
     PostNcclCalls(task, this_op);
   }
   NCCLCHECK(ncclGroupEnd());
@@ -538,9 +541,6 @@ bool RunCopyDevice2HostLoopOnce() {
     if (copy_len) {
       /* Minghao */
       #ifndef CPU_COMPRESS
-      // if(tensor->dtype() == BYTEPS_FLOAT32) {
-      //   test_mul_wrapper((void *)(p + copy_offset), (size_t)copy_len / unit_len);
-      // }
       // NOTE: 65536 is the defualt minimum number of byteps to compress.
       // And we don't want to blindly modify all tensors, otherwise those for accuracy
       // also get modified? 
@@ -848,13 +848,10 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     /* Minghao */
     #ifndef CPU_COMPRESS
     // if(tensor->dtype() == BYTEPS_FLOAT32) {
-    //   test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
-    // }
-    // if(tensor->dtype() == BYTEPS_FLOAT32) {
     //   terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
     // }
-    BPS_LOG(INFO) << "CopyHost2Device Rank=" << BytePSGlobal::GetLocalRank();
-    BPS_LOG(INFO) << "task scale=" << task->scale;
+    //BPS_LOG(INFO) << "CopyHost2Device Rank=" << BytePSGlobal::GetLocalRank();
+    //BPS_LOG(INFO) << "task scale=" << task->scale;
     #endif
     /////////////
   }
