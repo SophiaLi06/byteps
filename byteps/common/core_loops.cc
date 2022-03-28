@@ -337,7 +337,7 @@ inline void PostNcclCalls(
     }
     /* Minghao */
     // Change task's compressor context here
-    task->scale = 33.3;
+    //task->scale = 33.3;
   }
 }
 
@@ -545,9 +545,10 @@ bool RunCopyDevice2HostLoopOnce() {
       // And we don't want to blindly modify all tensors, otherwise those for accuracy
       // also get modified? 
       // TODO: not modifying, say tensors containing less than 100 byteps 
-      if(tensor->dtype() == BYTEPS_FLOAT32) {
-        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
-      }
+      // if(tensor->dtype() == BYTEPS_FLOAT32) {
+      //   terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+      // }
+      task->scale = 33.3;
       #endif
       /////////////
       CUDA_CALL(cudaMemcpyAsync(
