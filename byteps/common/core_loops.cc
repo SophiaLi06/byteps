@@ -380,7 +380,7 @@ bool RunRootNcclLoopOnce() {
             rank, (this_op == REDUCE) ? DO_REDUCE : DO_BROADCAST, task->key};
         signal_comm->broadcastSignal(&msg, sizeof(BytePSCommMsg));
         // Minghao
-        BPS_LOG(INFO) << "RootNcclRank: " << rank << " Task Tensor: " << task->tensor_name << "out pointer: " << task->output->data()+task->offset << "\n";
+        //BPS_LOG(INFO) << "RootNcclRank: " << rank << " Task Tensor: " << task->tensor_name << "out pointer: " << task->output->data()+task->offset << "\n";
         //////////
         PostNcclCalls(task, this_op);
       }
@@ -453,7 +453,7 @@ bool RunNonRootNcclLoopOnce() {
     queues.push_back(q);
 
     // Minghao
-    BPS_LOG(INFO) << "NonRootNccl Rank: " << rank <<  " Task Tensor: " << task->tensor_name << "out pointer: " << task->output->data()+task->offset << "\n";
+    //BPS_LOG(INFO) << "NonRootNccl Rank: " << rank <<  " Task Tensor: " << task->tensor_name << "out pointer: " << task->output->data()+task->offset << "\n";
     ///////////
     PostNcclCalls(task, this_op);
   }
@@ -548,6 +548,7 @@ bool RunCopyDevice2HostLoopOnce() {
       // if(tensor->dtype() == BYTEPS_FLOAT32) {
       //   terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       // }
+      BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << "cpubuff: " << cpubuff << "\n";
       task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
       /////////////
