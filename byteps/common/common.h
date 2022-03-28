@@ -261,6 +261,10 @@ struct TensorTableEntry {
   std::shared_ptr<compressor::Compressor> compressor;
   // Compressed
   std::shared_ptr<compressor::tensor_t> compressed;
+  /* Minghao */
+  // Compressor context fields
+  float scale;
+  ///////////////
 };
 using TensorTable = std::unordered_map<std::string, TensorTableEntry>;
 

@@ -335,6 +335,9 @@ inline void PostNcclCalls(
                               (int)nccl_root, (ncclComm_t)nccl_comm,
                               (cudaStream_t)nccl_stream));
     }
+    /* Minghao */
+    // Change task's compressor context here
+    task->scale = 33.3;
   }
 }
 
@@ -846,9 +849,11 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     // if(tensor->dtype() == BYTEPS_FLOAT32) {
     //   test_div_wrapper((void *)(gpu_addr + copy_offset), (size_t)copy_len / unit_len);
     // }
-    if(tensor->dtype() == BYTEPS_FLOAT32) {
-      terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
-    }
+    // if(tensor->dtype() == BYTEPS_FLOAT32) {
+    //   terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
+    // }
+    BPS_LOG(INFO) << "CopyHost2Device Rank=" << BytePSGlobal::GetLocalRank();
+    BPS_LOG(INFO) << "task scale=" << task->scale;
     #endif
     /////////////
   }
