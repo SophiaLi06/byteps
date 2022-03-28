@@ -548,7 +548,7 @@ bool RunCopyDevice2HostLoopOnce() {
       // if(tensor->dtype() == BYTEPS_FLOAT32) {
       //   terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       // }
-      task->scale = 33.3;
+      task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
       /////////////
       CUDA_CALL(cudaMemcpyAsync(
