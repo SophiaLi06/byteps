@@ -210,19 +210,26 @@ for epoch in range(args.epochs):
             output = model(data)
             loss = loss_fn(output, label)
             # Minghao
+            mx.nd.waitall()
             forward_total += (time.time() - ford_tic)
         # Minghao
         back_tic = time.time()
         loss.backward()
+        # Minghao
+        mx.nd.waitall()
         backward_total += (time.time() - back_tic)
         #Minghao
         step_tic = time.time()
         trainer.step(args.batch_size)
-        step_total += (time.time() - step_tic)
+        # Minghao
+        # mx.nd.waitall()
+        # step_total += (time.time() - step_tic)
         #Minghao
         update_tic = time.time()
         metric.update([label], [output])
-        update_total += (time.time() - update_tic)
+        # Minghao
+        # mx.nd.waitall()
+        # update_total += (time.time() - update_tic)
 
         if i % 100 == 0:
             name, acc = metric.get()
