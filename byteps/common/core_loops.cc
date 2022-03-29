@@ -514,17 +514,10 @@ bool RunCopyDevice2HostLoopOnce() {
     char *cpubuff;
     if (BytePSGlobal::IsCrossPcieSwitch()) {
       BPS_CHECK(task->pcie_cpubuff.size());
-      // Minghao
-      BPS_LOG(INFO) << "CrossPcie NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << "cpubuff: " << (task->pcie_cpubuff[BytePSGlobal::GetPcieSwitchIndex()]) +
-          offset << "\n";
-      //////////
       cpubuff =
           (char *)(task->pcie_cpubuff[BytePSGlobal::GetPcieSwitchIndex()]) +
           offset;
     } else {
-      // Minghao
-      BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << "cpubuff: " << (task->cpubuff) + offset << "\n";
-      //////////
       cpubuff = (char *)(task->cpubuff) + offset;
     }
 
@@ -557,6 +550,9 @@ bool RunCopyDevice2HostLoopOnce() {
       // }
       task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
+
+      BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " copy dest: " << (task->cpubuff) + offset + copy_offset << " copy_offset: " << copy_offset << "\n";
+
       /////////////
       CUDA_CALL(cudaMemcpyAsync(
           (void *)(cpubuff + copy_offset), (const void *)(p + copy_offset),
