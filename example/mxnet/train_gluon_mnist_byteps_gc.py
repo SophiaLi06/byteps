@@ -192,6 +192,8 @@ total_time = 0
 # Minghao
 forward_total = 0
 backward_total = 0
+step_total = 0
+update_total = 0
 ##########
 # Train model
 bps.byteps_declare_tensor("acc")
@@ -214,8 +216,13 @@ for epoch in range(args.epochs):
         loss.backward()
         backward_total += (time.time() - back_tic)
         #Minghao
+        step_tic = time.time()
         trainer.step(args.batch_size)
+        step_total += (time.time() - step_tic)
+        #Minghao
+        update_tic = time.time()
         metric.update([label], [output])
+        update_total += (time.time() - update_tic)
 
         if i % 100 == 0:
             name, acc = metric.get()
@@ -294,5 +301,7 @@ if bps.rank() == 0 and epoch == args.epochs - 1:
 ##############
 
 logger.info("total time=%.2f", total_time)
-logger.info("total time=%.5f", forward_total)
-logger.info("total time=%.5f", backward_total)
+logger.info("total forward=%.5f", forward_total)
+logger.info("total backward=%.5f", backward_total)
+logger.info("total step=%.5f", step_total)
+logger.info("total update=%.5f", update_total)
