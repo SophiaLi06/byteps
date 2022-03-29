@@ -514,10 +514,17 @@ bool RunCopyDevice2HostLoopOnce() {
     char *cpubuff;
     if (BytePSGlobal::IsCrossPcieSwitch()) {
       BPS_CHECK(task->pcie_cpubuff.size());
+      // Minghao
+      BPS_LOG(INFO) << "CrossPcie NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << "cpubuff: " << (task->pcie_cpubuff[BytePSGlobal::GetPcieSwitchIndex()]) +
+          offset << "\n";
+      //////////
       cpubuff =
           (char *)(task->pcie_cpubuff[BytePSGlobal::GetPcieSwitchIndex()]) +
           offset;
     } else {
+      // Minghao
+      BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << "cpubuff: " << (task->cpubuff) + offset << "\n";
+      //////////
       cpubuff = (char *)(task->cpubuff) + offset;
     }
 
@@ -548,7 +555,6 @@ bool RunCopyDevice2HostLoopOnce() {
       // if(tensor->dtype() == BYTEPS_FLOAT32) {
       //   terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       // }
-      BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << "cpubuff: " << cpubuff << "\n";
       task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
       /////////////
