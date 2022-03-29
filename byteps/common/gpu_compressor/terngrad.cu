@@ -87,13 +87,12 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
     // TODO: change data type from float to uint8
 }
 
-__global__ void terngrad_decompress_kernel(const void* gpu_ptr, size_t len){
+__global__ void terngrad_decompress_kernel(const void* gpu_ptr, size_t len, float scale){
     //threadIdx.x contains the index of the current thread within its block, 
     //and blockDim.x contains the number of threads in the block
     //and gridDim.x gives the number of blocks in a grid
     int id = threadIdx.x + blockIdx.x * blockDim.x;
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
-    float scale = ptr[len-1];
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     int stride = blockDim.x * gridDim.x;
 
@@ -101,8 +100,6 @@ __global__ void terngrad_decompress_kernel(const void* gpu_ptr, size_t len){
         ptr[i] *= scale;
         //printf("Done index %d\n", i);
     }
-    /* set the last value of gpu_ptr to be 0 */
-    ptr[len-1] = 0.0;
 }
 
 float terngrad_scale(const void* gpu_ptr, size_t len){
@@ -142,7 +139,7 @@ float terngrad_scale(const void* gpu_ptr, size_t len){
     return grad_max;
 }
 
-void terngrad_compress(const void* gpu_ptr, size_t len){
+float terngrad_compress(const void* gpu_ptr, size_t len){
     // This is a tensor used for push-pulling the accuracy
     // TODO: in the future. just don't call terngrad_compress and decompress on it
     if (len <= 2) return; 
@@ -255,6 +252,7 @@ void terngrad_compress(const void* gpu_ptr, size_t len){
     cudaEventDestroy(total_start);
     cudaEventDestroy(total_stop);
 #endif
+    return grad_max;
 }
 
 void terngrad_decompress(const void* gpu_ptr, float scale, size_t len){
@@ -269,6 +267,6 @@ void terngrad_decompress(const void* gpu_ptr, float scale, size_t len){
     const unsigned int threadsPerBlock = 512;
     //const unsigned int blockCount = 64;
     const unsigned int blockCount = (len + threadsPerBlock - 1) / threadsPerBlock;
-    terngrad_decompress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len);
+    terngrad_decompress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, scale);
     return;
 }

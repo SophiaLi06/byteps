@@ -384,7 +384,7 @@ void InitTensor(BPSContext &context, size_t size, int dtype, void *cpubuff) {
   char *data = const_cast<char *>(static_cast<const char *>(context.cpubuff));
   accumulated = 0;
   size_t i = 0;
-  BPS_LOG(INFO) << "tensor size=" << size;
+  BPS_LOG(INFO) << "Local Rank " << context.local_rank << " init tensor: " << context.tensor_name << " size: " << size << "cpubuff: " << context.cpubuff << "\n";
   // small tensor does not need to be compressed
   // Minghao highlight
   if (size < BytePSGlobal::GetMinCompressBound()) {
