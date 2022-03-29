@@ -192,6 +192,7 @@ total_time = 0
 # Minghao
 forward_total = 0
 backward_total = 0
+forw_back_total = 0
 step_total = 0
 update_total = 0
 ##########
@@ -210,14 +211,15 @@ for epoch in range(args.epochs):
             output = model(data)
             loss = loss_fn(output, label)
             # Minghao
-            mx.nd.waitall()
-            forward_total += (time.time() - ford_tic)
+            # mx.nd.waitall()
+            # forward_total += (time.time() - ford_tic)
         # Minghao
-        back_tic = time.time()
+        # back_tic = time.time()
         loss.backward()
         # Minghao
         mx.nd.waitall()
-        backward_total += (time.time() - back_tic)
+        # backward_total += (time.time() - back_tic)
+        forw_back_total += (time.time() - ford_tic)
         #Minghao
         step_tic = time.time()
         trainer.step(args.batch_size)
@@ -308,7 +310,8 @@ if bps.rank() == 0 and epoch == args.epochs - 1:
 ##############
 
 logger.info("total time=%.2f", total_time)
-logger.info("total forward=%.5f", forward_total)
-logger.info("total backward=%.5f", backward_total)
-logger.info("total step=%.5f", step_total)
-logger.info("total update=%.5f", update_total)
+logger.info("total forward_backward=%.5f", forw_back_total)
+# logger.info("total forward=%.5f", forward_total)
+# logger.info("total backward=%.5f", backward_total)
+# logger.info("total step=%.5f", step_total)
+# logger.info("total update=%.5f", update_total)
