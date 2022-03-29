@@ -551,7 +551,7 @@ bool RunCopyDevice2HostLoopOnce() {
       task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
 
-      BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " copy dest: " << (task->cpubuff) + offset + copy_offset << " copy_offset: " << copy_offset << "\n";
+      BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " key: " << key << " copy dest: " << (task->cpubuff) + offset + copy_offset << " copy_offset: " << copy_offset << "\n";
 
       /////////////
       CUDA_CALL(cudaMemcpyAsync(
@@ -703,6 +703,8 @@ bool RunPushLoopOnce() {
         len = task->compressed->size;
         task->compressed = nullptr;
       }
+      BPS_LOG(INFO) << "Push Task Tensor: " << task->tensor_name << " key: " << task->key << " data from: " << (task->cpubuff) + offset << " len: " << len << "\n";
+      ///////////////////////////
 
       // false means not to delete data when SArray is deleted
       ps::SArray<char> vals(data, len, false);
