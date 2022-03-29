@@ -317,7 +317,7 @@ inline void PostNcclCalls(
   } else {
     if (num_elem_per_gpu) {
       /* Minghao */
-      BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!!";
+      BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!! Rank: " << nccl_rank << " tensor_name: " << task->tensor_name << "\n";
       //////////////
       NCCLCHECK(ncclAllGather(
           (const void *)(p + nccl_rank * num_elem_per_gpu * unit_len),
