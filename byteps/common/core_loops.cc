@@ -545,9 +545,9 @@ bool RunCopyDevice2HostLoopOnce() {
       // And we don't want to blindly modify all tensors, otherwise those for accuracy
       // also get modified? 
       // TODO: not modifying, say tensors containing less than 100 byteps 
-      if(tensor->dtype() == BYTEPS_FLOAT32) {
-        task->scale = terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
-      }
+      // if(tensor->dtype() == BYTEPS_FLOAT32) {
+      //   task->scale = terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+      // }
       ///task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
 
@@ -856,9 +856,9 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     CUDA_CALL(cudaStreamSynchronize(*copy_h2d_stream));
     /* Minghao */
     #ifndef CPU_COMPRESS
-    if(tensor->dtype() == BYTEPS_FLOAT32) {
-      terngrad_decompress((void *)(gpu_addr + copy_offset), task->scale, (size_t)copy_len / unit_len);
-    }
+    // if(tensor->dtype() == BYTEPS_FLOAT32) {
+    //   terngrad_decompress((void *)(gpu_addr + copy_offset), task->scale, (size_t)copy_len / unit_len);
+    // }
     //BPS_LOG(INFO) << "Host2Device NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " key: " << key << " copy from: " << (const void *)(cpubuff + copy_offset) << " copy_offset: " << copy_offset << " scale: " << task->scale <<"\n";
     //BPS_LOG(INFO) << "CopyHost2Device Rank=" << BytePSGlobal::GetLocalRank();
     //BPS_LOG(INFO) << "task scale=" << task->scale;
