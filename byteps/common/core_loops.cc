@@ -759,6 +759,10 @@ bool RunPullLoopOnce() {
     // get metadata
     const int dtype = task->output->dtype();
 
+    // Minghao
+    BPS_LOG(INFO) << "Pull Task Tensor: " << task->tensor_name << " key: " << task->key << " data to: " << (task->cpubuff) + offset << " len: " << len << " scale: " << task->scale << "\n";
+    ////////////
+
     // false means not to delete data when SArray is deleted
     auto vals = new ps::SArray<char>(data, len, false);
 
@@ -855,6 +859,7 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     // if(tensor->dtype() == BYTEPS_FLOAT32) {
     //   terngrad_decompress((void *)(gpu_addr + copy_offset), 0.0, (size_t)copy_len / unit_len);
     // }
+    BPS_LOG(INFO) << "Host2Device NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " key: " << key << " copy from: " << (const void *)(cpubuff + copy_offset) << " copy_offset: " << copy_offset << " scale: " << task->scale <<"\n";
     //BPS_LOG(INFO) << "CopyHost2Device Rank=" << BytePSGlobal::GetLocalRank();
     //BPS_LOG(INFO) << "task scale=" << task->scale;
     #endif
