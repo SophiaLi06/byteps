@@ -189,6 +189,10 @@ loss_fn = gluon.loss.SoftmaxCrossEntropyLoss()
 metric = mx.metric.Accuracy()
 
 total_time = 0
+# Minghao
+forward_total = 0
+backward_total = 0
+##########
 # Train model
 bps.byteps_declare_tensor("acc")
 for epoch in range(args.epochs):
@@ -199,10 +203,17 @@ for epoch in range(args.epochs):
         label = batch[1].as_in_context(context)
 
         with autograd.record():
+            # Minghao
+            ford_tic = time.time()
             output = model(data)
             loss = loss_fn(output, label)
-
+            # Minghao
+            forward_total += (time.time() - ford_tic)
+        # Minghao
+        back_tic = time.time()
         loss.backward()
+        backward_total += (time.time() - back_tic)
+        #Minghao
         trainer.step(args.batch_size)
         metric.update([label], [output])
 
@@ -283,3 +294,5 @@ if bps.rank() == 0 and epoch == args.epochs - 1:
 ##############
 
 logger.info("total time=%.2f", total_time)
+logger.info("total time=%.5f", forward_total)
+logger.info("total time=%.5f", backward_total)
