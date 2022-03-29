@@ -142,7 +142,7 @@ float terngrad_scale(const void* gpu_ptr, size_t len){
 float terngrad_compress(const void* gpu_ptr, size_t len){
     // This is a tensor used for push-pulling the accuracy
     // TODO: in the future. just don't call terngrad_compress and decompress on it
-    if (len <= 2) return; 
+    if (len <= 2) return 1.0; 
 #ifdef TOTAL_TIME_CUDA
     // Create the timer
     cudaEvent_t total_start, total_stop;
