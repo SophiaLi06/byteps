@@ -41,6 +41,19 @@ int ReadyTable::SetReadyCount(uint64_t key, int cnt) {
 void ReadyTable::ClearReadyCount(uint64_t key) {
   std::lock_guard<std::mutex> lock(_table_mutex);
   _ready_table[key] = 0;
+  // Minghao: also clear the scaling factor here
+  _scale_table[key] = 0.0;
+}
+
+/* Minghao */
+float ReadyTable::GetKeyScale(uint64_t key) {
+  std::lock_guard<std::mutex> lock(_table_mutex);
+  return _scale_table[key];
+}
+
+void ReadyTable::SetKeyScale(uint64_t key, float scale){
+  std::lock_guard<std::mutex> lock(_table_mutex);
+  if (scale > _scale_table[key]) _scale_table[key] = scale;
 }
 
 }  // namespace common

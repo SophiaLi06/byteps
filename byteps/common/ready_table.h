@@ -34,6 +34,9 @@ class ReadyTable {
   int AddReadyCount(uint64_t key);
   int SetReadyCount(uint64_t key, int cnt);
   void ClearReadyCount(uint64_t key);
+  // to access or modify the per_worker scale
+  float GetKeyScale(uint64_t key);
+  void SetKeyScale(uint64_t key, float scale);
 
  private:
   // (key, ready_signal_count) pair, only valid for root device
@@ -42,6 +45,9 @@ class ReadyTable {
   std::mutex _table_mutex;
   int _ready_count;
   std::string _table_name;
+  /* Minghao */
+  // (key, scale) pair, keeps track of the per-worker scale
+  std::unordered_map<uint64_t, float> _scale_table;
 };
 
 }  // namespace common

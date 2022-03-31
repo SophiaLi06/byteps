@@ -183,7 +183,7 @@ bool RunCoordinateLoopOnce(QueueType this_op) {
     BPS_CHECK_NE(rank, comm->getRoot())
         << "only non-root device should enter COORDINATE loop";
 
-    // Minghao TODO: if sig is COORDINATE_PUSH, we should also include scale in the msg
+    // Minghao TODO: if sig is PUSH_READY, we should also include scale in the msg
     struct BytePSCommMsg msg = {rank, sig, key};
     comm->sendSignalToRoot(&msg, sizeof(BytePSCommMsg));
 
@@ -849,7 +849,7 @@ bool RunRootCopyHost2DeviceLoopOnce() {
     if (local_size > 1) {
       // notify non-root devices
       // TODO: when broadcasting here, also broadcast the scale?
-      struct BytePSCommMsg msg = {local_rank, DO_COPYH2D, key};
+      struct BytePSCommMsg msg = {local_rank, DO_COPYH2D, key, 33.3};
       BytePSGlobal::GetBasicComm()->broadcastSignal(&msg,
                                                     sizeof(BytePSCommMsg));
     }
@@ -875,6 +875,8 @@ bool RunNonRootCopyListenLoopOnce() {
   BPS_CHECK_EQ(msg.signal, DO_COPYH2D) << msg.signal;
 
   BytePSGlobal::GetCopyTable()->AddReadyCount(msg.key);
+  // Minghao: update the key's scale
+  BytePSGlobal::GetCopyTable()->SetKeyScale(msg.scale);
 
   BPS_LOG(TRACE) << "NonRootCopyListenLoop recved from root"
                  << ", signal=" << msg.signal << ", key=" << msg.key

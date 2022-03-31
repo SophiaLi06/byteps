@@ -193,6 +193,7 @@ void BytePSCommSocket::startListenThread() {  // only root starts this in
         break;
       case PUSH_READY:
         BytePSGlobal::GetPushTable()->AddReadyCount(message.key);
+        // TODO: also update key's scale here
         break;
       default:
         BPS_CHECK(0) << "unsupported signal: " << message.signal;

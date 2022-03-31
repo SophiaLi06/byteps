@@ -55,6 +55,8 @@ struct BytePSCommMsg {
   int src;
   BytePSCommSignal signal;
   uint64_t key;
+  /* Minghao */
+  float scale;
 };
 
 class BytePSComm {
