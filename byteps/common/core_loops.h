@@ -17,6 +17,7 @@
 #define BYTEPS_CORE_LOOPS_H
 
 //#define CPU_COMPRESS
+//#define DEFAULT_PUSHPULL
 
 namespace byteps {
 namespace common {

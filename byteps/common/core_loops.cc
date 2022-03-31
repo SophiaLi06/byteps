@@ -183,6 +183,7 @@ bool RunCoordinateLoopOnce(QueueType this_op) {
     BPS_CHECK_NE(rank, comm->getRoot())
         << "only non-root device should enter COORDINATE loop";
 
+    // Minghao TODO: if sig is COORDINATE_PUSH, we should also include scale in the msg
     struct BytePSCommMsg msg = {rank, sig, key};
     comm->sendSignalToRoot(&msg, sizeof(BytePSCommMsg));
 
@@ -244,10 +245,10 @@ inline void PostNcclCalls(
   //                << ", elements=" << len / unit_len
   //                << ", device=" << task->device;
   
-  // BPS_LOG(TRACE) << task->tensor_name << " calling NCCL " << LogStrings[this_op]
-  //                << " (rank=" << nccl_rank << ") key=" << key
-  //                << ", elements=" << len / unit_len
-  //                << ", device=" << task->device;
+  BPS_LOG(TRACE) << task->tensor_name << " calling NCCL " << LogStrings[this_op]
+                 << " (rank=" << nccl_rank << ") key=" << key
+                 << ", elements=" << len / unit_len
+                 << ", device=" << task->device;
   /////////////
 
   if (this_op == REDUCE) {
@@ -261,8 +262,6 @@ inline void PostNcclCalls(
       /* Minghao */
       //BPS_LOG(INFO) << "!!!!!!!!ncclReduceScatter!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
-      //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)p, (size_t)num_elem_per_gpu);
-      //if(tensor->dtype() == BYTEPS_FLOAT32) test_quan_wrapper((const void *)p, (size_t)num_elem_per_gpu);
       //nccl_dtype = getNcclDataType(BYTEPS_UINT8);
       // test clipping here by changing the size field in ncclReduceScatter
       NCCLCHECK(ncclReduceScatter(
@@ -291,8 +290,6 @@ inline void PostNcclCalls(
       /* Minghao */
       //BPS_LOG(INFO) << "!!!!!!!!ncclReduce!!!!!!!!!!!!";
       #ifndef CPU_COMPRESS
-      //if(tensor->dtype() == BYTEPS_FLOAT32) test_mul_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
-      //if(tensor->dtype() == BYTEPS_FLOAT32) test_quan_wrapper((const void *)(p + len - left_elem * unit_len), (size_t)left_elem);
       //nccl_dtype = getNcclDataType(BYTEPS_UINT8);
       // TODO: test clipping here by changing the size field in ncclReduceScatter
       NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
@@ -317,7 +314,7 @@ inline void PostNcclCalls(
   } else {
     if (num_elem_per_gpu) {
       /* Minghao */
-      BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!! Rank: " << nccl_rank << " tensor_name: " << task->tensor_name << "\n";
+      //BPS_LOG(INFO) << "!!!!!!!!ncclAllGather!!!!!!!!!!!! Rank: " << nccl_rank << " tensor_name: " << task->tensor_name << "\n";
       //////////////
       NCCLCHECK(ncclAllGather(
           (const void *)(p + nccl_rank * num_elem_per_gpu * unit_len),
@@ -332,9 +329,6 @@ inline void PostNcclCalls(
                               (int)nccl_root, (ncclComm_t)nccl_comm,
                               (cudaStream_t)nccl_stream));
     }
-    /* Minghao */
-    // Change task's compressor context here
-    //task->scale = 33.3;
   }
 }
 
@@ -365,11 +359,6 @@ bool RunRootNcclLoopOnce() {
       //if (task->gpu_ptr) BPS_LOG(INFO) << "RootNccl Tensor GPU ptr: " << task->gpu_ptr << "\n";
       //if (task->cpubuff) BPS_LOG(INFO) << "RootNccl Tensor CPU buff: " << task->cpubuff << "\n";
       auto tensor = task->tensor;
-      // if (tensor){
-      //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-      //   BPS_LOG(INFO) << "RootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-      // }
-      //test_wrapper(task->gpu_ptr, task->tensor->data(), task->offset);
       /////////////
       tasks.push_back(task);
       queues.push_back(q);
@@ -398,9 +387,6 @@ bool RunRootNcclLoopOnce() {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }
 
-  /* Minghao */
-  //std::cout << "RunRootNcclLoopOnce\n";
-  /////////////
   return true;
 }
 
@@ -422,9 +408,6 @@ bool RunNonRootNcclLoopOnce() {
     if (msg.signal == DO_GROUP) {
       break;
     }
-    /* Minghao */
-    //std::cout << "InRunNonRootNcclLoopOnce\n";
-    /////////////
     QueueType this_op = REDUCE;
     if (msg.signal == DO_BROADCAST) {
       this_op = BROADCAST;
@@ -442,11 +425,6 @@ bool RunNonRootNcclLoopOnce() {
     // if (task->gpu_ptr) BPS_LOG(INFO) << "NonRootNccl Tensor GPU ptr: " << task->gpu_ptr << "\n";
     // if (task->cpubuff) BPS_LOG(INFO) << "NonRootNccl Tensor CPU buff: " << task->cpubuff << "\n";
     // auto tensor = task->tensor;
-    // if (tensor){
-    //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-    //   BPS_LOG(INFO) << "NonRootNccl Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-    // }
-    //test_wrapper(task->gpu_ptr, task->tensor->data(), task->offset);
     //////////////
 
     tasks.push_back(task);
@@ -461,9 +439,6 @@ bool RunNonRootNcclLoopOnce() {
 
   nccl_entry->RecordEvents();
   BytePSGlobal::GetNccl()->EnqueueGroup(nccl_entry);
-  /* Minghao */
-  //std::cout << "RunNonRootNcclLoopOnce\n";
-  /////////////
   return true;
 }
 
@@ -666,19 +641,12 @@ bool RunPushLoopOnce() {
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
   auto task = q->getTask();
   if (task) {
+    #ifdef DEFAULT_PUSHPULL
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
     // if (task->gpu_ptr) BPS_LOG(INFO) << "Push Tensor GPU ptr: " << task->gpu_ptr << "\n";
     // if (task->cpubuff) BPS_LOG(INFO) << "Push Tensor CPU buff: " << task->cpubuff << "\n";
     auto tensor = task->tensor;
-    //BPS_LOG(INFO) << "Push Tensor len: " << tensor->size() << "Task len: " << task->len << "\n";
-    // if (tensor){
-    //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-    //   BPS_LOG(INFO) << "Push Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-    // }
-    // if(tensor->dtype() == BYTEPS_FLOAT32) {
-    //   terngrad_compress((void *)(tensor->data()), (size_t)tensor->size());
-    // }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PUSH loop";
@@ -718,12 +686,13 @@ bool RunPushLoopOnce() {
       BPS_CHECK(BytePSGlobal::IsCrossPcieSwitch());
       FinishOrProceed(task);
     }
+    #else
+    // An "empty" push-pull that does nothing
+    FinishOrProceed(task);
+    #endif
   } else {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }
-  /* Minghao */
-  //std::cout << "RunPushLoopOnce\n";
-  /////////////
   return true;
 }
 
@@ -732,18 +701,12 @@ bool RunPullLoopOnce() {
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
   auto task = q->getTask();
   if (task) {
+    #ifdef DEFAULT_PUSHPULL
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
     // if (task->gpu_ptr) BPS_LOG(INFO) << "Pull Tensor GPU ptr: " << task->gpu_ptr << "\n";
     // if (task->cpubuff) BPS_LOG(INFO) << "Pull Tensor CPU buff: " << task->cpubuff << "\n";
     auto tensor = task->tensor;
-    // if (tensor){
-    //   //auto gpu_addr = (char *)(tensor->data()) + task->offset;
-    //   BPS_LOG(INFO) << "Pull Tensor GPU Addr: " << tensor->data() << "offset: " << task->offset << "\n";
-    // }
-    // if(tensor->dtype() == BYTEPS_FLOAT32) {
-    //   terngrad_decompress((void *)(tensor->data()), 0.0, (size_t)tensor->size());
-    // }
     /////////////
     BPS_CHECK(BytePSGlobal::IsRootDevice())
         << "only root device should enter PULL loop";
@@ -774,12 +737,13 @@ bool RunPullLoopOnce() {
                                    delete vals;
                                    FinishOrProceed(task);
                                  });
+    #else
+    // An "empty" push-pull that does nothing
+    FinishOrProceed(task);
+    #endif
   } else {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }
-  /* Minghao */
-  //std::cout << "RunPullLoopOnce\n";
-  /////////////
   return true;
 }
 
@@ -884,6 +848,7 @@ bool RunRootCopyHost2DeviceLoopOnce() {
 
     if (local_size > 1) {
       // notify non-root devices
+      // TODO: when broadcasting here, also broadcast the scale?
       struct BytePSCommMsg msg = {local_rank, DO_COPYH2D, key};
       BytePSGlobal::GetBasicComm()->broadcastSignal(&msg,
                                                     sizeof(BytePSCommMsg));
