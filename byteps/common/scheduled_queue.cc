@@ -144,10 +144,10 @@ std::shared_ptr<TensorTableEntry> BytePSScheduledQueue::getTask() {
       }
       // TODO: might need to change task field here based on table field
       if (_qt == COPYH2D){
-        task->scale = _rt->GetKeyScale((*it)->key);
+        //task->scale = _rt->GetKeyScale((*it)->key);
       }
       if (_qt == PUSH){
-        task->scale = std::max(task->scale, _rt->GetKeyScale((*it)->key));
+        //task->scale = std::max(task->scale, _rt->GetKeyScale((*it)->key));
       }
       _rt->ClearReadyCount((*it)->key);
     }
