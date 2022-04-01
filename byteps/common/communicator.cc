@@ -180,6 +180,7 @@ void BytePSCommSocket::startListenThread() {  // only root starts this in
     if (BytePSGlobal::ShouldShutdown()) break;
 
     auto message = *(BytePSCommMsg*)buffer;
+    float push_scale;
 
     switch (message.signal) {
       case REDUCE_READY:
@@ -193,7 +194,7 @@ void BytePSCommSocket::startListenThread() {  // only root starts this in
         break;
       case PUSH_READY:
         BytePSGlobal::GetPushTable()->AddReadyCount(message.key);
-        float push_scale = BytePSGlobal::GetPushTable()->GetKeyScale(message.key);
+        push_scale = BytePSGlobal::GetPushTable()->GetKeyScale(message.key);
         if(message.scale && message.scale > push_scale){
           BytePSGlobal::GetPushTable()->SetKeyScale(message.key, message.scale);
         }
