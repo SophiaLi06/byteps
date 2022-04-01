@@ -184,11 +184,12 @@ bool RunCoordinateLoopOnce(QueueType this_op) {
         << "only non-root device should enter COORDINATE loop";
 
     // Minghao TODO: if sig is PUSH_READY, we should also include scale in the msg
+    struct BytePSCommMsg msg;
     if (sig == PUSH_READY){
-      struct BytePSCommMsg msg = {rank, sig, key, 23.3};
+      msg = {rank, sig, key, 23.3};
     }
     else{
-      struct BytePSCommMsg msg = {rank, sig, key};
+      msg = {rank, sig, key};
     }
     comm->sendSignalToRoot(&msg, sizeof(BytePSCommMsg));
 
