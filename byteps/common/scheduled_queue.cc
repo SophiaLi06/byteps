@@ -142,7 +142,7 @@ std::shared_ptr<TensorTableEntry> BytePSScheduledQueue::getTask() {
       if (!_rt->IsKeyReady((*it)->key)) {
         continue;
       }
-      // TODO: might need to change task field here based on table field
+      // change task field here based on table field
       if (_qt == COPYH2D){
         (*it)->scale = _rt->GetKeyScale((*it)->key);
       }

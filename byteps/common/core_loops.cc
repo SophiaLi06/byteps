@@ -284,13 +284,8 @@ inline void PostNcclCalls(
           (ncclRedOp_t)ncclSum, (ncclComm_t)nccl_comm,
           (cudaStream_t)nccl_stream));
       #endif
-      // NCCLCHECK(ncclReduceScatter(
-      //     (const void *)p,
-      //     (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len),
-      //     (size_t)num_elem_per_gpu, (ncclDataType_t)nccl_dtype,
-      //     (ncclRedOp_t)ncclSum, (ncclComm_t)nccl_comm,
-      //     (cudaStream_t)nccl_stream));
-      //////////////
+      // TODO: actually do scale finding here
+      task->scale = terngrad_scale((void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len), (size_t)num_elem_per_gpu);
     }
     if (left_elem) {
       /* Minghao */
@@ -310,11 +305,7 @@ inline void PostNcclCalls(
                            (ncclRedOp_t)ncclSum, (int)nccl_root,
                            (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
       #endif
-      // NCCLCHECK(ncclReduce((const void *)(p + len - left_elem * unit_len),
-      //                      (void *)(out_p + len - left_elem * unit_len),
-      //                      (size_t)left_elem, (ncclDataType_t)nccl_dtype,
-      //                      (ncclRedOp_t)ncclSum, (int)nccl_root,
-      //                      (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
+      task->scale = terngrad_scale((void *)(out_p + len - left_elem * unit_len), (size_t)left_elem);
       //////////////
     }
   } else {
@@ -527,7 +518,8 @@ bool RunCopyDevice2HostLoopOnce() {
       // also get modified? 
       // TODO: not modifying, say tensors containing less than 100 byteps 
       if(tensor->dtype() == BYTEPS_FLOAT32) {
-        task->scale = terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+        //task->scale = terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       }
       ///task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
