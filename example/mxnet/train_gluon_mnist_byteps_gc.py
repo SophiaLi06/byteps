@@ -283,7 +283,7 @@ for epoch in range(args.epochs):
                     train_acc, name, val_acc)
     ###########################
     bps.byteps_push_pull(acc, name="acc", is_average=False)
-    acc /= bps.size()
+    #Minghao acc /= bps.size()
     train_acc, val_acc = acc[0].asscalar(), acc[1].asscalar()
     ###########################
     # Minghao: only print train and validation if rank is 0 (i.e., root)
