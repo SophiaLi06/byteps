@@ -876,7 +876,7 @@ bool RunNonRootCopyListenLoopOnce() {
 
   BytePSGlobal::GetCopyTable()->AddReadyCount(msg.key);
   // Minghao: update the key's scale
-  BytePSGlobal::GetCopyTable()->SetKeyScale(msg.key, msg.scale);
+  //BytePSGlobal::GetCopyTable()->SetKeyScale(msg.key, msg.scale);
 
   BPS_LOG(TRACE) << "NonRootCopyListenLoop recved from root"
                  << ", signal=" << msg.signal << ", key=" << msg.key
