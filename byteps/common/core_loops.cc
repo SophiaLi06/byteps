@@ -284,7 +284,7 @@ inline void PostNcclCalls(
           (ncclRedOp_t)ncclSum, (ncclComm_t)nccl_comm,
           (cudaStream_t)nccl_stream));
       #endif
-      // TODO: actually do scale finding here
+      // do scale finding here
       task->scale = terngrad_scale((void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len), (size_t)num_elem_per_gpu);
     }
     if (left_elem) {
@@ -305,6 +305,7 @@ inline void PostNcclCalls(
                            (ncclRedOp_t)ncclSum, (int)nccl_root,
                            (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
       #endif
+      // do scale finding here
       task->scale = terngrad_scale((void *)(out_p + len - left_elem * unit_len), (size_t)left_elem);
       //////////////
     }
@@ -519,7 +520,7 @@ bool RunCopyDevice2HostLoopOnce() {
       // TODO: not modifying, say tensors containing less than 100 byteps 
       if(tensor->dtype() == BYTEPS_FLOAT32) {
         //task->scale = terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
-        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+        terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len, task->scale);
       }
       ///task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
@@ -846,7 +847,7 @@ bool RunRootCopyHost2DeviceLoopOnce() {
 
     if (local_size > 1) {
       // notify non-root devices
-      // TODO: when broadcasting here, also broadcast the scale?
+      // when broadcasting here, also broadcast the scale
       struct BytePSCommMsg msg = {local_rank, DO_COPYH2D, key, task->scale};
       BytePSGlobal::GetBasicComm()->broadcastSignal(&msg,
                                                     sizeof(BytePSCommMsg));

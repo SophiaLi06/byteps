@@ -80,8 +80,8 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
         else ptr[i] = 0.0;
         //printf("Done index %d\n", i);
     }
-    /* use the last value of gpu_ptr to store the "scaling factor" grad_max */
-    ptr[len-1] = grad_max;
+    // /* use the last value of gpu_ptr to store the "scaling factor" grad_max */
+    // ptr[len-1] = grad_max;
     /* Copy state back to global memory */
     state[id] = localState;
     // TODO: change data type from float to uint8
@@ -98,7 +98,6 @@ __global__ void terngrad_decompress_kernel(const void* gpu_ptr, size_t len, floa
 
     for(size_t i = index; i < len-1; i+=stride) {
         ptr[i] *= scale;
-        //printf("Done index %d\n", i);
     }
 }
 
@@ -139,7 +138,7 @@ float terngrad_scale(const void* gpu_ptr, size_t len){
     return grad_max;
 }
 
-float terngrad_compress(const void* gpu_ptr, size_t len){
+float terngrad_compress(const void* gpu_ptr, size_t len, float scale){
     // This is a tensor used for push-pulling the accuracy
     // TODO: in the future. just don't call terngrad_compress and decompress on it
     if (len <= 2) return 1.0; 
@@ -154,7 +153,7 @@ float terngrad_compress(const void* gpu_ptr, size_t len){
 #endif
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
     
-    float grad_max = 0.0;
+    //float grad_max = 0.0;
 
 #ifdef TIME_CUDA
     // Create the timer
@@ -165,35 +164,35 @@ float terngrad_compress(const void* gpu_ptr, size_t len){
     // Start the timer
     cudaEventRecord(start, 0);
 #endif
-    if (len > 200){
-        float *host_max_res, *dev_max_res;
+    // if (len > 200){
+    //     float *host_max_res, *dev_max_res;
 
-        const unsigned int maxBlockCount = 32;
-        const unsigned int maxThreadPerBlock = 128;
+    //     const unsigned int maxBlockCount = 32;
+    //     const unsigned int maxThreadPerBlock = 128;
     
-        // Allocate space for result on host
-        host_max_res = (float*)calloc(maxBlockCount, sizeof(float));
-        // Allocate space for result on device
-        cudaMalloc(&dev_max_res, maxBlockCount * sizeof(float));
-        para_max<<<maxBlockCount, maxThreadPerBlock, maxThreadPerBlock * sizeof(float)>>>(gpu_ptr, len, dev_max_res);
+    //     // Allocate space for result on host
+    //     host_max_res = (float*)calloc(maxBlockCount, sizeof(float));
+    //     // Allocate space for result on device
+    //     cudaMalloc(&dev_max_res, maxBlockCount * sizeof(float));
+    //     para_max<<<maxBlockCount, maxThreadPerBlock, maxThreadPerBlock * sizeof(float)>>>(gpu_ptr, len, dev_max_res);
 
-        // Copy device result to host
-        cudaMemcpy(host_max_res, dev_max_res, maxBlockCount * sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(dev_max_res);
+    //     // Copy device result to host
+    //     cudaMemcpy(host_max_res, dev_max_res, maxBlockCount * sizeof(float), cudaMemcpyDeviceToHost);
+    //     cudaFree(dev_max_res);
 
-        // Find the maximum value across all blocks
-        for (int i = 0; i < maxBlockCount; ++i){
-            if (host_max_res[i] > grad_max) grad_max = host_max_res[i];
-        }
-    }
-    else{
-        float* grad_max_answer;
-        cudaMalloc(&grad_max_answer, sizeof(float));
-        //find_grad_max<<<64, 64>>>(gpu_ptr, len, grad_max_answer);
-        find_grad_max<<<1, 1>>>(gpu_ptr, len, grad_max_answer);
-        cudaMemcpy(&grad_max, grad_max_answer, sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(grad_max_answer);
-    }
+    //     // Find the maximum value across all blocks
+    //     for (int i = 0; i < maxBlockCount; ++i){
+    //         if (host_max_res[i] > grad_max) grad_max = host_max_res[i];
+    //     }
+    // }
+    // else{
+    //     float* grad_max_answer;
+    //     cudaMalloc(&grad_max_answer, sizeof(float));
+    //     //find_grad_max<<<64, 64>>>(gpu_ptr, len, grad_max_answer);
+    //     find_grad_max<<<1, 1>>>(gpu_ptr, len, grad_max_answer);
+    //     cudaMemcpy(&grad_max, grad_max_answer, sizeof(float), cudaMemcpyDeviceToHost);
+    //     cudaFree(grad_max_answer);
+    // }
 
 #ifdef TIME_CUDA
     // Stop the timer
@@ -224,7 +223,7 @@ float terngrad_compress(const void* gpu_ptr, size_t len){
     /* Setup prng states */
     setup_kernel<<<blockCount, threadsPerBlock>>>(devStates);
 
-    terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
+    terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, scale);
 
 #ifdef TIME_CUDA
     // Stop the timer
@@ -252,7 +251,7 @@ float terngrad_compress(const void* gpu_ptr, size_t len){
     cudaEventDestroy(total_start);
     cudaEventDestroy(total_stop);
 #endif
-    return grad_max;
+    return scale;
 }
 
 void terngrad_decompress(const void* gpu_ptr, float scale, size_t len){
