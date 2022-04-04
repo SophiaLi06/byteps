@@ -285,10 +285,10 @@ inline void PostNcclCalls(
           (cudaStream_t)nccl_stream));
       #endif
       // do scale finding here
-      task->scale = terngrad_scale((void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len), (size_t)num_elem_per_gpu);
-      BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" ReduceScatter ptr: " 
-                    << (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len) 
-                    << " len: " << num_elem_per_gpu << " scale: " << task->scale;
+      // task->scale = terngrad_scale((void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len), (size_t)num_elem_per_gpu);
+      // BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" ReduceScatter ptr: " 
+      //               << (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len) 
+      //               << " len: " << num_elem_per_gpu << " scale: " << task->scale;
     }
     if (left_elem) {
       /* Minghao */
@@ -309,11 +309,11 @@ inline void PostNcclCalls(
                            (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
       #endif
       // do scale finding here
-      float temp_scale = terngrad_scale((void *)(out_p + len - left_elem * unit_len), (size_t)left_elem);
-      if (!task->scale || task->scale < temp_scale) task->scale = temp_scale;
-      BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" Reduce ptr: " 
-                    << (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len) 
-                    << " len: " << num_elem_per_gpu << " scale: " << task->scale;
+      // float temp_scale = terngrad_scale((void *)(out_p + len - left_elem * unit_len), (size_t)left_elem);
+      // if (!task->scale || task->scale < temp_scale) task->scale = temp_scale;
+      // BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" Reduce ptr: " 
+      //               << (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len) 
+      //               << " len: " << num_elem_per_gpu << " scale: " << task->scale;
       //////////////
     }
   } else {
@@ -451,8 +451,49 @@ bool RunSyncNcclOnce() {
   auto nccl_entry = BytePSGlobal::GetNccl()->DequeueGroup();
   if (nccl_entry) {
     nccl_entry->SynchronizeEvents();
-    // TODO: do scale finding here?
     for (size_t i = 0; i < nccl_entry->tasks.size(); i++) {
+      // TODO: do scale finding here?
+      if (nccl_entry->queues[i]->getQueueType() == REDUCE){
+        auto task = nccl_entry->tasks[i];
+        auto tensor =
+        (BytePSGlobal::GetNccl()->GetSize() > 1) ? task->output : task->tensor;
+        BPS_CHECK(tensor);
+        auto key = task->key;
+
+        auto nccl = BytePSGlobal::GetNccl();
+        auto nccl_root = nccl->GetRoot(key, REDUCE);
+        auto nccl_size = nccl->GetSize();
+        auto nccl_rank = nccl->GetRank(key, REDUCE);
+
+        auto len = task->len;
+        auto offset = task->offset;
+        auto p = (char *)(tensor->data()) + offset;
+        if (task->device == CPU_DEVICE_ID) {
+          p = (char *)(task->gpu_ptr) + offset;
+        }
+        auto unit_len = tensor->size() / tensor->shape().num_elements();
+        auto num_elem_per_gpu = len / nccl_size / unit_len;
+        auto left_elem = (len / unit_len) - (num_elem_per_gpu * nccl_size);
+
+        auto copy_offset = nccl_rank * num_elem_per_gpu * unit_len;
+        auto copy_len = num_elem_per_gpu * unit_len;
+        if (left_elem && (nccl_root == nccl_rank)) {
+          copy_len += left_elem * unit_len;
+        }
+
+        if (BytePSGlobal::IsUsingReduce()) {
+          copy_offset = 0;
+          copy_len = (BytePSGlobal::GetReduceRootByKey(key) == nccl_rank) ? len : 0;
+        }
+        if (copy_len) {
+          if(tensor->dtype() == BYTEPS_FLOAT32) {
+            task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
+          }
+          BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" Scale ptr: " 
+                        << (void *)(p + copy_offset)
+                        << " len: " << (size_t)copy_len / unit_len << " scale: " << task->scale;
+        }
+      }
       FinishOrProceed(nccl_entry->tasks[i]);
     }
     nccl_entry->DestroyEvents();
