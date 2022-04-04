@@ -286,7 +286,7 @@ inline void PostNcclCalls(
       #endif
       // do scale finding here
       task->scale = terngrad_scale((void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len), (size_t)num_elem_per_gpu);
-      BPS_LOG(INFO) << "Tensor: " << task->tensor_name <<" ReduceScatter ptr: " 
+      BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" ReduceScatter ptr: " 
                     << (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len) 
                     << " len: " << num_elem_per_gpu << " scale: " << task->scale;
     }
@@ -311,7 +311,7 @@ inline void PostNcclCalls(
       // do scale finding here
       float temp_scale = terngrad_scale((void *)(out_p + len - left_elem * unit_len), (size_t)left_elem);
       if (!task->scale || task->scale < temp_scale) task->scale = temp_scale;
-      BPS_LOG(INFO) << "Tensor: " << task->tensor_name <<" Reduce ptr: " 
+      BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" Reduce ptr: " 
                     << (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len) 
                     << " len: " << num_elem_per_gpu << " scale: " << task->scale;
       //////////////
@@ -451,6 +451,7 @@ bool RunSyncNcclOnce() {
   auto nccl_entry = BytePSGlobal::GetNccl()->DequeueGroup();
   if (nccl_entry) {
     nccl_entry->SynchronizeEvents();
+    // TODO: do scale finding here?
     for (size_t i = 0; i < nccl_entry->tasks.size(); i++) {
       FinishOrProceed(nccl_entry->tasks[i]);
     }
