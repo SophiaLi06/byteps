@@ -67,6 +67,12 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
     //and gridDim.x gives the number of blocks in a grid
     int id = threadIdx.x + blockIdx.x * blockDim.x;
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
+    
+    if (id == 0) {
+        printf("compress sample: %p, %.6f, %.6f, %.6f, %.6f, %.6f \n", gpu_ptr,
+               ptr[0], ptr[1], ptr[2], ptr[3], ptr[4]);
+    }
+
     float x;
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     int stride = blockDim.x * gridDim.x;
@@ -155,9 +161,9 @@ float terngrad_compress(const void* gpu_ptr, size_t len, float scale){
 #endif
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
 
-    std::cout << "compress sample: " << gpu_ptr << " " << ptr[0]
-              << " " << ptr[1] << " " << ptr[2] << " " << ptr[3] << " " 
-              << ptr[4] << " " << ptr[5] << std::endl;
+    // std::cout << "compress sample: " << gpu_ptr << " " << ptr[0]
+    //           << " " << ptr[1] << " " << ptr[2] << " " << ptr[3] << " " 
+    //           << ptr[4] << " " << ptr[5] << std::endl;
     
     float grad_max = 0.0;
 
