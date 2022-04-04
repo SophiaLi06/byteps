@@ -13,6 +13,10 @@ __global__ void setup_kernel(curandState *state)
 
 __global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
+    std::cout << "find_grad_max sample: " << gpu_ptr << " " << ptr[0]
+              << " " << ptr[1] << " " << ptr[2] << " " << ptr[3] << " " 
+              << ptr[4] << " " << ptr[5] << std::endl;
+
     float grad_max;
     if (ptr[0] >= 0) grad_max = ptr[0];
     else grad_max = -ptr[0];
@@ -25,7 +29,6 @@ __global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
         if (grad_abs > grad_max) grad_max = grad_abs;
     }
     *result = grad_max;
-    // TODO: maybe append grad_max (i.e., the scale at the end here)
 }
 
 __global__ void para_max(const void* gpu_ptr, size_t len, float* result){
@@ -152,6 +155,10 @@ float terngrad_compress(const void* gpu_ptr, size_t len, float scale){
     cudaEventRecord(total_start, 0);
 #endif
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
+
+    std::cout << "compress sample: " << gpu_ptr << " " << ptr[0]
+              << " " << ptr[1] << " " << ptr[2] << " " << ptr[3] << " " 
+              << ptr[4] << " " << ptr[5] << std::endl;
     
     float grad_max = 0.0;
 
@@ -225,7 +232,7 @@ float terngrad_compress(const void* gpu_ptr, size_t len, float scale){
 
     //terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, scale);
     terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
-    std::cout << "grad max: "<< grad_max << " scale: " << scale;
+    //std::cout << "grad max: "<< grad_max << " scale: " << scale;
 
 #ifdef TIME_CUDA
     // Stop the timer
