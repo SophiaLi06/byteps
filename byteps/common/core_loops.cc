@@ -286,6 +286,9 @@ inline void PostNcclCalls(
       #endif
       // do scale finding here
       task->scale = terngrad_scale((void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len), (size_t)num_elem_per_gpu);
+      BPS_LOG(INFO) << "Tensor: " << task->tensor_name <<" ReduceScatter ptr: " 
+                    << (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len) 
+                    << " len: " << num_elem_per_gpu << " scale: " << task->scale;
     }
     if (left_elem) {
       /* Minghao */
@@ -306,7 +309,11 @@ inline void PostNcclCalls(
                            (ncclComm_t)nccl_comm, (cudaStream_t)nccl_stream));
       #endif
       // do scale finding here
-      task->scale = terngrad_scale((void *)(out_p + len - left_elem * unit_len), (size_t)left_elem);
+      float temp_scale = terngrad_scale((void *)(out_p + len - left_elem * unit_len), (size_t)left_elem);
+      if (!task->scale || task->scale < temp_scale) task->scale = temp_scale;
+      BPS_LOG(INFO) << "Tensor: " << task->tensor_name <<" Reduce ptr: " 
+                    << (void *)(out_p + nccl_rank * num_elem_per_gpu * unit_len) 
+                    << " len: " << num_elem_per_gpu << " scale: " << task->scale;
       //////////////
     }
   } else {
@@ -521,11 +528,13 @@ bool RunCopyDevice2HostLoopOnce() {
       if(tensor->dtype() == BYTEPS_FLOAT32) {
         //task->scale = terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len);
         terngrad_compress((void *)(p + copy_offset), (size_t)copy_len / unit_len, task->scale);
+        BPS_LOG(INFO) << "Compress Tensor: " << task->tensor_name << " start ptr: "
+                      << (void *)(p + copy_offset) << " len: " << (size_t)copy_len / unit_len;
       }
       ///task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
       #endif
 
-      BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " key: " << key << " copy dest: " << (task->cpubuff) + offset + copy_offset << " copy_offset: " << copy_offset << " len: " << len << " scale: " << task->scale <<"\n";
+      //BPS_LOG(INFO) << "NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " key: " << key << " copy dest: " << (task->cpubuff) + offset + copy_offset << " copy_offset: " << copy_offset << " len: " << len << " scale: " << task->scale <<"\n";
 
       /////////////
       CUDA_CALL(cudaMemcpyAsync(
@@ -821,8 +830,11 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
     #ifndef CPU_COMPRESS
     if(tensor->dtype() == BYTEPS_FLOAT32) {
       terngrad_decompress((void *)(gpu_addr + copy_offset), task->scale, (size_t)copy_len / unit_len);
+      BPS_LOG(INFO) << "Decompress Tensor: " << task->tensor_name << " start ptr: "
+                    << (void *)(gpu_addr + copy_offset) << " len: " << (size_t)copy_len / unit_len
+                    << " scale: " << task->scale;
     }
-    BPS_LOG(INFO) << "Host2Device NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " key: " << key << " copy from: " << (const void *)(cpubuff + copy_offset) << " copy_offset: " << copy_offset << " scale: " << task->scale <<"\n";
+    //BPS_LOG(INFO) << "Host2Device NcclRank: " << nccl_rank << " Task Tensor: " << task->tensor_name << " key: " << key << " copy from: " << (const void *)(cpubuff + copy_offset) << " copy_offset: " << copy_offset << " scale: " << task->scale <<"\n";
     //BPS_LOG(INFO) << "CopyHost2Device Rank=" << BytePSGlobal::GetLocalRank();
     //BPS_LOG(INFO) << "task scale=" << task->scale;
     #endif
