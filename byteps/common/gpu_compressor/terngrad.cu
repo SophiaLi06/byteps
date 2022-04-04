@@ -235,8 +235,8 @@ float terngrad_compress(const void* gpu_ptr, size_t len, float scale){
     /* Setup prng states */
     setup_kernel<<<blockCount, threadsPerBlock>>>(devStates);
 
-    //terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, scale);
-    terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
+    terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, scale);
+    //terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
     if(scale != grad_max) std::cout << "grad max: "<< grad_max << " scale: " << scale;
 
 #ifdef TIME_CUDA
