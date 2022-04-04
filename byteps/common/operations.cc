@@ -72,6 +72,8 @@ void byteps_lazy_init() {
       // Or a dummy barrier in cross-pcie-switch mode
       func.push_back(PushLoop);
       /* Minghao */
+      func.push_back(ContextPushLoop);
+      func.push_back(ContextPullLoop);
       #ifdef CPU_COMPRESS
       func.push_back(CompressLoop);
       #endif
@@ -473,6 +475,14 @@ std::shared_ptr<std::vector<QueueType>> GetPushQueueList(int device) {
   } else {
     queue_list->push_back(COORDINATE_REDUCE);
     queue_list->push_back(REDUCE);
+  }
+
+  // Get the Global scale for compression
+  if (BytePSGlobal::IsDistributed() || BytePSGlobal::IsCrossPcieSwitch()) {
+    if (BytePSGlobal::IsRootDevice()) {
+      queue_list->push_back(CONTEXT_PUSH);
+      queue_list->push_back(CONTEXT_PULL);
+    }
   }
 
   // Copy from GPU to CPU

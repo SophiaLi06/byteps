@@ -88,6 +88,8 @@ enum DeviceType { CPU, GPU };
 enum QueueType {
   COORDINATE_REDUCE,
   REDUCE,
+  CONTEXT_PUSH,
+  CONTEXT_PULL,
   COPYD2H,
   PCIE_REDUCE,
   COORDINATE_PUSH,
@@ -106,6 +108,8 @@ const int QueueNum =
 
 const std::vector<std::string> LogStrings = {"COORDINATE_REDUCE",
                                              "REDUCE",
+                                             "CONTEXT_PUSH",
+                                             "CONTEXT_PULL",
                                              "COPYD2H",
                                              "PCIE_REDUCE",
                                              "COORDINATE_PUSH",

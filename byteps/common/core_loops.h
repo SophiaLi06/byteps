@@ -36,6 +36,10 @@ void NonRootNcclLoop();
 
 void SyncNcclLoop();
 
+void ContextPushLoop();
+
+void ContextPullLoop();
+
 void CopyDevice2HostLoop();
 
 void CompressLoop();

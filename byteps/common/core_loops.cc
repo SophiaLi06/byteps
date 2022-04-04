@@ -505,6 +505,117 @@ bool RunSyncNcclOnce() {
   return true;
 }
 
+bool RunContextPushLoopOnce() {
+  QueueType this_op = CONTEXT_PUSH;
+  auto q = BytePSGlobal::GetScheduledQueue(this_op);
+  auto task = q->getTask();
+  std::cout << "context PUSH Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
+  if (task) {
+    #ifdef DEFAULT_PUSHPULL
+    /* Minghao */
+    // TODO: do context pushing and pulling here
+    auto tensor = task->tensor;
+    /////////////
+    BPS_CHECK(BytePSGlobal::IsRootDevice())
+        << "only root device should enter PUSH loop";
+
+    if (BytePSGlobal::IsDistributed()) {
+      auto offset = task->offset;
+      auto len = task->len;
+
+      char *data;
+      BPS_CHECK(task->cpubuff);
+      data =
+          const_cast<char *>(static_cast<const char *>(task->cpubuff) + offset);
+
+      // get metadata
+      const int dtype = task->tensor->dtype();
+
+      /* Minghao */
+      // use compressed data/len
+      if (task->compressed) {
+        BPS_LOG(DEBUG) << "PUSH with gradient compression. key=" << task->key;
+        data = task->compressed->data;
+        len = task->compressed->size;
+        task->compressed = nullptr;
+      }
+      BPS_LOG(INFO) << "Push Task Tensor: " << task->tensor_name << " key: " << task->key << " data from: " << (task->cpubuff) + offset << " len: " << len << " scale: " << task->scale << "\n";
+      ///////////////////////////
+
+      // false means not to delete data when SArray is deleted
+      ps::SArray<char> vals(data, len, false);
+
+      int cmd = GetCommandType(RequestType::kDefaultPushPull, dtype);
+      auto &pskv = BytePSGlobal::EncodeDefaultKey(task->key, len);
+      BytePSGlobal::GetPS()->ZPush(pskv.keys, vals, pskv.lens, cmd,
+                                   [task, q]() { FinishOrProceed(task); });
+    } else {
+      // This is a dummy barrier for IsCrossPcieSwitch()
+      BPS_CHECK(BytePSGlobal::IsCrossPcieSwitch());
+      FinishOrProceed(task);
+    }
+    #else
+    // An "empty" push-pull that does nothing
+    FinishOrProceed(task);
+    #endif
+  } else {
+    std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+  }
+  return true;
+}
+
+bool RunContextPullLoopOnce() {
+  QueueType this_op = CONTEXT_PULL;
+  auto q = BytePSGlobal::GetScheduledQueue(this_op);
+  auto task = q->getTask();
+  std::cout << "context PULL Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
+  if (task) {
+    #ifdef DEFAULT_PUSHPULL
+    /* Minghao */
+    //std::cout << "RunPushLoopOnce\n";
+    // if (task->gpu_ptr) BPS_LOG(INFO) << "Pull Tensor GPU ptr: " << task->gpu_ptr << "\n";
+    // if (task->cpubuff) BPS_LOG(INFO) << "Pull Tensor CPU buff: " << task->cpubuff << "\n";
+    auto tensor = task->tensor;
+    /////////////
+    BPS_CHECK(BytePSGlobal::IsRootDevice())
+        << "only root device should enter PULL loop";
+    // TODO: allow merging
+    auto offset = task->offset;
+    auto len = task->len;
+
+    char *data;
+    BPS_CHECK(task->cpubuff);
+    data =
+        const_cast<char *>(static_cast<const char *>(task->cpubuff) + offset);
+
+    // get metadata
+    const int dtype = task->output->dtype();
+
+    // Minghao
+    BPS_LOG(INFO) << "Pull Task Tensor: " << task->tensor_name << " key: " << task->key << " data to: " << (task->cpubuff) + offset << " len: " << len << " scale: " << task->scale << "\n";
+    ////////////
+
+    // false means not to delete data when SArray is deleted
+    auto vals = new ps::SArray<char>(data, len, false);
+
+    int cmd = GetCommandType(RequestType::kDefaultPushPull, dtype);
+    auto &pskv = BytePSGlobal::EncodeDefaultKey(task->key, len);
+    // issue pull
+    BytePSGlobal::GetPS()->ZPull(pskv.keys, vals, &pskv.lens, cmd,
+                                 [vals, task, q]() {
+                                   delete vals;
+                                   FinishOrProceed(task);
+                                 });
+    #else
+    // An "empty" push-pull that does nothing
+    FinishOrProceed(task);
+    #endif
+  } else {
+    std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+  }
+  return true;
+}
+
 bool RunCopyDevice2HostLoopOnce() {
   QueueType this_op = COPYD2H;
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
@@ -1020,6 +1131,18 @@ void SyncNcclLoop() {
   /////////////////
   CUDA_CALL(cudaSetDevice(BytePSGlobal::GetLocalRank()));
   while (RunSyncNcclOnce() && !BytePSGlobal::ShouldShutdown()) {
+  }
+  BytePSGlobal::ReportThreadFinish();
+}
+
+void ContextPushLoop(){
+  while (RunContextPushLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
+  }
+  BytePSGlobal::ReportThreadFinish();
+}
+
+void ContextPullLoop(){
+  while (RunContextPullLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
   BytePSGlobal::ReportThreadFinish();
 }
