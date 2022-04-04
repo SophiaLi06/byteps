@@ -13,8 +13,8 @@ __global__ void setup_kernel(curandState *state)
 
 __global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
-    printf("find_grad_max sample: %p, %.6f, %.6f, %.6f, %.6f, %.6f \n", gpu_ptr,
-           ptr[0], ptr[1], ptr[2], ptr[3], ptr[4]);
+    // printf("find_grad_max sample: %p, %.6f, %.6f, %.6f, %.6f, %.6f \n", gpu_ptr,
+    //        ptr[0], ptr[1], ptr[2], ptr[3], ptr[4]);
 
     float grad_max;
     if (ptr[0] >= 0) grad_max = ptr[0];
@@ -68,10 +68,10 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
     int id = threadIdx.x + blockIdx.x * blockDim.x;
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
     
-    if (id == 0) {
-        printf("compress sample: %p, %.6f, %.6f, %.6f, %.6f, %.6f \n", gpu_ptr,
-               ptr[0], ptr[1], ptr[2], ptr[3], ptr[4]);
-    }
+    // if (id == 0) {
+    //     printf("compress sample: %p, %.6f, %.6f, %.6f, %.6f, %.6f \n", gpu_ptr,
+    //            ptr[0], ptr[1], ptr[2], ptr[3], ptr[4]);
+    // }
 
     float x;
     int index = blockIdx.x * blockDim.x + threadIdx.x;
@@ -237,7 +237,7 @@ float terngrad_compress(const void* gpu_ptr, size_t len, float scale){
 
     //terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, scale);
     terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
-    //std::cout << "grad max: "<< grad_max << " scale: " << scale;
+    std::cout << "grad max: "<< grad_max << " scale: " << scale;
 
 #ifdef TIME_CUDA
     // Stop the timer
