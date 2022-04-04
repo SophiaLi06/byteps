@@ -13,9 +13,8 @@ __global__ void setup_kernel(curandState *state)
 
 __global__ void find_grad_max(const void* gpu_ptr, size_t len, float* result){
     float* ptr = reinterpret_cast<float*>(const_cast<void*>(gpu_ptr));
-    std::cout << "find_grad_max sample: " << gpu_ptr << " " << ptr[0]
-              << " " << ptr[1] << " " << ptr[2] << " " << ptr[3] << " " 
-              << ptr[4] << " " << ptr[5] << std::endl;
+    printf("find_grad_max sample: %p, %.6f, %.6f, %.6f, %.6f, %.6f \n", gpu_ptr,
+           ptr[0], ptr[1], ptr[2], ptr[3], ptr[4]);
 
     float grad_max;
     if (ptr[0] >= 0) grad_max = ptr[0];
