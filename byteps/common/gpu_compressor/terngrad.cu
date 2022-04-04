@@ -72,6 +72,9 @@ __global__ void terngrad_compress_kernel(const void* gpu_ptr, size_t len, curand
     //     printf("compress sample: %p, %.6f, %.6f, %.6f, %.6f, %.6f \n", gpu_ptr,
     //            ptr[0], ptr[1], ptr[2], ptr[3], ptr[4]);
     // }
+    if (id == 0) {
+        printf("compress scale: %.6f \n", grad_max);
+    }
 
     float x;
     int index = blockIdx.x * blockDim.x + threadIdx.x;
@@ -237,7 +240,8 @@ float terngrad_compress(const void* gpu_ptr, size_t len, float scale){
 
     terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, scale);
     //terngrad_compress_kernel<<<blockCount, threadsPerBlock>>>(gpu_ptr, len, devStates, grad_max);
-    if(scale != grad_max) std::cout << "grad max: "<< grad_max << " scale: " << scale;
+    //if(scale != grad_max) std::cout << "grad max: "<< grad_max << " scale: " << scale;
+    std::cout << "grad max: "<< grad_max << " host scale: " << scale;
 
 #ifdef TIME_CUDA
     // Stop the timer
