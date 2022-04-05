@@ -181,6 +181,7 @@ void BytePSCommSocket::startListenThread() {  // only root starts this in
 
     auto message = *(BytePSCommMsg*)buffer;
     float push_scale;
+    float context_scale;
 
     switch (message.signal) {
       case REDUCE_READY:
