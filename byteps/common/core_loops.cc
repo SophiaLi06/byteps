@@ -495,10 +495,20 @@ bool RunSyncNcclOnce() {
         }
       }
       FinishOrProceed(nccl_entry->tasks[i]);
+      if(!BytePSGlobal::IsRootDevice()){
+        BytePSCommSignal sig = CONTEXT_PUSH_READY;
+        std::shared_ptr<BytePSComm> comm;
+        comm = BytePSGlobal::GetBasicComm();
+        struct BytePSCommMsg msg;
+        msg = {rank, sig, key, task->scale};
+        comm->sendSignalToRoot(&msg, sizeof(BytePSCommMsg));
+      }
+      
     }
     nccl_entry->DestroyEvents();
     BPS_LOG(TRACE) << "Finished NCCL Group size=" << nccl_entry->tasks.size()
                    << " rank=" << BytePSGlobal::GetLocalRank();
+    
   } else {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }

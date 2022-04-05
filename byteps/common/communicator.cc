@@ -199,6 +199,13 @@ void BytePSCommSocket::startListenThread() {  // only root starts this in
           BytePSGlobal::GetPushTable()->SetKeyScale(message.key, message.scale);
         }
         break;
+      case CONTEXT_PUSH_READY:
+        BytePSGlobal::GetContextPushTable()->AddReadyCount(message.key);
+        context_scale = BytePSGlobal::GetContextPushTable()->GetKeyScale(message.key);
+        if(message.scale && message.scale > context_scale){
+          BytePSGlobal::GetContextPushTable()->SetKeyScale(message.key, message.scale);
+        }
+        break;
       default:
         BPS_CHECK(0) << "unsupported signal: " << message.signal;
     }
