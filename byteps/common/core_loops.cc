@@ -458,6 +458,7 @@ bool RunSyncNcclOnce() {
         auto tensor =
         (BytePSGlobal::GetNccl()->GetSize() > 1) ? task->output : task->tensor;
         BPS_CHECK(tensor);
+        int rank = BytePSGlobal::GetLocalRank();
         auto key = task->key;
 
         auto nccl = BytePSGlobal::GetNccl();
@@ -493,15 +494,18 @@ bool RunSyncNcclOnce() {
                         << (void *)(p + copy_offset)
                         << " len: " << (size_t)copy_len / unit_len << " scale: " << task->scale;
         }
+        FinishOrProceed(nccl_entry->tasks[i]);
+        if(!BytePSGlobal::IsRootDevice()){
+          BytePSCommSignal sig = CONTEXT_PUSH_READY;
+          std::shared_ptr<BytePSComm> comm;
+          comm = BytePSGlobal::GetBasicComm();
+          struct BytePSCommMsg msg;
+          msg = {rank, sig, key, task->scale};
+          comm->sendSignalToRoot(&msg, sizeof(BytePSCommMsg));
+        }
       }
-      FinishOrProceed(nccl_entry->tasks[i]);
-      if(!BytePSGlobal::IsRootDevice()){
-        BytePSCommSignal sig = CONTEXT_PUSH_READY;
-        std::shared_ptr<BytePSComm> comm;
-        comm = BytePSGlobal::GetBasicComm();
-        struct BytePSCommMsg msg;
-        msg = {rank, sig, key, task->scale};
-        comm->sendSignalToRoot(&msg, sizeof(BytePSCommMsg));
+      else{
+        FinishOrProceed(nccl_entry->tasks[i]);
       }
       
     }
