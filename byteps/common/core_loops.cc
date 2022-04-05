@@ -511,7 +511,7 @@ bool RunContextPushLoopOnce() {
   auto task = q->getTask();
   
   if (task) {
-    std::cout << "context PUSH Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
+    //std::cout << "context PUSH Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
     #ifdef DEFAULT_PUSHPULL
     /* Minghao */
     // TODO: do context pushing and pulling here
@@ -571,7 +571,7 @@ bool RunContextPullLoopOnce() {
   auto task = q->getTask();
   
   if (task) {
-    std::cout << "context PULL Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
+    //std::cout << "context PULL Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
     #ifdef DEFAULT_PUSHPULL
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
