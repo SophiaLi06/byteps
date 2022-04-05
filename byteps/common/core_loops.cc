@@ -509,8 +509,9 @@ bool RunContextPushLoopOnce() {
   QueueType this_op = CONTEXT_PUSH;
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
   auto task = q->getTask();
-  std::cout << "context PUSH Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
+  
   if (task) {
+    std::cout << "context PUSH Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
     #ifdef DEFAULT_PUSHPULL
     /* Minghao */
     // TODO: do context pushing and pulling here
@@ -568,8 +569,9 @@ bool RunContextPullLoopOnce() {
   QueueType this_op = CONTEXT_PULL;
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
   auto task = q->getTask();
-  std::cout << "context PULL Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
+  
   if (task) {
+    std::cout << "context PULL Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
     #ifdef DEFAULT_PUSHPULL
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
