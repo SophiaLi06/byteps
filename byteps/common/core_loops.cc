@@ -623,6 +623,17 @@ bool RunContextPullLoopOnce() {
                                    FinishOrProceed(task);
                                  });
     #else
+    auto key = task->key;
+    int local_rank = BytePSGlobal::GetLocalRank();
+    int local_size = BytePSGlobal::GetLocalSize();
+
+    if (local_size > 1) {
+      // notify non-root devices
+      // when broadcasting here, also broadcast the scale
+      struct BytePSCommMsg msg = {local_rank, DO_COPYD2H, key, task->scale};
+      BytePSGlobal::GetBasicComm()->broadcastSignal(&msg,
+                                                    sizeof(BytePSCommMsg));
+    }
     // An "empty" push-pull that does nothing
     FinishOrProceed(task);
     #endif
@@ -1052,12 +1063,17 @@ bool RunNonRootCopyListenLoopOnce() {
 
   signal_comm->recvSignalFromRoot(&msg, sizeof(BytePSCommMsg));
   if (BytePSGlobal::ShouldShutdown()) return true;
-  BPS_CHECK_EQ(msg.signal, DO_COPYH2D) << msg.signal;
-
-  BytePSGlobal::GetCopyTable()->AddReadyCount(msg.key);
-  // Minghao: update the key's scale
-  BytePSGlobal::GetCopyTable()->SetKeyScale(msg.key, msg.scale);
-
+  //BPS_CHECK_EQ(msg.signal, DO_COPYH2D) << msg.signal;
+  if(msg.signal == DO_COPYD2H){
+    BytePSGlobal::GetContextCopyTable()->AddReadyCount(msg.key);
+    // Minghao: update the key's scale
+    BytePSGlobal::GetContextCopyTable()->SetKeyScale(msg.key, msg.scale);
+  }
+  if(msg.signal == DO_COPYH2D){
+    BytePSGlobal::GetCopyTable()->AddReadyCount(msg.key);
+    // Minghao: update the key's scale
+    //BytePSGlobal::GetCopyTable()->SetKeyScale(msg.key, msg.scale);
+  }
   BPS_LOG(TRACE) << "NonRootCopyListenLoop recved from root"
                  << ", signal=" << msg.signal << ", key=" << msg.key
                  << ", myrank=" << rank;

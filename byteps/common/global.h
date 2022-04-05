@@ -121,6 +121,7 @@ class BytePSGlobal {
 
   // for non-root
   static ReadyTable* GetCopyTable() { return _copy_table; }
+  static ReadyTable* GetContextCopyTable() { return _context_copy_table; }
 
   static std::shared_ptr<NcclManager> GetNccl() { return _nccl_manager; }
   static std::shared_ptr<CpuReducer> GetCpuReducer() { return _cpu_reducer; }
@@ -193,6 +194,7 @@ class BytePSGlobal {
 
   // (key, ready_signal_count) pair, only valid for non-root device
   static ReadyTable* _copy_table;
+  static ReadyTable* _context_copy_table;
 
   static std::shared_ptr<ThreadPool> _thread_pool;
 

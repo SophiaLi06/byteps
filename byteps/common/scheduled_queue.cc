@@ -74,6 +74,11 @@ BytePSScheduledQueue::BytePSScheduledQueue(QueueType type) {
         _rt = BytePSGlobal::GetCopyTable();
       }
       break;
+    case COPYD2H:
+      if (!BytePSGlobal::IsRootDevice()) {
+        _rt = BytePSGlobal::GetContextCopyTable();
+      }
+      break;
     case BROADCAST:
       if (BytePSGlobal::GetNccl()->IsSignalRoot()) {
         _rt = BytePSGlobal::GetBroadcastTable();
@@ -148,10 +153,10 @@ std::shared_ptr<TensorTableEntry> BytePSScheduledQueue::getTask() {
         continue;
       }
       // change task field here based on table field
-      if (_qt == COPYH2D){
+      if (_qt == COPYD2H){
         (*it)->scale = _rt->GetKeyScale((*it)->key);
       }
-      if (_qt == PUSH){
+      if (_qt == CONTEXT_PUSH){
         (*it)->scale = std::max((*it)->scale, _rt->GetKeyScale((*it)->key));
       }
       _rt->ClearReadyCount((*it)->key);

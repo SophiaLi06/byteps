@@ -70,6 +70,7 @@ ReadyTable* BytePSGlobal::_pcie_reduce_table;
 ReadyTable* BytePSGlobal::_broadcast_table;
 ReadyTable* BytePSGlobal::_push_table;
 ReadyTable* BytePSGlobal::_context_push_table;
+ReadyTable* BytePSGlobal::_context_copy_table;
 ReadyTable* BytePSGlobal::_copy_table;
 bool BytePSGlobal::_is_using_reduce = false;
 std::vector<int> BytePSGlobal::_reduce_roots;
@@ -211,6 +212,7 @@ void BytePSGlobal::Init() {
     _push_table = new ReadyTable(_local_size - 1, "PUSH");
   } else {
     _copy_table = new ReadyTable(1, "COPY");
+    _context_copy_table = new ReadyTable(1, "CONTEXT_COPY");
   }
 
   if (_is_root_device) {
@@ -379,6 +381,10 @@ void BytePSGlobal::Shutdown() {
   if (_context_push_table){
     delete _context_push_table;
     _context_push_table = NULL;
+  }
+  if (_context_copy_table){
+    delete _context_copy_table;
+    _context_copy_table = NULL;
   }
 
   if (_copy_table) {

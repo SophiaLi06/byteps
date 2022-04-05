@@ -49,7 +49,8 @@ enum BytePSCommSignal {
   DO_REDUCE,
   DO_BROADCAST,
   DO_GROUP,
-  DO_COPYH2D
+  DO_COPYH2D,
+  DO_COPYD2H
 };
 
 struct BytePSCommMsg {
