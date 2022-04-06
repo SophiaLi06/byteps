@@ -18,7 +18,7 @@
 
 //#define GPU_COMPERSS
 //#define CPU_COMPRESS
-//#define DEFAULT_PUSHPULL
+#define DEFAULT_PUSHPULL
 //#define DEFAULT_CONTEXT_PUSHPULL
 
 namespace byteps {
