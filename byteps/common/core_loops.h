@@ -16,8 +16,10 @@
 #ifndef BYTEPS_CORE_LOOPS_H
 #define BYTEPS_CORE_LOOPS_H
 
+//#define GPU_COMPERSS
 //#define CPU_COMPRESS
 //#define DEFAULT_PUSHPULL
+//#define DEFAULT_CONTEXT_PUSHPULL
 
 namespace byteps {
 namespace common {

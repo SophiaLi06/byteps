@@ -526,7 +526,7 @@ bool RunContextPushLoopOnce() {
   
   if (task) {
     //std::cout << "context PUSH Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
-    #ifdef DEFAULT_PUSHPULL
+    #ifdef DEFAULT_CONTEXT_PUSHPULL
     /* Minghao */
     // TODO: do context pushing and pulling here
     auto tensor = task->tensor;
@@ -586,7 +586,7 @@ bool RunContextPullLoopOnce() {
   
   if (task) {
     //std::cout << "context PULL Tensor: " << task->tensor_name << " scale: " << task->scale << std::endl;
-    #ifdef DEFAULT_PUSHPULL
+    #ifdef DEFAULT_CONTEXT_PUSHPULL
     /* Minghao */
     //std::cout << "RunPushLoopOnce\n";
     // if (task->gpu_ptr) BPS_LOG(INFO) << "Pull Tensor GPU ptr: " << task->gpu_ptr << "\n";
@@ -700,7 +700,7 @@ bool RunCopyDevice2HostLoopOnce() {
 
     if (copy_len) {
       /* Minghao */
-      #ifndef CPU_COMPRESS
+      #ifdef GPU_COMPRESS
       // NOTE: 65536 is the defualt minimum number of byteps to compress.
       // And we don't want to blindly modify all tensors, otherwise those for accuracy
       // also get modified? 
@@ -1007,7 +1007,7 @@ void CopyHost2Device(std::shared_ptr<byteps::common::TensorTableEntry> task) {
         (cudaStream_t)*copy_h2d_stream));
     CUDA_CALL(cudaStreamSynchronize(*copy_h2d_stream));
     /* Minghao */
-    #ifndef CPU_COMPRESS
+    #ifdef GPU_COMPRESS
     if(tensor->dtype() == BYTEPS_FLOAT32) {
       terngrad_decompress((void *)(gpu_addr + copy_offset), task->scale, (size_t)copy_len / unit_len);
       BPS_LOG(INFO) << "Decompress Tensor: " << task->tensor_name << " start ptr: "
