@@ -1,0 +1,60 @@
+{% set name = "nccl" %}
+{% set version = "2.11.4-1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version|replace("-", ".") }}
+
+source:
+  url: https://github.com/NVIDIA/nccl/archive/v{{ version }}.tar.gz
+  sha256: db4e9a0277a64f9a31ea9b5eea22e63f10faaed36dded4587bbc8a0d8eceed10
+  patches:
+    # Fixes `memcpy` issue on older GCC's
+    #
+    # xref: https://github.com/NVIDIA/nccl/commit/30ca3fcacf8a73c48d7b8f7aaa54ae8bff89e884
+    - 30ca3fcacf.patch
+
+build:
+  number: 0
+  skip: true  # [(not linux) or cuda_compiler_version in (undefined, "None")]
+  run_exports:
+    # xref: https://github.com/NVIDIA/nccl/issues/218
+    - {{ pin_subpackage(name, max_pin="x") }}
+  script_env:
+    # for some reason /usr/local/cuda is not added to $PATH in ppc64le's docker image
+    - CUDA_HOME  # [ppc64le]
+
+requirements:
+  build:
+    - {{ compiler("c") }}
+    - {{ compiler("cxx") }}
+    - {{ compiler("cuda") }}
+    - make
+
+test:
+  commands:
+    - test -f "${PREFIX}/include/nccl.h"
+    - test -f "${PREFIX}/lib/libnccl.so"
+    - test ! -f "${PREFIX}/lib/libnccl_static.a"
+
+about:
+  home: https://developer.nvidia.com/nccl
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: LICENSE.txt
+  summary: Optimized primitives for collective multi-GPU communication
+
+  description: |
+    The NVIDIA Collective Communications Library (NCCL) implements multi-GPU
+    and multi-node collective communication primitives that are performance
+    optimized for NVIDIA GPUs. NCCL provides routines such as all-gather,
+    all-reduce, broadcast, reduce, reduce-scatter, that are optimized to
+    achieve high bandwidth over PCIe and NVLink high-speed interconnect.
+
+  doc_url: https://docs.nvidia.com/deeplearning/sdk/nccl-developer-guide/docs/index.html
+  dev_url: https://github.com/NVIDIA/nccl
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - leofang

@@ -1,0 +1,43 @@
+{
+  "paths": [
+    {
+      "_path": "include/nccl.h",
+      "path_type": "hardlink",
+      "sha256": "0d385139b76386dd3ea1d2846b73ec9afc5c4e4aa9fba51289013a364534ae76",
+      "size_in_bytes": 14647
+    },
+    {
+      "_path": "include/nccl_net.h",
+      "path_type": "hardlink",
+      "sha256": "d8ae3ecc0c5680540e64e7615551ea8ce908b3ac38e8e2a5b7cf16179200bf0d",
+      "size_in_bytes": 6160
+    },
+    {
+      "_path": "lib/libnccl.so",
+      "path_type": "softlink",
+      "sha256": "03c57e963d54cb1fdfb189d7ac9fbae16e8e44abf5276215d28fc469fafaf055",
+      "size_in_bytes": 281891072
+    },
+    {
+      "_path": "lib/libnccl.so.2",
+      "path_type": "softlink",
+      "sha256": "03c57e963d54cb1fdfb189d7ac9fbae16e8e44abf5276215d28fc469fafaf055",
+      "size_in_bytes": 281891072
+    },
+    {
+      "_path": "lib/libnccl.so.2.11.4",
+      "path_type": "hardlink",
+      "sha256": "03c57e963d54cb1fdfb189d7ac9fbae16e8e44abf5276215d28fc469fafaf055",
+      "size_in_bytes": 281891072
+    },
+    {
+      "_path": "lib/pkgconfig/nccl.pc",
+      "file_mode": "text",
+      "path_type": "hardlink",
+      "prefix_placeholder": "/home/conda/feedstock_root/build_artifacts/nccl_1633397865763/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placeh",
+      "sha256": "bf9d68a2bd45ca7ba16db79dcb14a39ddb78672bf424d99a26a054a92111456a",
+      "size_in_bytes": 490
+    }
+  ],
+  "paths_version": 1
+}

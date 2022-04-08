@@ -1,0 +1,6 @@
+include/nccl.h
+include/nccl_net.h
+lib/libnccl.so
+lib/libnccl.so.2
+lib/libnccl.so.2.11.4
+lib/pkgconfig/nccl.pc
