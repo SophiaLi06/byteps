@@ -344,6 +344,7 @@ void BytePSGlobal::Init() {
   BPS_LOG(DEBUG) << "Inited rank=" << _rank << " local_rank=" << _local_rank
                  << " size=" << _size << " local_size=" << _local_size
                  << " worker_id=" << _worker_id;
+  std::cout << "Finished BytePS Init" << std::endl;
 
   if (getenv("BYTEPS_DEBUG_SAMPLE_TENSOR")) {
     _sample_key = strtoull(getenv("BYTEPS_DEBUG_SAMPLE_TENSOR"), nullptr, 0);
@@ -431,6 +432,7 @@ void BytePSGlobal::Shutdown() {
   }
 
   if (_copy_device2host_stream) {
+    std::cout << "At shutdown cleaning _copy_device2host_stream" << std::endl;
     CUDA_CALL(cudaStreamDestroy(*_copy_device2host_stream));
     _copy_device2host_stream = NULL;
   }
