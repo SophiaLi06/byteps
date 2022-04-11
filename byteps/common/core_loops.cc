@@ -42,6 +42,17 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
   //BPS_LOG(INFO) << "FinishOrProceed op: " << LogStrings[this_op];
   //////////////////////
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
+#ifdef TIMING
+  if (this_op == COMPRESS){
+    BPS_LOG(INFO) << "Finish COMPRESS tensor: " << task->tensor_name;
+  }
+  else if (this_op == DECOMPRESS){
+    BPS_LOG(INFO) << "Finish DECOMPRESS tensor: " << task->tensor_name;
+  }
+  else if(this_op == PULL){
+    BPS_LOG(INFO) << "Finish PULL tensor: " << task->tensor_name;
+  }
+#endif
   q->reportFinish(task->len);
   if (BytePSGlobal::IsTensorSampled(task->key)) {
     // We only support sampling
@@ -490,9 +501,9 @@ bool RunSyncNcclOnce() {
           if(tensor->dtype() == BYTEPS_FLOAT32) {
             task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
           }
-          BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" Scale ptr: " 
-                        << (void *)(p + copy_offset)
-                        << " len: " << (size_t)copy_len / unit_len << " scale: " << task->scale;
+          // BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" Scale ptr: " 
+          //               << (void *)(p + copy_offset)
+          //               << " len: " << (size_t)copy_len / unit_len << " scale: " << task->scale;
         }
         FinishOrProceed(nccl_entry->tasks[i]);
         if(!BytePSGlobal::IsRootDevice()){
@@ -794,6 +805,7 @@ bool RunCompressLoopOnce() {
     BPS_CHECK(task->compressor != nullptr);
     BPS_CHECK(task->compressed == nullptr);
 
+    BPS_LOG(INFO) << "Compress Task Tensor: " << task->tensor_name;
     // spawn
     BytePSGlobal::GetThreadPool()->enqueue([task]() {
       char *data = const_cast<char *>(static_cast<const char *>(task->cpubuff) +
@@ -944,6 +956,7 @@ bool RunDecompressLoopOnce() {
         << "only root device should enter DECOMPRESS loop";
     BPS_CHECK(task->compressor != nullptr);
 
+    BPS_LOG(INFO) << "Decompress Task Tensor: " << task->tensor_name;
     // spawn
     BytePSGlobal::GetThreadPool()->enqueue([task]() {
       char *data = const_cast<char *>(static_cast<const char *>(task->cpubuff) +

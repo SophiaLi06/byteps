@@ -57,6 +57,9 @@ class ErrorFeedback;
 // For P4ML
 //#define USE_P4ML
 
+// For timing
+#define TIMING
+
 // Keep the order consistent with DMLC/mshadow
 // https://github.com/dmlc/mshadow/blob/master/mshadow/base.h
 enum DataType {
@@ -231,6 +234,11 @@ struct TensorTableEntry {
   uint64_t p4ml_key;
   uint64_t enqueue_num;
   std::chrono::time_point<std::chrono::system_clock> start;
+  #endif
+  #ifdef TIMING
+  std::chrono::time_point<std::chrono::system_clock> compress_start;
+  std::chrono::time_point<std::chrono::system_clock> decompress_start;
+  std::chrono::time_point<std::chrono::system_clock> communication_start;
   #endif
   // Name of the tensor.
   std::string tensor_name;
