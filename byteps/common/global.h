@@ -37,6 +37,10 @@
 #include "scheduled_queue.h"
 #include "shared_memory.h"
 #include "thread_pool.h"
+#ifdef USE_P4ML
+// For P4ML
+#include "p4ml_manager.h"
+#endif
 
 namespace byteps {
 namespace common {
@@ -126,6 +130,55 @@ class BytePSGlobal {
   static std::shared_ptr<NcclManager> GetNccl() { return _nccl_manager; }
   static std::shared_ptr<CpuReducer> GetCpuReducer() { return _cpu_reducer; }
 
+#ifdef USE_P4ML
+  /* For P4ML */
+  static std::shared_ptr<P4mlManager> GetP4ML() { return _p4ml_manager; }
+  static uint64_t GetEnqNumber() {
+    std::lock_guard<std::mutex> lock(_EnqNumber_mutex);
+    return enqueue_number++;
+  }
+
+  static uint64_t GetP4MLkey() {
+    std::lock_guard<std::mutex> lock(_P4MLKey_mutex);
+    /* reuse the keys */
+    // uint64_t ret = _P4MLkey % P4ML_KEY_TOTAL;
+    // _P4MLkey++;
+    return _P4MLkey++;
+  }
+
+  static void SetReadyForP4ML(const int key) { isReadyForP4ML[key] = true; }
+  static bool ReadyForP4ML(const int key) {
+    if (isReadyForP4ML[key]) {
+      /* Reset for reuse */
+      isReadyForP4ML[key] = false;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  struct CompareP4MLkey {
+    bool operator()(std::shared_ptr<TensorTableEntry> a,
+                    std::shared_ptr<TensorTableEntry> b) {
+      return (a->enqueue_num > b->enqueue_num);
+    }
+  };
+
+  static uint64_t enqueue_number;
+
+  static std::priority_queue<std::shared_ptr<TensorTableEntry>,
+                             std::vector<std::shared_ptr<TensorTableEntry>>,
+                             BytePSGlobal::CompareP4MLkey>
+      push_queue;
+  static std::shared_ptr<TensorTableEntry> Task[P4ML_KEY_TOTAL];
+  static std::thread* TaskListener;
+
+  static uint64_t total_sent;
+  static float measure_interval;
+  static std::chrono::time_point<std::chrono::system_clock> start_time;
+  static std::chrono::time_point<std::chrono::system_clock> timer;
+  /* END */
+#endif
   static bool IsTensorSampled(uint64_t key) { return (key == _sample_key); }
 
   static void SetProfileFlag(BPSContext* ctxt);
@@ -204,10 +257,22 @@ class BytePSGlobal {
 
   static std::shared_ptr<NcclManager> _nccl_manager;
   static std::shared_ptr<CpuReducer> _cpu_reducer;
+#ifdef USE_P4ML
+  /* For P4ML */
+  static std::shared_ptr<P4mlManager> _p4ml_manager;
+#endif
 
   // for debug sampling
   static uint64_t _sample_key;
 
+#ifdef USE_P4ML
+  /* For P4ML */
+  static std::mutex _P4MLKey_mutex;
+  static std::mutex _EnqNumber_mutex;
+  static uint64_t _P4MLkey;
+  static bool isReadyForP4ML[10240000];
+  /* END */
+#endif
   static int AlignTo(int input, int alignment) {
     return input / alignment * alignment;
   }

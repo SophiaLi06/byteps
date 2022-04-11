@@ -85,6 +85,31 @@ std::shared_ptr<NcclManager> BytePSGlobal::_nccl_manager;
 std::shared_ptr<CpuReducer> BytePSGlobal::_cpu_reducer;
 std::shared_ptr<ThreadPool> BytePSGlobal::_thread_pool;
 
+#ifdef USE_P4ML
+/* For P4ML */
+std::shared_ptr<P4mlManager> BytePSGlobal::_p4ml_manager;
+
+uint64_t BytePSGlobal::_P4MLkey = 0;
+bool BytePSGlobal::isReadyForP4ML[10240000]{0};
+std::priority_queue<std::shared_ptr<TensorTableEntry>,
+                    std::vector<std::shared_ptr<TensorTableEntry>>,
+                    BytePSGlobal::CompareP4MLkey>
+    BytePSGlobal::push_queue;
+std::shared_ptr<TensorTableEntry> BytePSGlobal::Task[P4ML_KEY_TOTAL];
+std::thread* BytePSGlobal::TaskListener;
+
+uint64_t BytePSGlobal::enqueue_number = 0;
+
+std::mutex BytePSGlobal::_P4MLKey_mutex;
+std::mutex BytePSGlobal::_EnqNumber_mutex;
+
+float BytePSGlobal::measure_interval = 0.0;
+
+uint64_t BytePSGlobal::total_sent = 0;
+std::chrono::time_point<std::chrono::system_clock> BytePSGlobal::timer;
+std::chrono::time_point<std::chrono::system_clock> BytePSGlobal::start_time;
+#endif
+
 std::hash<std::string> BytePSGlobal::_built_in_hash_fn;
 unsigned int BytePSGlobal::_built_in_hash_coefficient;
 volatile bool BytePSGlobal::_mixed_mode = false;
@@ -189,6 +214,41 @@ void BytePSGlobal::Init() {
   // Set to associated GPU
   CUDA_CALL(cudaSetDevice(_local_rank));
 
+#ifdef USE_P4ML
+  /* For P4ML */
+  if (getenv("BYTEPS_MEASURING_INTERVAL")) {
+    measure_interval = atof(getenv("BYTEPS_MEASURING_INTERVAL"));
+    printf("measuring interval: %f...\n", measure_interval);
+  }
+
+  int p4ml_app = 1;
+  if (getenv("P4ML_APP")) {
+    p4ml_app = atoi(getenv("P4ML_APP"));
+  }
+
+  int p4ml_thread = 12;
+  if (getenv("P4ML_THREAD")) {
+    p4ml_thread = atoi(getenv("P4ML_THREAD"));
+  }
+
+  if (getenv("P4ML_FORWARD_RATE")) {
+    float p4ml_forward_rate = atof(getenv("P4ML_FORWARD_RATE"));
+    _p4ml_manager->SetForceForward(p4ml_forward_rate);
+  }
+
+  if (getenv("P4ML_MAX_AGTR_PER_THREAD")) {
+    int p4ml_max_agtr_per_thread = atoi(getenv("P4ML_MAX_AGTR_PER_THREAD"));
+    _p4ml_manager->SetMaxAgtrSizePerThread(p4ml_max_agtr_per_thread);
+  }
+
+  if (getenv("P4ML_HASH_RANGE")) {
+    int p4ml_hash_range = atoi(getenv("P4ML_HASH_RANGE"));
+    _p4ml_manager->SetUsedSwitchAGTRcount(p4ml_hash_range);
+  }
+
+  total_sent = 0;
+  isReadyForP4ML[0] = true;
+#endif
   // Init NCCL
   _nccl_manager = std::make_shared<NcclManager>(_basic_comm);
   _is_cross_pcie_switch = (_local_size > _nccl_manager->GetSize());
@@ -210,6 +270,13 @@ void BytePSGlobal::Init() {
   if (_is_root_device) {
     _context_push_table = new ReadyTable(_local_size - 1, "CONTEXT_PUSH");
     _push_table = new ReadyTable(_local_size - 1, "PUSH");
+#ifdef USE_P4ML
+    /* For P4ML */
+    _p4ml_manager = std::shared_ptr<byteps::common::P4mlManager>(
+        new byteps::common::P4mlManager(GetWorkerID(), _num_worker, p4ml_app,
+                                        1));
+    _p4ml_manager->init_threadPool(p4ml_thread);
+#endif
   } else {
     _copy_table = new ReadyTable(1, "COPY");
     _context_copy_table = new ReadyTable(1, "CONTEXT_COPY");
@@ -305,6 +372,11 @@ void BytePSGlobal::Start(const std::vector<LoopFunction>& func) {
   for (size_t i = 0; i < func.size(); i++) {
     _threads.push_back(new std::thread(func[i]));
   }
+#ifdef USE_P4ML
+  // add timers for P4ML measurement
+  start_time = std::chrono::high_resolution_clock::now();
+  timer = std::chrono::high_resolution_clock::now();
+#endif
   BPS_LOG(DEBUG) << "Started " << func.size()
                  << " background threads. rank=" << _local_rank;
 }
@@ -334,6 +406,11 @@ void BytePSGlobal::Shutdown() {
     }
   }
 
+#ifdef USE_P4ML
+  /* Clean up for P4ML */
+  BytePSGlobal::TaskListener->join();
+  BytePSGlobal::TaskListener = NULL;
+#endif
   while (!IsAllThreadFinish(total_thread_num)) {
     // wait until all threads joined
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
@@ -396,6 +473,10 @@ void BytePSGlobal::Shutdown() {
   _shm_obj.reset();
   _cpu_reducer.reset();
   _nccl_manager.reset();
+#ifdef USE_P4ML
+  // clean up for P4ML
+  _p4ml_manager.reset();
+#endif
 
   // reset state, ignore profiling state
   BPS_LOG(DEBUG) << "Clear BytePS state";

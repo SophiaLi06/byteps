@@ -54,6 +54,9 @@ class ErrorFeedback;
 #define CPU_DEVICE_ID (-1)
 #define UNDECIDED_DEVICE_ID (-2)
 
+// For P4ML
+//#define USE_P4ML
+
 // Keep the order consistent with DMLC/mshadow
 // https://github.com/dmlc/mshadow/blob/master/mshadow/base.h
 enum DataType {
@@ -223,6 +226,12 @@ using StatusCallback = std::function<void(const Status&)>;
 // Table storing Tensors to be reduced, keyed by unique name.
 // This table contains everything necessary to do the reduction.
 struct TensorTableEntry {
+  #ifdef USE_P4ML
+  // Key for P4ML & keep ordering use
+  uint64_t p4ml_key;
+  uint64_t enqueue_num;
+  std::chrono::time_point<std::chrono::system_clock> start;
+  #endif
   // Name of the tensor.
   std::string tensor_name;
   // Key of the tensor, using ps::Key = uint64_t

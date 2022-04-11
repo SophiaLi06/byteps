@@ -110,8 +110,14 @@ int DoPushPull(::torch::Tensor tensor, ::torch::Tensor output, int average,
   if (context.initialized) {
     StartTask(tensor, output, average, tensor_name, version, priority, handle);
   } else {
+#ifdef USE_P4ML
+    // std::thread t(StartTask, tensor, output, average, tensor_name, version, priority, handle);
+    // t.detach();
+    StartTask(tensor, output, average, tensor_name, version, priority, handle);
+#else
     std::thread t(StartTask, tensor, output, average, tensor_name, version, priority, handle);
     t.detach();
+#endif
   }
   return handle;
 }

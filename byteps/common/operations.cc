@@ -39,11 +39,16 @@ extern "C" {
 
 void byteps_init() {
   byteps_lazy_init();
+  //TODO: the following line should be removed for ATP?
   BytePSGlobal::GetOrInitPS();
 }
 
 void byteps_lazy_init() {
   BytePSGlobal::Init();
+#ifdef USE_P4ML
+  /* add task listener for ATP */
+  BytePSGlobal::TaskListener = new std::thread(TaskAddListener);
+#endif
 
   // The order of func does not matter
   std::vector<LoopFunction> func;
@@ -199,7 +204,11 @@ Status EnqueueTensor(BPSContext &context, std::shared_ptr<Tensor> input,
                      std::shared_ptr<ReadyEvent> ready_event, const int device,
                      const int priority, const int version,
                      StatusCallback callback,
-                     std::shared_ptr<std::vector<QueueType>> queue_list) {
+                     std::shared_ptr<std::vector<QueueType>> queue_list
+#ifdef USE_P4ML                     
+                     , uint64_t p4ml_key, uint64_t p4ml_enqueue_num
+#endif
+                     ) {
   if (BytePSGlobal::ShouldShutdown()) {
     return Status::OK();
   }
@@ -290,7 +299,26 @@ Status EnqueueTensor(BPSContext &context, std::shared_ptr<Tensor> input,
                    << " rank=" << BytePSGlobal::GetLocalRank();
     ////////////////
 
+#ifdef USE_P4ML
+    /* the following are for enabling p4ml*/
+    task->p4ml_key = p4ml_key - (partitions.size() - i - 1);
+    // printf("%d\n", task->p4ml_key);
+    task->p4ml_key %= P4ML_KEY_TOTAL;
+    // printf("%d\n", task->p4ml_key);
+    task->enqueue_num = p4ml_enqueue_num - (partitions.size() - i - 1);
+    // task->p4ml_key = BytePSGlobal::GetP4MLkey();
+    // task->enqueue_num = BytePSGlobal::GetEnqNumber();
+    // {
+    //   std::lock_guard<std::mutex> lock(printMutex);
+    //   std::cout << p4ml_key << " " << task->p4ml_key << " " << task->key << "
+    //   " << task->tensor_name << std::endl;
+    // }
+    // std::cout << task->p4ml_key << " " << task->enqueue_num << std::endl;
+#endif
     BytePSGlobal::GetScheduledQueue(e->queue_list[0])->addTask(task);
+#ifdef USE_P4ML
+    BytePSGlobal::Task[task->p4ml_key] = task;
+#endif
     accumulated += task->len;
   }
 
@@ -396,6 +424,7 @@ void InitTensor(BPSContext &context, size_t size, int dtype, void *cpubuff) {
     auto key = key_list[i];
     int len = ((size - accumulated) > bound) ? bound : (size - accumulated);
 
+    // TODO: The following section is not needed for using ATP?
     if (BytePSGlobal::IsDistributed() && BytePSGlobal::IsRootDevice()) {
       auto ps = BytePSGlobal::GetOrInitPS();
       // encode the key for pskv scattering
