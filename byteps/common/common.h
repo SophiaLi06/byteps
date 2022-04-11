@@ -239,6 +239,12 @@ struct TensorTableEntry {
   std::chrono::time_point<std::chrono::system_clock> compress_start;
   std::chrono::time_point<std::chrono::system_clock> decompress_start;
   std::chrono::time_point<std::chrono::system_clock> communication_start;
+  unsigned int compress_call = 0;
+  unsigned int decompress_call = 0;
+  unsigned int communication_call = 0;
+  unsigned long long total_compress_time = 0;
+  unsigned long long total_decompress_time = 0;
+  unsigned long long total_communication_time = 0;
   #endif
   // Name of the tensor.
   std::string tensor_name;

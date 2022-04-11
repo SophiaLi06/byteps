@@ -51,6 +51,10 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
   }
   else if(this_op == PULL){
     BPS_LOG(INFO) << "Finish PULL tensor: " << task->tensor_name;
+    if (task->communication_call == 10){
+      std::cout << task->compression_call << " " << task->decompression_call << " " << 
+                   task->communication_call << std::endl;
+    }
   }
 #endif
   q->reportFinish(task->len);
@@ -806,6 +810,7 @@ bool RunCompressLoopOnce() {
     BPS_CHECK(task->compressed == nullptr);
 
     BPS_LOG(INFO) << "Compress Task Tensor: " << task->tensor_name;
+    task->compress_call++;
     // spawn
     BytePSGlobal::GetThreadPool()->enqueue([task]() {
       char *data = const_cast<char *>(static_cast<const char *>(task->cpubuff) +
@@ -872,6 +877,7 @@ bool RunPushLoopOnce() {
         task->compressed = nullptr;
       }
       BPS_LOG(INFO) << "Push Task Tensor: " << task->tensor_name << " key: " << task->key << " data from: " << (task->cpubuff) + offset << " len: " << len << " scale: " << task->scale << "\n";
+      task->communication_call++;
       ///////////////////////////
 
       // false means not to delete data when SArray is deleted
@@ -879,6 +885,7 @@ bool RunPushLoopOnce() {
 
       int cmd = GetCommandType(RequestType::kDefaultPushPull, dtype);
       auto &pskv = BytePSGlobal::EncodeDefaultKey(task->key, len);
+      /* Minghao */
       BytePSGlobal::GetPS()->ZPush(pskv.keys, vals, pskv.lens, cmd,
                                    [task, q]() { FinishOrProceed(task); });
     } else {
@@ -957,6 +964,7 @@ bool RunDecompressLoopOnce() {
     BPS_CHECK(task->compressor != nullptr);
 
     BPS_LOG(INFO) << "Decompress Task Tensor: " << task->tensor_name;
+    task->decompress_call++;
     // spawn
     BytePSGlobal::GetThreadPool()->enqueue([task]() {
       char *data = const_cast<char *>(static_cast<const char *>(task->cpubuff) +
