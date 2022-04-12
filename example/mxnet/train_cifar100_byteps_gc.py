@@ -289,6 +289,9 @@ def main():
                 iteration += 1
 
                 ##### Minghao
+                if i % 10 == 0:
+                    logger.info('[Epoch %d Batch %d]' %
+                        (epoch, i))
                 if i % 100 == 0:
                     logger.info('[Epoch %d Batch %d] Training: %s=%f' %
                         (epoch, i, name, train_acc))
