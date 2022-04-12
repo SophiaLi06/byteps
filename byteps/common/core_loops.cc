@@ -52,7 +52,7 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
   else if(this_op == PULL){
     BPS_LOG(INFO) << "Finish PULL tensor: " << task->tensor_name;
     if (task->communication_call == 10){
-      std::cout << task->compression_call << " " << task->decompression_call << " " << 
+      std::cout << task->compress_call << " " << task->decompress_call << " " << 
                    task->communication_call << std::endl;
     }
   }
