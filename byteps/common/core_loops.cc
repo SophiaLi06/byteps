@@ -516,9 +516,11 @@ bool RunSyncNcclOnce() {
           copy_len = (BytePSGlobal::GetReduceRootByKey(key) == nccl_rank) ? len : 0;
         }
         if (copy_len) {
+          #ifdef GPU_COMPRESS
           if(tensor->dtype() == BYTEPS_FLOAT32) {
             task->scale = terngrad_scale((void *)(p + copy_offset), (size_t)copy_len / unit_len);
           }
+          #endif
           // BPS_LOG(INFO) << "Rank: " << nccl_rank << " Tensor: " << task->tensor_name <<" Scale ptr: " 
           //               << (void *)(p + copy_offset)
           //               << " len: " << (size_t)copy_len / unit_len << " scale: " << task->scale;
