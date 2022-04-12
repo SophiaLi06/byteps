@@ -44,17 +44,19 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
 #ifdef TIMING
   if (this_op == COMPRESS){
-    BPS_LOG(INFO) << "Finish COMPRESS tensor: " << task->tensor_name;
+    // BPS_LOG(INFO) << "Finish COMPRESS tensor: " << task->tensor_name;
   }
   else if (this_op == DECOMPRESS){
-    BPS_LOG(INFO) << "Finish DECOMPRESS tensor: " << task->tensor_name;
+    // BPS_LOG(INFO) << "Finish DECOMPRESS tensor: " << task->tensor_name;
   }
   else if(this_op == PULL){
-    BPS_LOG(INFO) << "Finish PULL tensor: " << task->tensor_name;
-    if (task->communication_call == 10){
-      std::cout << task->compress_call << " " << task->decompress_call << " " << 
-                   task->communication_call << std::endl;
-    }
+    // BPS_LOG(INFO) << "Finish PULL tensor: " << task->tensor_name;
+    // if (task->communication_call == 10){
+    //   std::cout << task->compress_call << " " << task->decompress_call << " " << 
+    //                task->communication_call << std::endl;
+    // }
+    BPS_LOG(INFO) << "tensor: " << task->tensor_name << " COMPRESS calls: " << task->compress_call 
+                  << " DECOMPRESS calls: " << task->decompress_call << " PULL calls: " << task->communication_call;
   }
 #endif
   q->reportFinish(task->len);
@@ -1211,6 +1213,9 @@ void CopyDevice2HostLoop() {
 }
 
 void CompressLoop() {
+  // Minghao
+  std::cout << "CompressLoop\n";
+  /////////////////
   while (RunCompressLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
   BytePSGlobal::ReportThreadFinish();
@@ -1235,6 +1240,9 @@ void PullLoop() {
 }
 
 void DecompressLoop() {
+  // Minghao
+  std::cout << "DecompressLoop\n";
+  /////////////////
   while (RunDecompressLoopOnce() && !BytePSGlobal::ShouldShutdown()) {
   }
   BytePSGlobal::ReportThreadFinish();
