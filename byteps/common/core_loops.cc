@@ -45,9 +45,17 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
 #ifdef TIMING
   if (this_op == COMPRESS){
     // BPS_LOG(INFO) << "Finish COMPRESS tensor: " << task->tensor_name;
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> diff = end - task->compress_start;
+    std::cout << "Time to COMPRESS tensor: " << task->tensor_name << "of size: "
+              << task->len << " is: " << diff.count() << " s\n";
   }
   else if (this_op == DECOMPRESS){
     // BPS_LOG(INFO) << "Finish DECOMPRESS tensor: " << task->tensor_name;
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> diff = end - task->decompress_start;
+    std::cout << "Time to DECOMPRESS tensor: " << task->tensor_name << "of size: "
+              << task->len << " is: " << diff.count() << " s\n";
   }
   else if(this_op == PULL){
     // BPS_LOG(INFO) << "Finish PULL tensor: " << task->tensor_name;
@@ -55,8 +63,12 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
     //   std::cout << task->compress_call << " " << task->decompress_call << " " << 
     //                task->communication_call << std::endl;
     // }
-    BPS_LOG(INFO) << "tensor: " << task->tensor_name << " COMPRESS calls: " << task->compress_call 
-                  << " DECOMPRESS calls: " << task->decompress_call << " PULL calls: " << task->communication_call;
+    // BPS_LOG(INFO) << "tensor: " << task->tensor_name << " COMPRESS calls: " << task->compress_call 
+    //               << " DECOMPRESS calls: " << task->decompress_call << " PULL calls: " << task->communication_call;
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> diff = end - task->communication_start;
+    std::cout << "Time to PUSHPULL tensor: " << task->tensor_name << "of size: "
+              << task->len << " is: " << diff.count() << " s\n";
   }
 #endif
   q->reportFinish(task->len);
@@ -812,7 +824,7 @@ bool RunCompressLoopOnce() {
     BPS_CHECK(task->compressed == nullptr);
 
     BPS_LOG(INFO) << "Compress Task Tensor: " << task->tensor_name;
-    task->compress_call++;
+    task->compress_start = std::chrono::system_clock::now();
     // spawn
     BytePSGlobal::GetThreadPool()->enqueue([task]() {
       char *data = const_cast<char *>(static_cast<const char *>(task->cpubuff) +
@@ -879,7 +891,7 @@ bool RunPushLoopOnce() {
         task->compressed = nullptr;
       }
       BPS_LOG(INFO) << "Push Task Tensor: " << task->tensor_name << " key: " << task->key << " data from: " << (task->cpubuff) + offset << " len: " << len << " scale: " << task->scale << "\n";
-      task->communication_call++;
+      task->communication_start = std::chrono::system_clock::now();
       ///////////////////////////
 
       // false means not to delete data when SArray is deleted
@@ -966,7 +978,7 @@ bool RunDecompressLoopOnce() {
     BPS_CHECK(task->compressor != nullptr);
 
     BPS_LOG(INFO) << "Decompress Task Tensor: " << task->tensor_name;
-    task->decompress_call++;
+    task->decompress_start = std::chrono::system_clock::now();
     // spawn
     BytePSGlobal::GetThreadPool()->enqueue([task]() {
       char *data = const_cast<char *>(static_cast<const char *>(task->cpubuff) +
