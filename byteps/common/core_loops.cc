@@ -47,14 +47,14 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
     // BPS_LOG(INFO) << "Finish COMPRESS tensor: " << task->tensor_name;
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> diff = end - task->compress_start;
-    std::cout << "Time to COMPRESS tensor: " << task->tensor_name << "of size: "
+    std::cout << "Time to COMPRESS tensor: " << task->tensor_name << " of size: "
               << task->len << " is: " << diff.count() << " s\n";
   }
   else if (this_op == DECOMPRESS){
     // BPS_LOG(INFO) << "Finish DECOMPRESS tensor: " << task->tensor_name;
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> diff = end - task->decompress_start;
-    std::cout << "Time to DECOMPRESS tensor: " << task->tensor_name << "of size: "
+    std::cout << "Time to DECOMPRESS tensor: " << task->tensor_name << " of size: "
               << task->len << " is: " << diff.count() << " s\n";
   }
   else if(this_op == PULL){
@@ -67,7 +67,7 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
     //               << " DECOMPRESS calls: " << task->decompress_call << " PULL calls: " << task->communication_call;
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> diff = end - task->communication_start;
-    std::cout << "Time to PUSHPULL tensor: " << task->tensor_name << "of size: "
+    std::cout << "Time to PUSHPULL tensor: " << task->tensor_name << " of size: "
               << task->len << " is: " << diff.count() << " s\n";
   }
 #endif

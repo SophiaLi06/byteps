@@ -292,6 +292,12 @@ def main():
                 if i % 100 == 0:
                     logger.info('[Epoch %d Batch %d] Training: %s=%f' %
                         (epoch, i, name, train_acc))
+                    if i == 100:
+                        throughput = (batch_size * nworker * i / (time.time() - tic))
+                        logger.info('[Epoch %d First 100 Batch] speed: %f samples/sec' %
+                        (epoch, throughput))
+                        # EARLY STOPPING!
+                        return
 
             train_loss /= batch_size * num_batch
             name, train_acc = train_metric.get()
