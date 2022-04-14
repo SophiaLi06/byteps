@@ -31,8 +31,17 @@
 #include "global.h"
 #include "logging.h"
 
+#ifdef USE_P4ML
+#define DO_QUANTIZE_IN_BYTEPS true
+#define PRINT_SINGLE_TENSOR_RESNET false
+#endif
+
 namespace byteps {
 namespace common {
+
+#ifdef USE_P4ML
+std::mutex _priorityQueue_mutex;
+#endif
 
 void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
   auto &queue_list = task->queue_list;
@@ -135,7 +144,17 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
     BPS_LOG(TRACE) << "Rank=" << BytePSGlobal::GetRank() << " finishes "
                    << LogStrings[this_op] << ", tensor: " << task->tensor_name
                    << ", key=" << task->key << "; Passing to the next queue.";
+#ifdef USE_P4ML
+    if (LogStrings[queue_list[0]] == "PUSH" &&
+        !BytePSGlobal::ReadyForP4ML(task->p4ml_key)) {
+      std::lock_guard<std::mutex> lock(_priorityQueue_mutex);
+      BytePSGlobal::push_queue.push(task);
+    } else {
+      BytePSGlobal::GetScheduledQueue(queue_list[0])->addTask(task);
+    }
+#else
     BytePSGlobal::GetScheduledQueue(queue_list[0])->addTask(task);
+#endif  
   } else {
     // this is the last QueueType of this current sub-task.
     BPS_CHECK(task->counter_ptr) << task->tensor_name << " counter_ptr is null";
@@ -173,6 +192,57 @@ void FinishOrProceed(std::shared_ptr<TensorTableEntry> task) {
   }
   return;
 }
+
+#ifdef USE_P4ML
+void TaskAddListener() {
+  while (!BytePSGlobal::ShouldShutdown()) {
+    std::chrono::time_point<std::chrono::system_clock> current_time =
+        std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> time_span =
+        std::chrono::duration_cast<std::chrono::duration<double>>(
+            current_time - BytePSGlobal::timer);
+    std::chrono::duration<double> total_time =
+        std::chrono::duration_cast<std::chrono::duration<double>>(
+            current_time - BytePSGlobal::start_time);
+    if (BytePSGlobal::measure_interval > 0.0) {
+      if (time_span.count() >= BytePSGlobal::measure_interval) {
+        // printf("total send %" PRIu64 " bytes, time %lf, throughput: %lf\n",
+        // BytePSGlobal::total_sent, total_time, BytePSGlobal::total_sent /
+        // 1024.0 / 1024.0 / 1024.0 * 8.0 / 1.0);
+        // BytePSGlobal::GetP4ML()->GetLossRate();
+        // int tmp = BytePSGlobal::GetP4ML()->GetCollisionTimeAndClear();
+        // if (tmp)
+        //   printf("%d\n", tmp);
+        printf("bandwidth: %lf\n", BytePSGlobal::total_sent / 1024.0 / 1024.0 /
+                                       1024.0 * 8.0 / time_span.count());
+        BytePSGlobal::total_sent = 0;
+        BytePSGlobal::timer = current_time;
+      }
+    }
+
+    if (!BytePSGlobal::push_queue.empty()) {
+      std::lock_guard<std::mutex> lock(_priorityQueue_mutex);
+      auto tmpTask = BytePSGlobal::push_queue.top();
+      // This queue used to guarantee the order of PUSH task
+      if (BytePSGlobal::ReadyForP4ML(tmpTask->p4ml_key)) {
+        // printf("tmpTask->p4ml_key: %d ", tmpTask->p4ml_key);
+        // std::cout << LogStrings[tmpTask->queue_list[0]] << std::endl;
+        BytePSGlobal::GetScheduledQueue((tmpTask->queue_list)[0])
+            ->addTask(tmpTask);
+        BytePSGlobal::push_queue.pop();
+      }
+    }
+
+    int64_t finishedTask = BytePSGlobal::GetP4ML()->GetFinishKey();
+    // printf("try finishedTask: %d\n", finishedTask);
+    if (finishedTask >= 0) {
+      // printf("Finish PUSH Task: %d\n", finishedTask);
+      FinishOrProceed(BytePSGlobal::Task[finishedTask]);
+    }
+    usleep(1);
+  }
+}
+#endif
 
 bool RunCoordinateLoopOnce(QueueType this_op) {
   auto q = BytePSGlobal::GetScheduledQueue(this_op);
@@ -884,6 +954,37 @@ bool RunPushLoopOnce() {
       // get metadata
       const int dtype = task->tensor->dtype();
 
+#ifdef USE_P4ML
+      task->start = std::chrono::system_clock::now();
+      uint32_t num_count = len / 4;
+
+      if (PRINT_SINGLE_TENSOR_RESNET)
+        if (task->tensor_name.compare("byteps.Gradient.fc.bias_0") == 0 ||
+            task->tensor_name.compare("byteps.Parameter.fc.bias_0") == 0) {
+          printf("##########################################\n");
+          std::cout << task->tensor_name << (void *)data << std::endl;
+          printf("origin data: \n");
+          for (int i = 0; i < 10; i++)
+            std::cout << std::setprecision(4) << ((float *)(data))[i] << " ";
+          std::cout << std::endl;
+        }
+
+      if (DO_QUANTIZE_IN_BYTEPS) quantizeAVX2(data, num_count);
+      // std::cout << std::setprecision(4) << task->tensor_name << " p4ml->key "
+      // << p4ml_key << " " << (void*)data << " PULLPUSH:  " << std::endl;
+      if (PRINT_SINGLE_TENSOR_RESNET)
+        if (task->tensor_name.compare("byteps.Gradient.fc.bias_0") == 0 ||
+            task->tensor_name.compare("byteps.Parameter.fc.bias_0") == 0) {
+          std::cout << task->tensor_name << (void *)data << std::endl;
+          printf("quanted data: \n");
+          for (int i = 0; i < 10; i++) std::cout << ((int *)(data))[i] << " ";
+          std::cout << std::endl;
+        }
+      // printf("key: %d\n", task->p4ml_key);
+      BytePSGlobal::GetP4ML()->PushPull(task->p4ml_key, data, num_count, 1);
+      BytePSGlobal::total_sent += len;
+      BytePSGlobal::SetReadyForP4ML((task->p4ml_key + 1) % P4ML_KEY_TOTAL);
+#else
       /* Minghao */
       // use compressed data/len
       if (task->compressed) {
@@ -904,6 +1005,7 @@ bool RunPushLoopOnce() {
       /* Minghao */
       BytePSGlobal::GetPS()->ZPush(pskv.keys, vals, pskv.lens, cmd,
                                    [task, q]() { FinishOrProceed(task); });
+#endif
     } else {
       // This is a dummy barrier for IsCrossPcieSwitch()
       BPS_CHECK(BytePSGlobal::IsCrossPcieSwitch());
@@ -942,6 +1044,32 @@ bool RunPullLoopOnce() {
     data =
         const_cast<char *>(static_cast<const char *>(task->cpubuff) + offset);
 
+#ifdef USE_P4ML
+    uint32_t num_count = len / 4;
+    // printf("[recv] key: %d\n", task->p4ml_key);
+    if (PRINT_SINGLE_TENSOR_RESNET)
+      if (task->tensor_name.compare("byteps.Gradient.fc.bias_0") == 0 ||
+          task->tensor_name.compare("byteps.Parameter.fc.bias_0") == 0) {
+        std::cout << task->tensor_name << (void *)data << std::endl;
+        printf("received data: \n");
+        for (int i = 0; i < 10; i++) std::cout << ((int *)(data))[i] << " ";
+        std::cout << std::endl;
+      }
+
+    if (DO_QUANTIZE_IN_BYTEPS) dequantizeAVX2(data, num_count);
+
+    if (PRINT_SINGLE_TENSOR_RESNET)
+      if (task->tensor_name.compare("byteps.Gradient.fc.bias_0") == 0 ||
+          task->tensor_name.compare("byteps.Parameter.fc.bias_0") == 0) {
+        std::cout << task->tensor_name << (void *)data << std::endl;
+        printf("final data: \n");
+        for (int i = 0; i < 10; i++)
+          std::cout << std::setprecision(4) << ((float *)(data))[i] << " ";
+        std::cout << std::endl;
+      }
+
+    FinishOrProceed(task);
+#else
     // get metadata
     const int dtype = task->output->dtype();
 
@@ -964,6 +1092,7 @@ bool RunPullLoopOnce() {
     // An "empty" push-pull that does nothing
     FinishOrProceed(task);
     #endif
+#endif
   } else {
     std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   }

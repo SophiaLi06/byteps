@@ -24,6 +24,10 @@
 namespace byteps {
 namespace common {
 
+#ifdef USE_P4ML
+void TaskAddListener();
+#endif
+
 void CoordinateReduceLoop();
 
 void CoordinateBroadcastLoop();
