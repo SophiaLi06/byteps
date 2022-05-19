@@ -58,7 +58,7 @@ class ErrorFeedback;
 //#define USE_P4ML
 
 // For timing
-#define TIMING
+//#define TIMING
 
 // Keep the order consistent with DMLC/mshadow
 // https://github.com/dmlc/mshadow/blob/master/mshadow/base.h
