@@ -263,6 +263,7 @@ def main():
         iteration = 0
         best_val_score = 0
         bps.byteps_declare_tensor("acc")
+        start_time = time.time()
         for epoch in range(epochs):
             tic = time.time()
             train_metric.reset()
@@ -288,19 +289,23 @@ def main():
                 name, train_acc = train_metric.get()
                 iteration += 1
 
-                ##### Minghao
+                # ##### Minghao
+                ####### code for getting TAA
                 if i % 10 == 0:
-                    logger.info('[Epoch %d Batch %d]' %
-                        (epoch, i))
-                if i % 100 == 0:
-                    logger.info('[Epoch %d Batch %d] Training: %s=%f' %
-                        (epoch, i, name, train_acc))
-                    if i == 100:
-                        throughput = (batch_size * nworker * i / (time.time() - tic))
-                        logger.info('[Epoch %d First 100 Batch] speed: %f samples/sec' %
-                        (epoch, throughput))
-                        # EARLY STOPPING!
-                        return
+                    logger.info('time %.3f, acc %f' %
+                        (time.time() - start_time, train_acc))
+                # if i % 10 == 0:
+                #     logger.info('[Epoch %d Batch %d]' %
+                #         (epoch, i))
+                # if i % 100 == 0:
+                #     logger.info('[Epoch %d Batch %d] Training: %s=%f' %
+                #         (epoch, i, name, train_acc))
+                #     if i == 100:
+                #         throughput = (batch_size * nworker * i / (time.time() - tic))
+                #         logger.info('[Epoch %d First 100 Batch] speed: %f samples/sec' %
+                #         (epoch, throughput))
+                #         # EARLY STOPPING!
+                #         return
 
             train_loss /= batch_size * num_batch
             name, train_acc = train_metric.get()
