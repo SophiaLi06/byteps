@@ -1043,7 +1043,7 @@ bool RunPullLoopOnce() {
     BPS_CHECK(task->cpubuff);
     data =
         const_cast<char *>(static_cast<const char *>(task->cpubuff) + offset);
-
+    #endif
 #ifdef USE_P4ML
     uint32_t num_count = len / 4;
     // printf("[recv] key: %d\n", task->p4ml_key);
@@ -1070,6 +1070,7 @@ bool RunPullLoopOnce() {
 
     FinishOrProceed(task);
 #else
+    #ifdef DEFAULT_PUSHPULL
     // get metadata
     const int dtype = task->output->dtype();
 
