@@ -291,8 +291,8 @@ def main():
 
                 # ##### Minghao
                 ####### code for getting TAA
-                if i % 10 == 0:
-                    logger.info('time %.3f, acc %f' %
+                if i % 20 == 0:
+                    print('time %.3f, acc %f' %
                         (time.time() - start_time, train_acc))
                 # if i % 10 == 0:
                 #     logger.info('[Epoch %d Batch %d]' %
