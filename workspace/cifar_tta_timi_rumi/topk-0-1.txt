@@ -1,0 +1,2354 @@
+BytePS launching worker
+Finished BytePS Init
+PullLoop
+CopyDevice2HostLoop
+PushLoop
+DecompressLoop
+RootCopyHost2DeviceLoop
+CompressLoop
+RootNcclLoop
+SyncNcclLoop
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+rank: 0, compressor related parameters: {'byteps_compressor_type': 'topk', 'byteps_compressor_k': 0.1}
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 1245184, k: 31129
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 1245184, k: 31129
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 1245184, k: 31129
+TopK compressor size: 147456, k: 3686
+TopK compressor size: 294912, k: 7372
+TopK compressor size: 589824, k: 14745
+TopK compressor size: 1179648, k: 29491
+TopK compressor size: 2359296, k: 58982
+TopK compressor size: 2359296, k: 58982
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 622592, k: 15564
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 1245184, k: 31129
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 1245184, k: 31129
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 196608, k: 4915
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 4096000, k: 102400
+TopK compressor size: 1572864, k: 39321
+TopK compressor size: 1638400, k: 40960
+time 1.191, acc 0.000000
+time 9.754, acc 0.043899
+time 19.386, acc 0.046494
+time 28.657, acc 0.046875
+time 37.040, acc 0.049383
+time 45.833, acc 0.047958
+time 54.192, acc 0.050878
+time 66.940, acc 0.049313
+time 76.872, acc 0.050951
+time 85.458, acc 0.052055
+time 94.114, acc 0.052239
+time 101.382, acc 0.051612
+time 110.051, acc 0.051284
+time 118.362, acc 0.051485
+time 126.418, acc 0.052269
+time 134.375, acc 0.052429
+time 143.316, acc 0.052570
+time 150.601, acc 0.052236
+time 159.433, acc 0.052329
+time 167.798, acc 0.052904
+time 175.914, acc 0.053577
+time 184.182, acc 0.054112
+time 192.721, acc 0.054776
+time 200.116, acc 0.055891
+time 207.528, acc 0.056295
+time 215.557, acc 0.056886
+time 223.650, acc 0.057282
+time 230.906, acc 0.057850
+time 238.406, acc 0.058127
+time 246.680, acc 0.058923
+time 254.029, acc 0.060030
+time 261.302, acc 0.060865
+time 269.819, acc 0.061306
+time 277.345, acc 0.062051
+time 285.673, acc 0.062821
+time 293.189, acc 0.064127
+time 301.797, acc 0.065361
+time 309.485, acc 0.065916
+time 317.979, acc 0.066689
+time 326.617, acc 0.067362
+time 339.235, acc 0.078125
+time 347.078, acc 0.090030
+time 355.341, acc 0.098704
+time 362.940, acc 0.097592
+time 371.573, acc 0.099151
+time 379.233, acc 0.100248
+time 386.685, acc 0.100723
+time 394.273, acc 0.101950
+time 403.039, acc 0.104231
+time 411.720, acc 0.105836
+time 419.511, acc 0.107976
+time 428.569, acc 0.107183
+time 436.084, acc 0.107106
+time 443.640, acc 0.106561
+time 451.807, acc 0.108207
+time 459.598, acc 0.107922
+time 467.818, acc 0.107623
+time 476.620, acc 0.108413
+time 485.206, acc 0.109159
+time 492.627, acc 0.109662
+time 499.994, acc 0.110193
+time 508.635, acc 0.110043
+time 517.574, acc 0.110686
+time 526.265, acc 0.111341
+time 534.411, acc 0.111551
+time 542.130, acc 0.112151
+time 549.594, acc 0.112314
+time 557.149, acc 0.112899
+time 564.690, acc 0.113581
+time 573.131, acc 0.113355
+time 580.639, acc 0.113119
+time 588.149, acc 0.113174
+time 595.835, acc 0.113543
+time 603.238, acc 0.114457
+time 611.541, acc 0.115180
+time 619.098, acc 0.115661
+time 628.113, acc 0.115963
+time 636.884, acc 0.115849
+time 644.309, acc 0.115719
+time 651.796, acc 0.116117
+time 663.322, acc 0.171875
+time 671.203, acc 0.120536
+time 679.707, acc 0.123095
+time 687.348, acc 0.121926
+time 695.856, acc 0.123071
+time 704.451, acc 0.129641
+time 712.026, acc 0.131586
+time 720.328, acc 0.133200
+time 728.026, acc 0.132958
+time 735.566, acc 0.132942
+time 742.978, acc 0.134328
+time 751.243, acc 0.135817
+time 758.997, acc 0.136411
+time 767.253, acc 0.137033
+time 775.348, acc 0.137845
+time 783.240, acc 0.137251
+time 790.728, acc 0.138191
+time 798.315, acc 0.139021
+time 805.845, acc 0.139500
+time 813.451, acc 0.140461
+time 821.042, acc 0.140976
+time 829.612, acc 0.141701
+time 837.143, acc 0.141582
+time 845.632, acc 0.140998
+time 853.132, acc 0.141502
+time 861.566, acc 0.142715
+time 869.026, acc 0.143354
+time 877.125, acc 0.143513
+time 885.075, acc 0.143856
+time 892.538, acc 0.144847
+time 900.129, acc 0.145487
+time 907.715, acc 0.145330
+time 916.245, acc 0.145403
+time 923.812, acc 0.145660
+time 931.385, acc 0.146384
+time 939.118, acc 0.146643
+time 946.698, acc 0.147343
+time 954.285, acc 0.147541
+time 961.871, acc 0.148058
+time 970.215, acc 0.148708
+time 982.421, acc 0.281250
+time 990.378, acc 0.185268
+time 998.713, acc 0.172637
+time 1007.677, acc 0.168801
+time 1016.295, acc 0.168210
+time 1023.838, acc 0.168626
+time 1031.347, acc 0.168518
+time 1038.962, acc 0.163785
+time 1046.560, acc 0.163626
+time 1054.138, acc 0.163933
+time 1062.400, acc 0.164179
+time 1069.890, acc 0.166926
+time 1077.408, acc 0.167337
+time 1084.886, acc 0.168762
+time 1093.527, acc 0.169595
+time 1101.002, acc 0.169902
+time 1109.641, acc 0.170171
+time 1116.976, acc 0.171050
+time 1125.664, acc 0.172351
+time 1133.097, acc 0.173597
+time 1141.707, acc 0.174018
+time 1149.121, acc 0.175327
+time 1157.912, acc 0.176552
+time 1166.810, acc 0.177264
+time 1174.421, acc 0.178437
+time 1181.973, acc 0.178206
+time 1189.385, acc 0.178833
+time 1196.824, acc 0.179702
+time 1205.786, acc 0.179562
+time 1213.380, acc 0.180293
+time 1220.812, acc 0.180272
+time 1229.424, acc 0.180556
+time 1238.118, acc 0.181650
+time 1245.800, acc 0.181827
+time 1253.245, acc 0.181764
+time 1260.898, acc 0.182217
+time 1268.311, acc 0.182776
+time 1277.016, acc 0.183283
+time 1284.701, acc 0.184051
+time 1294.162, acc 0.184299
+time 1305.676, acc 0.187500
+time 1313.645, acc 0.218006
+time 1321.963, acc 0.215320
+time 1330.361, acc 0.218494
+time 1338.084, acc 0.217978
+time 1345.668, acc 0.216739
+time 1354.427, acc 0.217071
+time 1361.989, acc 0.215758
+time 1369.512, acc 0.216615
+time 1377.044, acc 0.213570
+time 1384.730, acc 0.212142
+time 1392.351, acc 0.212316
+time 1399.888, acc 0.213823
+time 1408.870, acc 0.213302
+time 1416.574, acc 0.213412
+time 1425.015, acc 0.213819
+time 1432.552, acc 0.213006
+time 1440.121, acc 0.213160
+time 1448.537, acc 0.213859
+time 1456.973, acc 0.213870
+time 1464.399, acc 0.213918
+time 1473.066, acc 0.214408
+time 1482.140, acc 0.216589
+time 1491.095, acc 0.217665
+time 1498.799, acc 0.218230
+time 1507.608, acc 0.218532
+time 1515.073, acc 0.218360
+time 1522.627, acc 0.219443
+time 1531.293, acc 0.219948
+time 1538.982, acc 0.220283
+time 1547.718, acc 0.220908
+time 1556.576, acc 0.221040
+time 1564.137, acc 0.221773
+time 1571.647, acc 0.221539
+time 1580.862, acc 0.222123
+time 1589.750, acc 0.222205
+time 1598.149, acc 0.222542
+time 1606.763, acc 0.223115
+time 1615.496, acc 0.223205
+time 1623.151, acc 0.223632
+time 1635.633, acc 0.265625
+time 1643.996, acc 0.244048
+time 1651.814, acc 0.243140
+time 1660.389, acc 0.241547
+time 1668.139, acc 0.239390
+time 1675.772, acc 0.241182
+time 1683.409, acc 0.244576
+time 1691.127, acc 0.242797
+time 1698.678, acc 0.243012
+time 1706.263, acc 0.243008
+time 1714.798, acc 0.242848
+time 1722.782, acc 0.243213
+time 1730.495, acc 0.243128
+time 1739.442, acc 0.242457
+time 1748.251, acc 0.242771
+time 1756.649, acc 0.243511
+time 1764.722, acc 0.243818
+time 1772.291, acc 0.245005
+time 1779.634, acc 0.246278
+time 1788.210, acc 0.246309
+time 1796.981, acc 0.246065
+time 1805.239, acc 0.246845
+time 1813.239, acc 0.247378
+time 1821.628, acc 0.248848
+time 1829.065, acc 0.248603
+time 1836.762, acc 0.249532
+time 1845.524, acc 0.250720
+time 1854.286, acc 0.251502
+time 1861.916, acc 0.252618
+time 1870.418, acc 0.253173
+time 1879.159, acc 0.253406
+time 1886.708, acc 0.254126
+time 1895.441, acc 0.255143
+time 1903.052, acc 0.255531
+time 1911.750, acc 0.256011
+time 1919.852, acc 0.256798
+time 1927.936, acc 0.257477
+time 1936.349, acc 0.258603
+time 1944.585, acc 0.258952
+time 1952.381, acc 0.259743
+time 1964.570, acc 0.265625
+time 1972.568, acc 0.280506
+time 1981.063, acc 0.286204
+time 1988.771, acc 0.292264
+time 1997.650, acc 0.291088
+time 2005.231, acc 0.294245
+time 2013.867, acc 0.292226
+time 2022.565, acc 0.292664
+time 2030.212, acc 0.288626
+time 2038.626, acc 0.287724
+time 2046.306, acc 0.287702
+time 2054.576, acc 0.288391
+time 2062.054, acc 0.288511
+time 2069.565, acc 0.288194
+time 2077.807, acc 0.288256
+time 2085.320, acc 0.289867
+time 2092.967, acc 0.289525
+time 2100.544, acc 0.289773
+time 2108.148, acc 0.290599
+time 2115.629, acc 0.290559
+time 2124.272, acc 0.290368
+time 2133.343, acc 0.290640
+time 2140.860, acc 0.290568
+time 2149.197, acc 0.291316
+time 2157.715, acc 0.291970
+time 2165.372, acc 0.291729
+time 2174.048, acc 0.291327
+time 2181.693, acc 0.291272
+time 2190.489, acc 0.291695
+time 2198.081, acc 0.291254
+time 2206.539, acc 0.291649
+time 2214.070, acc 0.291792
+time 2221.642, acc 0.291805
+time 2229.238, acc 0.292171
+time 2236.698, acc 0.292447
+time 2245.090, acc 0.292529
+time 2252.699, acc 0.292671
+time 2260.315, acc 0.292869
+time 2267.822, acc 0.293343
+time 2275.374, acc 0.294234
+time 2287.009, acc 0.328125
+time 2295.576, acc 0.308036
+time 2303.596, acc 0.307165
+time 2311.847, acc 0.300973
+time 2319.642, acc 0.304784
+time 2327.489, acc 0.305538
+time 2335.176, acc 0.301782
+time 2343.856, acc 0.305408
+time 2352.055, acc 0.306871
+time 2359.534, acc 0.308702
+time 2368.218, acc 0.308069
+time 2376.684, acc 0.308753
+time 2384.258, acc 0.309064
+time 2392.964, acc 0.307352
+time 2400.697, acc 0.307940
+time 2408.254, acc 0.308088
+time 2416.900, acc 0.309433
+time 2424.443, acc 0.308972
+time 2432.573, acc 0.310639
+time 2440.159, acc 0.311352
+time 2448.697, acc 0.311604
+time 2456.180, acc 0.311164
+time 2463.646, acc 0.312677
+time 2471.955, acc 0.313110
+time 2479.518, acc 0.315099
+time 2486.891, acc 0.314870
+time 2494.458, acc 0.314989
+time 2501.970, acc 0.315273
+time 2509.542, acc 0.315675
+time 2517.094, acc 0.316480
+time 2524.805, acc 0.317310
+time 2532.969, acc 0.318388
+time 2540.442, acc 0.318448
+time 2548.846, acc 0.317866
+time 2556.376, acc 0.318052
+time 2563.979, acc 0.318563
+time 2572.657, acc 0.319478
+time 2580.239, acc 0.319965
+time 2588.679, acc 0.320179
+time 2596.143, acc 0.320082
+time 2607.703, acc 0.281250
+time 2615.500, acc 0.345238
+time 2624.531, acc 0.341845
+time 2632.279, acc 0.340932
+time 2641.195, acc 0.335262
+time 2648.789, acc 0.336634
+time 2656.411, acc 0.337681
+time 2663.992, acc 0.338542
+time 2672.074, acc 0.339383
+time 2680.277, acc 0.340297
+time 2687.850, acc 0.339785
+time 2695.383, acc 0.337811
+time 2702.965, acc 0.336942
+time 2710.441, acc 0.338182
+time 2718.004, acc 0.337911
+time 2726.513, acc 0.340116
+time 2734.359, acc 0.341316
+time 2741.822, acc 0.341596
+time 2750.823, acc 0.343750
+time 2758.528, acc 0.343176
+time 2767.258, acc 0.343399
+time 2774.979, acc 0.342971
+time 2782.445, acc 0.343856
+time 2789.902, acc 0.344767
+time 2798.144, acc 0.344562
+time 2805.992, acc 0.344998
+time 2813.572, acc 0.345459
+time 2821.329, acc 0.345194
+time 2829.939, acc 0.345059
+time 2837.737, acc 0.345982
+time 2846.232, acc 0.346038
+time 2853.906, acc 0.346644
+time 2861.574, acc 0.346992
+time 2870.052, acc 0.346894
+time 2877.660, acc 0.347582
+time 2885.162, acc 0.348275
+time 2892.624, acc 0.347933
+time 2900.264, acc 0.348790
+time 2907.758, acc 0.348965
+time 2916.257, acc 0.348912
+time 2927.703, acc 0.406250
+time 2936.789, acc 0.363839
+time 2944.403, acc 0.363186
+time 2952.450, acc 0.359119
+time 2960.546, acc 0.358410
+time 2968.550, acc 0.361541
+time 2976.969, acc 0.358600
+time 2984.643, acc 0.357713
+time 2992.810, acc 0.357531
+time 3000.836, acc 0.358771
+time 3008.511, acc 0.360152
+time 3016.103, acc 0.359375
+time 3024.327, acc 0.359829
+time 3032.245, acc 0.363206
+time 3039.760, acc 0.363490
+time 3048.662, acc 0.363943
+time 3056.199, acc 0.364632
+time 3064.890, acc 0.364461
+time 3072.424, acc 0.363400
+time 3081.178, acc 0.363886
+time 3088.660, acc 0.364596
+time 3097.097, acc 0.364014
+time 3104.703, acc 0.365611
+time 3113.285, acc 0.366086
+time 3120.852, acc 0.365969
+time 3128.417, acc 0.367265
+time 3136.019, acc 0.367682
+time 3143.678, acc 0.367231
+time 3152.482, acc 0.366394
+time 3160.048, acc 0.366556
+time 3167.678, acc 0.366577
+time 3176.463, acc 0.366772
+time 3183.946, acc 0.367517
+time 3192.306, acc 0.368192
+time 3200.270, acc 0.369035
+time 3207.902, acc 0.369851
+time 3215.554, acc 0.370146
+time 3224.204, acc 0.370213
+time 3231.846, acc 0.369867
+time 3240.466, acc 0.370158
+time 3252.293, acc 0.421875
+time 3260.650, acc 0.388393
+time 3268.452, acc 0.400915
+time 3276.001, acc 0.402408
+time 3283.521, acc 0.399306
+time 3291.982, acc 0.401918
+time 3299.673, acc 0.405346
+time 3307.431, acc 0.406472
+time 3315.359, acc 0.403047
+time 3323.453, acc 0.401588
+time 3331.023, acc 0.400964
+time 3339.591, acc 0.397978
+time 3347.090, acc 0.398600
+time 3354.586, acc 0.396372
+time 3362.793, acc 0.395018
+time 3370.280, acc 0.395764
+time 3377.943, acc 0.393886
+time 3386.148, acc 0.394978
+time 3393.672, acc 0.393352
+time 3401.644, acc 0.393004
+time 3409.834, acc 0.392534
+time 3417.296, acc 0.393149
+time 3425.702, acc 0.393424
+time 3433.422, acc 0.392862
+time 3441.039, acc 0.392736
+time 3448.619, acc 0.392340
+time 3457.352, acc 0.392304
+time 3464.871, acc 0.392878
+time 3472.430, acc 0.392965
+time 3480.251, acc 0.393126
+time 3488.416, acc 0.394447
+time 3496.040, acc 0.394852
+time 3503.663, acc 0.394696
+time 3511.399, acc 0.394904
+time 3519.641, acc 0.395191
+time 3527.455, acc 0.395729
+time 3535.071, acc 0.394873
+time 3543.321, acc 0.394884
+time 3551.741, acc 0.394896
+time 3559.056, acc 0.396207
+time 3570.618, acc 0.375000
+time 3578.424, acc 0.427827
+time 3586.837, acc 0.410061
+time 3594.502, acc 0.401639
+time 3602.167, acc 0.407407
+time 3609.760, acc 0.409499
+time 3617.631, acc 0.411544
+time 3626.004, acc 0.413121
+time 3633.648, acc 0.413432
+time 3641.843, acc 0.417213
+time 3649.472, acc 0.415656
+time 3656.836, acc 0.416714
+time 3664.330, acc 0.417855
+time 3672.570, acc 0.417744
+time 3680.303, acc 0.416481
+time 3687.858, acc 0.416009
+time 3695.860, acc 0.417689
+time 3704.114, acc 0.417064
+time 3711.704, acc 0.416205
+time 3719.509, acc 0.416954
+time 3728.211, acc 0.417784
+time 3735.625, acc 0.417681
+time 3743.246, acc 0.416135
+time 3751.710, acc 0.416147
+time 3759.437, acc 0.417814
+time 3767.530, acc 0.417821
+time 3775.974, acc 0.417826
+time 3783.655, acc 0.417369
+time 3792.282, acc 0.416500
+time 3799.890, acc 0.416900
+time 3808.795, acc 0.417923
+time 3816.782, acc 0.417572
+time 3825.150, acc 0.417414
+time 3832.741, acc 0.417927
+time 3840.200, acc 0.418043
+time 3847.826, acc 0.418086
+time 3855.280, acc 0.418083
+time 3862.876, acc 0.418037
+time 3871.166, acc 0.418241
+time 3878.669, acc 0.418234
+time 3890.456, acc 0.390625
+time 3898.322, acc 0.428571
+time 3906.005, acc 0.434070
+time 3913.868, acc 0.426230
+time 3921.521, acc 0.424769
+time 3929.168, acc 0.427135
+time 3936.660, acc 0.435046
+time 3944.523, acc 0.432181
+time 3952.128, acc 0.433230
+time 3959.598, acc 0.433443
+time 3967.273, acc 0.436412
+time 3975.628, acc 0.435732
+time 3983.065, acc 0.435425
+time 3990.401, acc 0.436542
+time 3998.054, acc 0.436833
+time 4006.474, acc 0.436098
+time 4014.106, acc 0.435991
+time 4022.684, acc 0.435942
+time 4030.360, acc 0.434643
+time 4037.928, acc 0.434301
+time 4045.560, acc 0.433915
+time 4054.194, acc 0.434457
+time 4061.651, acc 0.434488
+time 4069.259, acc 0.435568
+time 4076.727, acc 0.435129
+time 4084.241, acc 0.433976
+time 4091.877, acc 0.434291
+time 4099.407, acc 0.434930
+time 4108.161, acc 0.434826
+time 4115.723, acc 0.434676
+time 4124.431, acc 0.435368
+time 4131.910, acc 0.435613
+time 4140.193, acc 0.436086
+time 4147.708, acc 0.436200
+time 4156.360, acc 0.436261
+time 4164.065, acc 0.437010
+time 4172.755, acc 0.437283
+time 4180.546, acc 0.437099
+time 4187.989, acc 0.437192
+time 4196.707, acc 0.436760
+time 4208.756, acc 0.437500
+time 4216.825, acc 0.450893
+time 4225.200, acc 0.445122
+time 4232.824, acc 0.443391
+time 4240.924, acc 0.450617
+time 4248.910, acc 0.446782
+time 4256.458, acc 0.448993
+time 4264.151, acc 0.449025
+time 4272.260, acc 0.447884
+time 4280.438, acc 0.448118
+time 4288.030, acc 0.446906
+time 4296.611, acc 0.449661
+time 4304.192, acc 0.449624
+time 4311.709, acc 0.448994
+time 4320.671, acc 0.447898
+time 4329.038, acc 0.449076
+time 4337.518, acc 0.448695
+time 4344.987, acc 0.449230
+time 4353.150, acc 0.450658
+time 4360.991, acc 0.451033
+time 4368.627, acc 0.450670
+time 4376.991, acc 0.450379
+time 4384.896, acc 0.450645
+time 4392.259, acc 0.450956
+time 4399.705, acc 0.450526
+time 4407.469, acc 0.451784
+time 4415.701, acc 0.452045
+time 4423.077, acc 0.452865
+time 4430.687, acc 0.453236
+time 4439.148, acc 0.452426
+time 4446.956, acc 0.453515
+time 4455.122, acc 0.454081
+time 4462.596, acc 0.455173
+time 4470.237, acc 0.454898
+time 4479.050, acc 0.455006
+time 4486.499, acc 0.454329
+time 4495.137, acc 0.454902
+time 4502.566, acc 0.455445
+time 4510.090, acc 0.455260
+time 4517.572, acc 0.455506
+time 4528.958, acc 0.640625
+time 4537.705, acc 0.485119
+time 4545.313, acc 0.463415
+time 4554.006, acc 0.467213
+time 4561.599, acc 0.467207
+time 4569.061, acc 0.466584
+time 4577.382, acc 0.467717
+time 4585.011, acc 0.468307
+time 4593.392, acc 0.470109
+time 4601.115, acc 0.471771
+time 4608.778, acc 0.471626
+time 4617.475, acc 0.471083
+time 4624.976, acc 0.471343
+time 4632.668, acc 0.468630
+time 4641.464, acc 0.469473
+time 4648.891, acc 0.469061
+time 4657.375, acc 0.469821
+time 4664.983, acc 0.469483
+time 4672.452, acc 0.469572
+time 4680.795, acc 0.470349
+time 4688.295, acc 0.470698
+time 4695.786, acc 0.472016
+time 4703.231, acc 0.471301
+time 4711.719, acc 0.470818
+time 4719.472, acc 0.470634
+time 4727.050, acc 0.470684
+time 4735.463, acc 0.470549
+time 4742.965, acc 0.469761
+time 4750.760, acc 0.469446
+time 4758.221, acc 0.469987
+time 4767.013, acc 0.469530
+time 4774.559, acc 0.469455
+time 4782.027, acc 0.470115
+time 4790.317, acc 0.470263
+time 4797.752, acc 0.469920
+time 4805.195, acc 0.470868
+time 4813.635, acc 0.471112
+time 4821.133, acc 0.471301
+time 4828.562, acc 0.471440
+time 4836.852, acc 0.471031
+time 4848.745, acc 0.375000
+time 4856.726, acc 0.482887
+time 4865.584, acc 0.501143
+time 4873.342, acc 0.486424
+time 4881.210, acc 0.487654
+time 4889.627, acc 0.490873
+time 4897.260, acc 0.485408
+time 4904.953, acc 0.484153
+time 4913.338, acc 0.483696
+time 4920.899, acc 0.484030
+time 4928.519, acc 0.484919
+time 4937.340, acc 0.485365
+time 4944.880, acc 0.486320
+time 4952.491, acc 0.483477
+time 4960.828, acc 0.484375
+time 4968.337, acc 0.484271
+time 4976.893, acc 0.485738
+time 4984.451, acc 0.484787
+time 4992.080, acc 0.484418
+time 4999.741, acc 0.483760
+time 5008.183, acc 0.483674
+time 5016.025, acc 0.484115
+time 5023.573, acc 0.482851
+time 5031.196, acc 0.483155
+time 5040.232, acc 0.482004
+time 5047.731, acc 0.481100
+time 5055.341, acc 0.480596
+time 5062.904, acc 0.481689
+time 5071.386, acc 0.481562
+time 5078.985, acc 0.481686
+time 5087.126, acc 0.481515
+time 5095.336, acc 0.481809
+time 5102.903, acc 0.482035
+time 5111.720, acc 0.482035
+time 5119.310, acc 0.481989
+time 5127.056, acc 0.481990
+time 5135.525, acc 0.482251
+time 5142.953, acc 0.482646
+time 5151.482, acc 0.482609
+time 5159.152, acc 0.482554
+time 5170.476, acc 0.500000
+time 5178.399, acc 0.484375
+time 5186.795, acc 0.495808
+time 5194.354, acc 0.498975
+time 5201.770, acc 0.496721
+time 5209.278, acc 0.495050
+time 5217.542, acc 0.493027
+time 5225.248, acc 0.493573
+time 5232.798, acc 0.491363
+time 5241.022, acc 0.492403
+time 5248.434, acc 0.494636
+time 5255.825, acc 0.495687
+time 5263.272, acc 0.494165
+time 5270.728, acc 0.493954
+time 5278.060, acc 0.493494
+time 5285.502, acc 0.493823
+time 5293.026, acc 0.494451
+time 5300.571, acc 0.493173
+time 5308.477, acc 0.494070
+time 5316.432, acc 0.493725
+time 5323.955, acc 0.494116
+time 5332.399, acc 0.494359
+time 5340.193, acc 0.494331
+time 5347.607, acc 0.495729
+time 5355.089, acc 0.496297
+time 5362.568, acc 0.497068
+time 5371.156, acc 0.498291
+time 5378.561, acc 0.498267
+time 5386.103, acc 0.497549
+time 5393.460, acc 0.496800
+time 5401.070, acc 0.496958
+time 5408.530, acc 0.497182
+time 5416.151, acc 0.497392
+time 5424.611, acc 0.497258
+time 5432.159, acc 0.497338
+time 5440.326, acc 0.498150
+time 5448.038, acc 0.497876
+time 5455.634, acc 0.497322
+time 5463.029, acc 0.498049
+time 5470.684, acc 0.498419
+time 5483.471, acc 0.406250
+time 5491.343, acc 0.516369
+time 5498.932, acc 0.505716
+time 5506.809, acc 0.504611
+time 5514.239, acc 0.507716
+time 5521.633, acc 0.511293
+time 5530.186, acc 0.511880
+time 5537.513, acc 0.511746
+time 5545.052, acc 0.508152
+time 5552.819, acc 0.506129
+time 5560.946, acc 0.507463
+time 5568.454, acc 0.507636
+time 5575.845, acc 0.507586
+time 5583.373, acc 0.506585
+time 5591.827, acc 0.504949
+time 5599.306, acc 0.506177
+time 5607.439, acc 0.505744
+time 5614.993, acc 0.506003
+time 5622.532, acc 0.506795
+time 5630.208, acc 0.506685
+time 5639.012, acc 0.505260
+time 5646.389, acc 0.506161
+time 5655.097, acc 0.506661
+time 5662.774, acc 0.507118
+time 5670.628, acc 0.506237
+time 5678.263, acc 0.506549
+time 5686.324, acc 0.506568
+time 5693.915, acc 0.506123
+time 5702.344, acc 0.505793
+time 5709.847, acc 0.505782
+time 5717.365, acc 0.506006
+time 5724.956, acc 0.506793
+time 5732.314, acc 0.506362
+time 5739.642, acc 0.507139
+time 5747.910, acc 0.507640
+time 5755.468, acc 0.508047
+time 5763.067, acc 0.507368
+time 5771.267, acc 0.508097
+time 5779.107, acc 0.507761
+time 5786.645, acc 0.507102
+time 5798.643, acc 0.437500
+time 5807.403, acc 0.501488
+time 5815.176, acc 0.498857
+time 5822.949, acc 0.511270
+time 5830.747, acc 0.508681
+time 5839.890, acc 0.506807
+time 5847.378, acc 0.508781
+time 5854.839, acc 0.508311
+time 5862.287, acc 0.508637
+time 5869.890, acc 0.510532
+time 5878.637, acc 0.511194
+time 5886.370, acc 0.510040
+time 5893.990, acc 0.513226
+time 5902.666, acc 0.514428
+time 5910.248, acc 0.514012
+time 5917.734, acc 0.513133
+time 5925.230, acc 0.513435
+time 5932.638, acc 0.512876
+time 5940.065, acc 0.514630
+time 5947.612, acc 0.514190
+time 5955.039, acc 0.513872
+time 5963.636, acc 0.513287
+time 5971.153, acc 0.514172
+time 5979.561, acc 0.513930
+time 5987.131, acc 0.512961
+time 5994.765, acc 0.513629
+time 6003.211, acc 0.513616
+time 6010.727, acc 0.513055
+time 6019.495, acc 0.513648
+time 6027.074, acc 0.513742
+time 6034.498, acc 0.513571
+time 6041.988, acc 0.513184
+time 6050.709, acc 0.513870
+time 6058.129, acc 0.514372
+time 6065.736, acc 0.514638
+time 6074.362, acc 0.514622
+time 6082.043, acc 0.514953
+time 6089.808, acc 0.515056
+time 6098.354, acc 0.515132
+time 6105.894, acc 0.515585
+time 6118.090, acc 0.562500
+time 6125.825, acc 0.538690
+time 6133.427, acc 0.520198
+time 6141.139, acc 0.518186
+time 6149.170, acc 0.527006
+time 6156.681, acc 0.522277
+time 6164.107, acc 0.519499
+time 6171.858, acc 0.526263
+time 6180.412, acc 0.524068
+time 6187.986, acc 0.526934
+time 6195.511, acc 0.527130
+time 6204.216, acc 0.525877
+time 6211.817, acc 0.527295
+time 6219.505, acc 0.527299
+time 6227.147, acc 0.527246
+time 6235.717, acc 0.527876
+time 6243.145, acc 0.529108
+time 6252.226, acc 0.530700
+time 6259.591, acc 0.530125
+time 6267.909, acc 0.528133
+time 6275.629, acc 0.526886
+time 6283.128, acc 0.527650
+time 6290.811, acc 0.527140
+time 6298.607, acc 0.527657
+time 6306.202, acc 0.527774
+time 6314.388, acc 0.528443
+time 6321.972, acc 0.528701
+time 6329.526, acc 0.529633
+time 6337.252, acc 0.529969
+time 6345.057, acc 0.530873
+time 6352.545, acc 0.530210
+time 6359.996, acc 0.529866
+time 6367.655, acc 0.530104
+time 6375.582, acc 0.530399
+time 6382.948, acc 0.530745
+time 6390.542, acc 0.530514
+time 6399.122, acc 0.530947
+time 6406.737, acc 0.530955
+time 6414.238, acc 0.530490
+time 6421.848, acc 0.529649
+time 6434.347, acc 0.531250
+time 6442.300, acc 0.555804
+time 6450.476, acc 0.552210
+time 6458.163, acc 0.550205
+time 6466.705, acc 0.551312
+time 6474.241, acc 0.550124
+time 6481.790, acc 0.549070
+time 6489.226, acc 0.549535
+time 6497.682, acc 0.549786
+time 6505.138, acc 0.546357
+time 6512.700, acc 0.545631
+time 6521.085, acc 0.545178
+time 6528.422, acc 0.544476
+time 6536.018, acc 0.543762
+time 6544.242, acc 0.543984
+time 6552.393, acc 0.544695
+time 6559.827, acc 0.543906
+time 6568.219, acc 0.543668
+time 6575.787, acc 0.544711
+time 6583.350, acc 0.542692
+time 6591.459, acc 0.542823
+time 6599.132, acc 0.542570
+time 6606.625, acc 0.542517
+time 6615.386, acc 0.541791
+time 6622.858, acc 0.542100
+time 6630.313, acc 0.541823
+time 6638.950, acc 0.541777
+time 6646.338, acc 0.541676
+time 6653.973, acc 0.541277
+time 6662.508, acc 0.540340
+time 6670.127, acc 0.539673
+time 6678.432, acc 0.539805
+time 6686.009, acc 0.539416
+time 6693.474, acc 0.539263
+time 6702.446, acc 0.540106
+time 6709.747, acc 0.539319
+time 6718.444, acc 0.539117
+time 6726.024, acc 0.538841
+time 6733.646, acc 0.538642
+time 6742.174, acc 0.539213
+time 6753.852, acc 0.546875
+time 6762.579, acc 0.555804
+time 6770.190, acc 0.559070
+time 6777.777, acc 0.556096
+time 6786.467, acc 0.561921
+time 6794.028, acc 0.555384
+time 6801.582, acc 0.553977
+time 6809.219, acc 0.552527
+time 6817.437, acc 0.552213
+time 6825.007, acc 0.552573
+time 6832.315, acc 0.551928
+time 6839.820, acc 0.552319
+time 6848.230, acc 0.551673
+time 6855.747, acc 0.551185
+time 6863.312, acc 0.553214
+time 6870.845, acc 0.553000
+time 6878.422, acc 0.551158
+time 6886.961, acc 0.551365
+time 6894.391, acc 0.550164
+time 6903.059, acc 0.549664
+time 6910.363, acc 0.549213
+time 6917.844, acc 0.549621
+time 6925.512, acc 0.549568
+time 6934.109, acc 0.549790
+time 6941.556, acc 0.550676
+time 6949.212, acc 0.549963
+time 6957.390, acc 0.549244
+time 6964.935, acc 0.548897
+time 6972.509, acc 0.547961
+time 6980.394, acc 0.547789
+time 6988.470, acc 0.547317
+time 6996.043, acc 0.547403
+time 7004.307, acc 0.546924
+time 7011.905, acc 0.546426
+time 7019.447, acc 0.545820
+time 7027.001, acc 0.546273
+time 7034.637, acc 0.546333
+time 7042.076, acc 0.546580
+time 7049.637, acc 0.547286
+time 7057.983, acc 0.547255
+time 7069.301, acc 0.546875
+time 7077.211, acc 0.556548
+time 7085.733, acc 0.551829
+time 7093.372, acc 0.555072
+time 7101.776, acc 0.553627
+time 7109.443, acc 0.552444
+time 7117.139, acc 0.557076
+time 7125.827, acc 0.560062
+time 7133.303, acc 0.557745
+time 7141.663, acc 0.560601
+time 7149.187, acc 0.558535
+time 7156.616, acc 0.559318
+time 7164.053, acc 0.557897
+time 7171.522, acc 0.557172
+time 7179.257, acc 0.557218
+time 7187.547, acc 0.558036
+time 7195.010, acc 0.558411
+time 7202.595, acc 0.559659
+time 7210.932, acc 0.558994
+time 7218.481, acc 0.558809
+time 7225.956, acc 0.558214
+time 7233.839, acc 0.557972
+time 7241.551, acc 0.558107
+time 7249.079, acc 0.556365
+time 7257.564, acc 0.555808
+time 7264.937, acc 0.556107
+time 7272.492, acc 0.556352
+time 7280.018, acc 0.556753
+time 7287.474, acc 0.556568
+time 7294.919, acc 0.556449
+time 7303.949, acc 0.555714
+time 7311.464, acc 0.556109
+time 7318.914, acc 0.556869
+time 7326.295, acc 0.556661
+time 7333.813, acc 0.556902
+time 7341.222, acc 0.556147
+time 7348.834, acc 0.555479
+time 7356.348, acc 0.555689
+time 7364.937, acc 0.555252
+time 7372.479, acc 0.555038
+time 7385.131, acc 0.515625
+time 7392.857, acc 0.564732
+time 7400.834, acc 0.558689
+time 7409.049, acc 0.561219
+time 7416.616, acc 0.561343
+time 7424.151, acc 0.558942
+time 7432.942, acc 0.554236
+time 7440.433, acc 0.556073
+time 7448.185, acc 0.555901
+time 7455.630, acc 0.555853
+time 7464.099, acc 0.556048
+time 7471.701, acc 0.556985
+time 7479.177, acc 0.555174
+time 7487.422, acc 0.556633
+time 7494.837, acc 0.558274
+time 7502.393, acc 0.559022
+time 7509.827, acc 0.559287
+time 7517.131, acc 0.559384
+time 7524.542, acc 0.556960
+time 7531.970, acc 0.557784
+time 7539.358, acc 0.557785
+time 7546.772, acc 0.559048
+time 7554.229, acc 0.559276
+time 7562.681, acc 0.560331
+time 7570.058, acc 0.560713
+time 7577.513, acc 0.560629
+time 7585.960, acc 0.560551
+time 7593.790, acc 0.560623
+time 7602.297, acc 0.561302
+time 7610.018, acc 0.560967
+time 7618.490, acc 0.561174
+time 7626.171, acc 0.560865
+time 7634.706, acc 0.560574
+time 7642.249, acc 0.559805
+time 7649.731, acc 0.559380
+time 7658.517, acc 0.559848
+time 7666.050, acc 0.560615
+time 7674.370, acc 0.561087
+time 7682.063, acc 0.561186
+time 7690.266, acc 0.561540
+time 7701.892, acc 0.562500
+time 7710.079, acc 0.595982
+time 7718.316, acc 0.561357
+time 7725.842, acc 0.563268
+time 7733.260, acc 0.563850
+time 7742.144, acc 0.572556
+time 7749.587, acc 0.576834
+time 7757.028, acc 0.576020
+time 7765.172, acc 0.576960
+time 7772.642, acc 0.577089
+time 7780.019, acc 0.576881
+time 7787.412, acc 0.574024
+time 7794.868, acc 0.573846
+time 7802.453, acc 0.571839
+time 7810.284, acc 0.570062
+time 7817.731, acc 0.570079
+time 7825.852, acc 0.568146
+time 7833.241, acc 0.567311
+time 7840.672, acc 0.566482
+time 7848.674, acc 0.566109
+time 7856.399, acc 0.567020
+time 7864.111, acc 0.567436
+time 7872.479, acc 0.568169
+time 7880.009, acc 0.568736
+time 7888.285, acc 0.568899
+time 7895.846, acc 0.569112
+time 7903.332, acc 0.568528
+time 7910.878, acc 0.568507
+time 7919.290, acc 0.568349
+time 7926.875, acc 0.567771
+time 7934.305, acc 0.567518
+time 7941.749, acc 0.567608
+time 7949.214, acc 0.568204
+time 7956.914, acc 0.568528
+time 7964.697, acc 0.568901
+time 7972.178, acc 0.569031
+time 7979.789, acc 0.568763
+time 7988.037, acc 0.568489
+time 7995.505, acc 0.568927
+time 8004.157, acc 0.568682
+time 8015.159, acc 0.578125
+time 8023.771, acc 0.583333
+time 8031.946, acc 0.596799
+time 8039.367, acc 0.585297
+time 8046.786, acc 0.577932
+time 8055.438, acc 0.579363
+time 8063.078, acc 0.578900
+time 8070.568, acc 0.574911
+time 8078.888, acc 0.574049
+time 8086.277, acc 0.575190
+time 8093.611, acc 0.574394
+time 8100.994, acc 0.574590
+time 8109.138, acc 0.573911
+time 8116.595, acc 0.573815
+time 8124.036, acc 0.573454
+time 8131.810, acc 0.574439
+time 8139.336, acc 0.573452
+time 8146.921, acc 0.574276
+time 8155.225, acc 0.575615
+time 8162.717, acc 0.575746
+time 8170.177, acc 0.574306
+time 8178.517, acc 0.575045
+time 8185.914, acc 0.574795
+time 8193.495, acc 0.575176
+time 8201.917, acc 0.574227
+time 8209.378, acc 0.573946
+time 8216.895, acc 0.573476
+time 8225.208, acc 0.573879
+time 8232.627, acc 0.573975
+time 8240.701, acc 0.574360
+time 8248.742, acc 0.574615
+time 8256.194, acc 0.575332
+time 8264.472, acc 0.574907
+time 8271.944, acc 0.575501
+time 8279.555, acc 0.575441
+time 8287.805, acc 0.575629
+time 8295.350, acc 0.575589
+time 8302.828, acc 0.575637
+time 8311.374, acc 0.575661
+time 8318.751, acc 0.575544
+time 8331.016, acc 0.671875
+time 8338.948, acc 0.590774
+time 8346.848, acc 0.585366
+time 8354.648, acc 0.588115
+time 8362.910, acc 0.586806
+time 8370.489, acc 0.590656
+time 8378.014, acc 0.593104
+time 8385.727, acc 0.589871
+time 8394.049, acc 0.589771
+time 8401.500, acc 0.587362
+time 8409.069, acc 0.587065
+time 8417.684, acc 0.586256
+time 8425.158, acc 0.583571
+time 8432.845, acc 0.584531
+time 8441.128, acc 0.582351
+time 8448.856, acc 0.581655
+time 8456.483, acc 0.581484
+time 8465.210, acc 0.581241
+time 8472.752, acc 0.581025
+time 8480.294, acc 0.580545
+time 8488.540, acc 0.580385
+time 8496.744, acc 0.580352
+time 8504.510, acc 0.580109
+time 8511.988, acc 0.580193
+time 8520.115, acc 0.580009
+time 8527.689, acc 0.580183
+time 8535.229, acc 0.579325
+time 8542.687, acc 0.579627
+time 8551.163, acc 0.579156
+time 8558.737, acc 0.579981
+time 8566.263, acc 0.579373
+time 8574.280, acc 0.578955
+time 8582.517, acc 0.579124
+time 8590.110, acc 0.579591
+time 8597.770, acc 0.580052
+time 8605.389, acc 0.580198
+time 8613.208, acc 0.580531
+time 8621.593, acc 0.580255
+time 8629.331, acc 0.579891
+time 8636.835, acc 0.580026
+time 8648.617, acc 0.671875
+time 8656.790, acc 0.604911
+time 8664.568, acc 0.594512
+time 8672.252, acc 0.595799
+time 8680.396, acc 0.592400
+time 8688.012, acc 0.589264
+time 8695.432, acc 0.591038
+time 8703.021, acc 0.589096
+time 8710.520, acc 0.590839
+time 8718.850, acc 0.593577
+time 8726.227, acc 0.592584
+time 8733.734, acc 0.593609
+time 8742.167, acc 0.594723
+time 8749.650, acc 0.593930
+time 8757.134, acc 0.592805
+time 8765.552, acc 0.592348
+time 8773.015, acc 0.591462
+time 8780.718, acc 0.592650
+time 8789.198, acc 0.591932
+time 8796.755, acc 0.591946
+time 8804.389, acc 0.592386
+time 8811.853, acc 0.592043
+time 8820.258, acc 0.590703
+time 8827.853, acc 0.590293
+time 8835.402, acc 0.590112
+time 8842.869, acc 0.590101
+time 8850.236, acc 0.590901
+time 8858.815, acc 0.591353
+time 8866.475, acc 0.591550
+time 8873.996, acc 0.591276
+time 8881.683, acc 0.590526
+time 8890.382, acc 0.589976
+time 8897.855, acc 0.589947
+time 8906.507, acc 0.589141
+time 8913.898, acc 0.589276
+time 8921.561, acc 0.587821
+time 8929.883, acc 0.587487
+time 8937.300, acc 0.587466
+time 8944.741, acc 0.587775
+time 8953.505, acc 0.587088
+time 8965.537, acc 0.546875
+time 8973.469, acc 0.607887
+time 8981.878, acc 0.596037
+time 8989.731, acc 0.594262
+time 8997.458, acc 0.590664
+time 9005.270, acc 0.596380
+time 9013.290, acc 0.597107
+time 9021.391, acc 0.595966
+time 9028.843, acc 0.598797
+time 9037.330, acc 0.598325
+time 9044.871, acc 0.597559
+time 9052.465, acc 0.598558
+time 9060.133, acc 0.600622
+time 9068.800, acc 0.601114
+time 9076.330, acc 0.599867
+time 9083.916, acc 0.598889
+time 9092.673, acc 0.597887
+time 9100.090, acc 0.598653
+time 9107.958, acc 0.598641
+time 9116.214, acc 0.596785
+time 9123.776, acc 0.597062
+time 9132.009, acc 0.596719
+time 9139.541, acc 0.596514
+time 9147.165, acc 0.596902
+time 9154.935, acc 0.596966
+time 9163.111, acc 0.597648
+time 9170.674, acc 0.597229
+time 9179.168, acc 0.596985
+time 9186.632, acc 0.596869
+time 9194.222, acc 0.596816
+time 9201.740, acc 0.596610
+time 9209.225, acc 0.596191
+time 9216.731, acc 0.595822
+time 9224.856, acc 0.595688
+time 9232.362, acc 0.594874
+time 9240.802, acc 0.595110
+time 9248.318, acc 0.595115
+time 9255.916, acc 0.594868
+time 9264.485, acc 0.595167
+time 9271.965, acc 0.595150
+time 9283.963, acc 0.671875
+time 9291.769, acc 0.618304
+time 9299.760, acc 0.616235
+time 9307.425, acc 0.615523
+time 9315.086, acc 0.617670
+time 9323.324, acc 0.614016
+time 9330.873, acc 0.608988
+time 9338.322, acc 0.611370
+time 9345.974, acc 0.610734
+time 9353.887, acc 0.606354
+time 9361.722, acc 0.611707
+time 9369.098, acc 0.610930
+time 9376.836, acc 0.609699
+time 9384.688, acc 0.609435
+time 9392.558, acc 0.609431
+time 9400.139, acc 0.608233
+time 9407.777, acc 0.607720
+time 9415.141, acc 0.607084
+time 9422.578, acc 0.606259
+time 9430.047, acc 0.606832
+time 9437.700, acc 0.607544
+time 9445.342, acc 0.607556
+time 9453.846, acc 0.606859
+time 9461.251, acc 0.605409
+time 9468.847, acc 0.604502
+time 9476.874, acc 0.604167
+time 9484.778, acc 0.604097
+time 9492.298, acc 0.603541
+time 9499.668, acc 0.603443
+time 9507.220, acc 0.602652
+time 9514.731, acc 0.602615
+time 9523.104, acc 0.602129
+time 9530.556, acc 0.603062
+time 9538.096, acc 0.601882
+time 9545.631, acc 0.601780
+time 9553.682, acc 0.601930
+time 9561.284, acc 0.601508
+time 9568.675, acc 0.601341
+time 9576.054, acc 0.601675
+time 9583.634, acc 0.601452
+time 9595.414, acc 0.546875
+time 9603.026, acc 0.615327
+time 9610.683, acc 0.606707
+time 9618.338, acc 0.608607
+time 9626.685, acc 0.614005
+time 9634.287, acc 0.614016
+time 9641.808, acc 0.613636
+time 9650.411, acc 0.611591
+time 9657.949, acc 0.607628
+time 9665.409, acc 0.609634
+time 9672.880, acc 0.610774
+time 9681.042, acc 0.610577
+time 9688.941, acc 0.608986
+time 9696.537, acc 0.606621
+time 9704.073, acc 0.606317
+time 9711.546, acc 0.606728
+time 9719.012, acc 0.607282
+time 9727.120, acc 0.606122
+time 9734.615, acc 0.604614
+time 9741.958, acc 0.604618
+time 9749.500, acc 0.604426
+time 9757.071, acc 0.604810
+time 9765.148, acc 0.605796
+time 9772.794, acc 0.605240
+time 9780.279, acc 0.605314
+time 9787.771, acc 0.604946
+time 9795.279, acc 0.604846
+time 9803.765, acc 0.605101
+time 9811.459, acc 0.605086
+time 9818.884, acc 0.604131
+time 9826.302, acc 0.604643
+time 9833.720, acc 0.604267
+time 9842.050, acc 0.603915
+time 9849.995, acc 0.603394
+time 9857.381, acc 0.602974
+time 9864.713, acc 0.603513
+time 9872.048, acc 0.603415
+time 9879.591, acc 0.603091
+time 9888.097, acc 0.603133
+time 9895.440, acc 0.602893
+time 9907.037, acc 0.640625
+time 9914.648, acc 0.588542
+time 9922.211, acc 0.613186
+time 9930.801, acc 0.607326
+time 9938.467, acc 0.607832
+time 9945.964, acc 0.608911
+time 9954.378, acc 0.610150
+time 9962.067, acc 0.608378
+time 9969.431, acc 0.609569
+time 9976.905, acc 0.610152
+time 9985.016, acc 0.611007
+time 9992.380, acc 0.609163
+time 9999.833, acc 0.608727
+time 10007.413, acc 0.609076
+time 10015.473, acc 0.609097
+time 10022.970, acc 0.609375
+time 10030.482, acc 0.610008
+time 10037.916, acc 0.611712
+time 10045.407, acc 0.612059
+time 10053.817, acc 0.612000
+time 10061.407, acc 0.610466
+time 10069.113, acc 0.610266
+time 10076.700, acc 0.609269
+time 10084.224, acc 0.608697
+time 10092.733, acc 0.608660
+time 10100.203, acc 0.609250
+time 10107.690, acc 0.609165
+time 10115.162, acc 0.609000
+time 10122.741, acc 0.608567
+time 10131.026, acc 0.608111
+time 10138.356, acc 0.608283
+time 10145.779, acc 0.608645
+time 10153.172, acc 0.608449
+time 10160.665, acc 0.608264
+time 10168.090, acc 0.607631
+time 10176.470, acc 0.607592
+time 10184.070, acc 0.607251
+time 10191.537, acc 0.608004
+time 10199.611, acc 0.608431
+time 10207.168, acc 0.609155
+time 10218.920, acc 0.609375
+time 10227.733, acc 0.629464
+time 10235.505, acc 0.635671
+time 10243.046, acc 0.616547
+time 10250.389, acc 0.615355
+time 10257.873, acc 0.614944
+time 10265.674, acc 0.617769
+time 10273.523, acc 0.618129
+time 10281.242, acc 0.616654
+time 10288.738, acc 0.613519
+time 10296.312, acc 0.614506
+time 10303.870, acc 0.613617
+time 10311.762, acc 0.612487
+time 10319.085, acc 0.611470
+time 10326.572, acc 0.612489
+time 10334.110, acc 0.612022
+time 10341.736, acc 0.612393
+time 10349.853, acc 0.613820
+time 10357.394, acc 0.614309
+time 10364.915, acc 0.614009
+time 10372.417, acc 0.614908
+time 10379.919, acc 0.615944
+time 10387.584, acc 0.615327
+time 10395.370, acc 0.615679
+time 10402.853, acc 0.615644
+time 10410.337, acc 0.616049
+time 10418.075, acc 0.615433
+time 10425.697, acc 0.616191
+time 10433.505, acc 0.615614
+time 10441.473, acc 0.614807
+time 10449.295, acc 0.615043
+time 10456.782, acc 0.614885
+time 10464.051, acc 0.614713
+time 10471.491, acc 0.614410
+time 10479.910, acc 0.613711
+time 10487.677, acc 0.613187
+time 10495.126, acc 0.612864
+time 10502.664, acc 0.612643
+time 10510.736, acc 0.612619
+time 10518.388, acc 0.612176
+time 10529.734, acc 0.593750
+time 10537.786, acc 0.600446
+time 10546.102, acc 0.613186
+time 10554.127, acc 0.619365
+time 10561.786, acc 0.618441
+time 10569.438, acc 0.622679
+time 10578.305, acc 0.622676
+time 10585.896, acc 0.621121
+time 10593.455, acc 0.622283
+time 10601.814, acc 0.623187
+time 10609.331, acc 0.622823
+time 10616.942, acc 0.621960
+time 10624.532, acc 0.620526
+time 10632.336, acc 0.620211
+time 10639.933, acc 0.619440
+time 10647.402, acc 0.617317
+time 10654.908, acc 0.618234
+time 10663.060, acc 0.617531
+time 10670.846, acc 0.615911
+time 10678.269, acc 0.616265
+time 10685.688, acc 0.616545
+time 10693.399, acc 0.616390
+time 10700.900, acc 0.615823
+time 10708.416, acc 0.615883
+time 10716.018, acc 0.615839
+time 10724.742, acc 0.616236
+time 10732.389, acc 0.616273
+time 10740.041, acc 0.615816
+time 10747.753, acc 0.617452
+time 10756.140, acc 0.617577
+time 10763.885, acc 0.617902
+time 10771.334, acc 0.617779
+time 10778.866, acc 0.617760
+time 10786.344, acc 0.617696
+time 10794.362, acc 0.617107
+time 10801.815, acc 0.616441
+time 10809.327, acc 0.616462
+time 10817.086, acc 0.616270
+time 10824.624, acc 0.615802
+time 10832.688, acc 0.615957
+time 10844.298, acc 0.562500
+time 10851.913, acc 0.627232
+time 10859.586, acc 0.623095
+time 10867.218, acc 0.621670
+time 10875.148, acc 0.618634
+time 10882.809, acc 0.618657
+time 10890.188, acc 0.620868
+time 10897.716, acc 0.622340
+time 10905.104, acc 0.623738
+time 10913.388, acc 0.626381
+time 10921.118, acc 0.623678
+time 10928.747, acc 0.623445
+time 10936.218, acc 0.622731
+time 10943.921, acc 0.621528
+time 10952.599, acc 0.623999
+time 10960.272, acc 0.625000
+time 10967.602, acc 0.623929
+time 10974.999, acc 0.622938
+time 10982.455, acc 0.624437
+time 10991.088, acc 0.622539
+time 10998.638, acc 0.622195
+time 11006.257, acc 0.622736
+time 11013.934, acc 0.623689
+time 11022.101, acc 0.624085
+time 11030.152, acc 0.623506
+time 11037.792, acc 0.623659
+time 11046.096, acc 0.624550
+time 11053.594, acc 0.624827
+time 11060.854, acc 0.625362
+time 11069.400, acc 0.625834
+time 11077.044, acc 0.626014
+time 11084.534, acc 0.625679
+time 11091.882, acc 0.625731
+time 11099.567, acc 0.624858
+time 11108.056, acc 0.624426
+time 11115.557, acc 0.623975
+time 11123.158, acc 0.624090
+time 11131.740, acc 0.624367
+time 11139.225, acc 0.624281
+time 11146.645, acc 0.624000
+time 11158.823, acc 0.531250
+time 11166.678, acc 0.636905
+time 11174.427, acc 0.635290
+time 11182.603, acc 0.636527
+time 11190.075, acc 0.633873
+time 11197.618, acc 0.630260
+time 11205.159, acc 0.630036
+time 11212.690, acc 0.634530
+time 11220.667, acc 0.635190
+time 11228.837, acc 0.635100
+time 11236.611, acc 0.634095
+time 11244.113, acc 0.632989
+time 11251.665, acc 0.631613
+time 11259.251, acc 0.630987
+time 11267.608, acc 0.631673
+time 11275.275, acc 0.630970
+time 11282.835, acc 0.630500
+time 11290.391, acc 0.630132
+time 11298.378, acc 0.631449
+time 11306.257, acc 0.631070
+time 11313.845, acc 0.631507
+time 11321.299, acc 0.631792
+time 11328.746, acc 0.631661
+time 11337.010, acc 0.630830
+time 11344.750, acc 0.629093
+time 11352.338, acc 0.628898
+time 11359.841, acc 0.627399
+time 11367.496, acc 0.626906
+time 11376.059, acc 0.626560
+time 11383.479, acc 0.625941
+time 11390.955, acc 0.625806
+time 11398.413, acc 0.626359
+time 11406.824, acc 0.626073
+time 11414.350, acc 0.625662
+time 11421.983, acc 0.625184
+time 11430.123, acc 0.625334
+time 11437.990, acc 0.625130
+time 11445.521, acc 0.625612
+time 11453.145, acc 0.625390
+time 11461.495, acc 0.624920
+time 11473.177, acc 0.609375
+time 11481.009, acc 0.637649
+time 11488.853, acc 0.630716
+time 11496.782, acc 0.626537
+time 11505.251, acc 0.624807
+time 11512.837, acc 0.630415
+time 11520.362, acc 0.633523
+time 11527.983, acc 0.632314
+time 11536.060, acc 0.633443
+time 11543.938, acc 0.632856
+time 11551.460, acc 0.632074
+time 11559.086, acc 0.629313
+time 11566.829, acc 0.627658
+time 11574.508, acc 0.628772
+time 11582.741, acc 0.629170
+time 11590.215, acc 0.630087
+time 11597.728, acc 0.630938
+time 11605.360, acc 0.631048
+time 11612.982, acc 0.631406
+time 11621.132, acc 0.632423
+time 11629.100, acc 0.631312
+time 11636.688, acc 0.631272
+time 11644.186, acc 0.632228
+time 11651.843, acc 0.631508
+time 11659.850, acc 0.631367
+time 11667.586, acc 0.631674
+time 11675.385, acc 0.631898
+time 11682.983, acc 0.630516
+time 11690.663, acc 0.630682
+time 11698.956, acc 0.630648
+time 11706.530, acc 0.630148
+time 11714.155, acc 0.630913
+time 11721.846, acc 0.630631
+time 11729.398, acc 0.630366
+time 11737.358, acc 0.630851
+time 11744.940, acc 0.631419
+time 11752.442, acc 0.631241
+time 11759.943, acc 0.630609
+time 11767.523, acc 0.630585
+time 11775.880, acc 0.630582
+time 11787.375, acc 0.562500
+time 11795.210, acc 0.649554
+time 11803.101, acc 0.635671
+time 11812.036, acc 0.631148
+time 11819.634, acc 0.634066
+time 11827.213, acc 0.634901
+time 11834.804, acc 0.635718
+time 11843.574, acc 0.637633
+time 11851.263, acc 0.637811
+time 11858.710, acc 0.640711
+time 11866.699, acc 0.639303
+time 11874.981, acc 0.637797
+time 11882.514, acc 0.639782
+time 11890.406, acc 0.638350
+time 11898.644, acc 0.637122
+time 11906.452, acc 0.636109
+time 11914.027, acc 0.635563
+time 11921.536, acc 0.634806
+time 11930.253, acc 0.634349
+time 11937.758, acc 0.635253
+time 11945.168, acc 0.635637
+time 11952.955, acc 0.634947
+time 11961.370, acc 0.634814
+time 11969.186, acc 0.633846
+time 11976.678, acc 0.634420
+time 11984.177, acc 0.634450
+time 11991.694, acc 0.634177
+time 11999.812, acc 0.634358
+time 12007.549, acc 0.633968
+time 12014.944, acc 0.633955
+time 12022.549, acc 0.634151
+time 12031.020, acc 0.634259
+time 12038.806, acc 0.633483
+time 12046.536, acc 0.633132
+time 12054.205, acc 0.633489
+time 12062.710, acc 0.633827
+time 12070.767, acc 0.634600
+time 12078.477, acc 0.634510
+time 12086.380, acc 0.634753
+time 12094.802, acc 0.634803
+time 12106.295, acc 0.656250
+time 12114.142, acc 0.635417
+time 12122.523, acc 0.632241
+time 12130.090, acc 0.632172
+time 12137.496, acc 0.632523
+time 12145.125, acc 0.631343
+time 12152.578, acc 0.628228
+time 12161.371, acc 0.629987
+time 12168.921, acc 0.630629
+time 12176.543, acc 0.630007
+time 12184.115, acc 0.631141
+time 12192.157, acc 0.631080
+time 12199.724, acc 0.631937
+time 12207.343, acc 0.633082
+time 12214.728, acc 0.633730
+time 12222.875, acc 0.632319
+time 12230.629, acc 0.631279
+time 12238.261, acc 0.630819
+time 12245.732, acc 0.630280
+time 12253.211, acc 0.630988
+time 12261.546, acc 0.631897
+time 12269.039, acc 0.631421
+time 12276.557, acc 0.631342
+time 12284.285, acc 0.631101
+time 12292.622, acc 0.631205
+time 12300.099, acc 0.631082
+time 12307.430, acc 0.631838
+time 12314.946, acc 0.631614
+time 12322.927, acc 0.631657
+time 12330.595, acc 0.630917
+time 12338.053, acc 0.631786
+time 12345.601, acc 0.632473
+time 12353.071, acc 0.632727
+time 12360.570, acc 0.633604
+time 12369.186, acc 0.633099
+time 12376.784, acc 0.632044
+time 12384.507, acc 0.631480
+time 12392.006, acc 0.631516
+time 12399.901, acc 0.631365
+time 12407.678, acc 0.631382
+time 12418.926, acc 0.718750
+time 12426.700, acc 0.637649
+time 12434.366, acc 0.641768
+time 12442.153, acc 0.644211
+time 12450.414, acc 0.646412
+time 12457.866, acc 0.651145
+time 12465.328, acc 0.647211
+time 12472.843, acc 0.645501
+time 12480.335, acc 0.646933
+time 12488.546, acc 0.647272
+time 12495.850, acc 0.646844
+time 12503.394, acc 0.646635
+time 12510.979, acc 0.643932
+time 12518.587, acc 0.642301
+time 12526.329, acc 0.642516
+time 12534.349, acc 0.643584
+time 12541.777, acc 0.643302
+time 12549.265, acc 0.643558
+time 12556.766, acc 0.642876
+time 12565.058, acc 0.642224
+time 12572.508, acc 0.641365
+time 12580.073, acc 0.641404
+time 12587.443, acc 0.641192
+time 12596.007, acc 0.640862
+time 12603.527, acc 0.640138
+time 12611.032, acc 0.640968
+time 12618.702, acc 0.640355
+time 12626.999, acc 0.639499
+time 12634.467, acc 0.639567
+time 12641.964, acc 0.639549
+time 12649.621, acc 0.640547
+time 12657.865, acc 0.641103
+time 12665.319, acc 0.640723
+time 12672.863, acc 0.640578
+time 12680.547, acc 0.640602
+time 12688.085, acc 0.640358
+time 12696.518, acc 0.640257
+time 12703.945, acc 0.640836
+time 12711.458, acc 0.641179
+time 12718.834, acc 0.640905
+time 12731.295, acc 0.671875
+time 12739.036, acc 0.654018
+time 12746.663, acc 0.655869
+time 12754.199, acc 0.651895
+time 12761.738, acc 0.653549
+time 12769.772, acc 0.651764
+time 12777.764, acc 0.643853
+time 12785.240, acc 0.645390
+time 12792.950, acc 0.645866
+time 12801.378, acc 0.648999
+time 12809.434, acc 0.647854
+time 12816.970, acc 0.649109
+time 12824.413, acc 0.651128
+time 12831.777, acc 0.648527
+time 12839.205, acc 0.648354
+time 12847.724, acc 0.648152
+time 12855.378, acc 0.648900
+time 12862.803, acc 0.649468
+time 12870.390, acc 0.648113
+time 12878.418, acc 0.646900
+time 12885.881, acc 0.645574
+time 12893.293, acc 0.644522
+time 12900.706, acc 0.643991
+time 12908.316, acc 0.643709
+time 12916.152, acc 0.643321
+time 12923.747, acc 0.644274
+time 12930.999, acc 0.644014
+time 12938.501, acc 0.643773
+time 12946.521, acc 0.644079
+time 12953.913, acc 0.643476
+time 12961.260, acc 0.642731
+time 12968.739, acc 0.643443
+time 12976.278, acc 0.643623
+time 12984.181, acc 0.643580
+time 12991.744, acc 0.643287
+time 12999.103, acc 0.643746
+time 13006.573, acc 0.643767
+time 13014.047, acc 0.644547
+time 13021.451, acc 0.644280
+time 13029.220, acc 0.644486
+time 13041.115, acc 0.640625
+time 13049.083, acc 0.642113
+time 13056.715, acc 0.657393
+time 13064.400, acc 0.662654
+time 13071.796, acc 0.659722
+time 13079.353, acc 0.657488
+time 13086.919, acc 0.658187
+time 13095.349, acc 0.660572
+time 13103.013, acc 0.660132
+time 13110.464, acc 0.657459
+time 13117.917, acc 0.654928
+time 13126.460, acc 0.654836
+time 13133.990, acc 0.653527
+time 13141.495, acc 0.653317
+time 13149.202, acc 0.653581
+time 13157.169, acc 0.652512
+time 13164.763, acc 0.651139
+time 13172.242, acc 0.649927
+time 13179.807, acc 0.649974
+time 13187.743, acc 0.649647
+time 13195.245, acc 0.648418
+time 13202.814, acc 0.648642
+time 13210.418, acc 0.649554
+time 13217.993, acc 0.649980
+time 13225.534, acc 0.650988
+time 13233.101, acc 0.651229
+time 13241.466, acc 0.651542
+time 13249.074, acc 0.650503
+time 13256.402, acc 0.651014
+time 13263.791, acc 0.650091
+time 13271.617, acc 0.650452
+time 13279.463, acc 0.649985
+time 13286.829, acc 0.650132
+time 13294.095, acc 0.650388
+time 13301.656, acc 0.649780
+time 13309.959, acc 0.649831
+time 13317.611, acc 0.649619
+time 13325.135, acc 0.649776
+time 13332.658, acc 0.649598
+time 13340.931, acc 0.649528
+time 13352.418, acc 0.718750
+time 13360.379, acc 0.683780
+time 13368.083, acc 0.669207
+time 13376.871, acc 0.667777
+time 13384.487, acc 0.665702
+time 13392.146, acc 0.658880
+time 13400.953, acc 0.657541
+time 13408.439, acc 0.656472
+time 13416.108, acc 0.656444
+time 13424.702, acc 0.656854
+time 13432.424, acc 0.657416
+time 13440.096, acc 0.656674
+time 13448.160, acc 0.658065
+time 13455.637, acc 0.656011
+time 13463.185, acc 0.654749
+time 13470.904, acc 0.654433
+time 13479.320, acc 0.653573
+time 13486.817, acc 0.652768
+time 13494.384, acc 0.652268
+time 13502.044, acc 0.649688
+time 13510.154, acc 0.650132
+time 13517.730, acc 0.649347
+time 13525.341, acc 0.648703
+time 13533.112, acc 0.648082
+time 13540.705, acc 0.647609
+time 13549.044, acc 0.647829
+time 13556.639, acc 0.648213
+time 13564.302, acc 0.648770
+time 13571.906, acc 0.648953
+time 13579.620, acc 0.649204
+time 13588.220, acc 0.648762
+time 13595.832, acc 0.648299
+time 13603.319, acc 0.648572
+time 13610.870, acc 0.648591
+time 13618.425, acc 0.648564
+time 13626.640, acc 0.648939
+time 13634.418, acc 0.649055
+time 13641.847, acc 0.648406
+time 13649.557, acc 0.648715
+time 13657.867, acc 0.648287
+time 13669.159, acc 0.578125
+time 13676.902, acc 0.659970
+time 13684.733, acc 0.664253
+time 13693.096, acc 0.655738
+time 13700.846, acc 0.656443
+time 13708.551, acc 0.658880
+time 13716.784, acc 0.653667
+time 13724.299, acc 0.655696
+time 13731.902, acc 0.655765
+time 13739.889, acc 0.657977
+time 13747.372, acc 0.657727
+time 13754.792, acc 0.656391
+time 13762.132, acc 0.656574
+time 13769.587, acc 0.655532
+time 13777.770, acc 0.655583
+time 13785.301, acc 0.655627
+time 13792.786, acc 0.655423
+time 13800.325, acc 0.652264
+time 13807.794, acc 0.651749
+time 13815.980, acc 0.651288
+time 13823.442, acc 0.650990
+time 13830.816, acc 0.652056
+time 13838.048, acc 0.651361
+time 13845.633, acc 0.650319
+time 13853.598, acc 0.650468
+time 13861.578, acc 0.650730
+time 13869.061, acc 0.650762
+time 13876.654, acc 0.651282
+time 13884.059, acc 0.651376
+time 13891.613, acc 0.652082
+time 13899.641, acc 0.652428
+time 13907.178, acc 0.652174
+time 13914.692, acc 0.652155
+time 13922.057, acc 0.652208
+time 13929.527, acc 0.652097
+time 13937.061, acc 0.652216
+time 13945.482, acc 0.652132
+time 13952.974, acc 0.652201
+time 13960.415, acc 0.652020
+time 13967.813, acc 0.650928
+time 13980.261, acc 0.703125
+time 13987.970, acc 0.676339
+time 13995.584, acc 0.661966
+time 14003.196, acc 0.657018
+time 14010.830, acc 0.656636
+time 14019.052, acc 0.655631
+time 14026.743, acc 0.655346
+time 14034.209, acc 0.661458
+time 14041.594, acc 0.661200
+time 14049.048, acc 0.659099
+time 14057.697, acc 0.659049
+time 14065.347, acc 0.658937
+time 14072.770, acc 0.657612
+time 14080.269, acc 0.657807
+time 14087.818, acc 0.658697
+time 14095.934, acc 0.658015
+time 14104.043, acc 0.657321
+time 14111.599, acc 0.657945
+time 14119.143, acc 0.658328
+time 14127.463, acc 0.657890
+time 14135.072, acc 0.657925
+time 14142.717, acc 0.657586
+time 14150.547, acc 0.657100
+time 14158.172, acc 0.657097
+time 14165.542, acc 0.657452
+time 14173.106, acc 0.657591
+time 14180.924, acc 0.657060
+time 14188.654, acc 0.657145
+time 14196.276, acc 0.656835
+time 14203.762, acc 0.656653
+time 14211.306, acc 0.656432
+time 14219.506, acc 0.656476
+time 14227.012, acc 0.656981
+time 14234.490, acc 0.657266
+time 14241.883, acc 0.656525
+time 14249.319, acc 0.656629
+time 14257.806, acc 0.656748
+time 14265.370, acc 0.656672
+time 14272.903, acc 0.656825
+time 14280.337, acc 0.656310
+time 14292.549, acc 0.671875
+time 14300.232, acc 0.656994
+time 14307.891, acc 0.662348
+time 14315.370, acc 0.665215
+time 14323.623, acc 0.661073
+time 14331.174, acc 0.662283
+time 14338.605, acc 0.661157
+time 14346.039, acc 0.661902
+time 14353.535, acc 0.662364
+time 14362.030, acc 0.660480
+time 14369.667, acc 0.659748
+time 14377.071, acc 0.661058
+time 14384.663, acc 0.659168
+time 14392.244, acc 0.659602
+time 14400.656, acc 0.658585
+time 14408.595, acc 0.657859
+time 14416.184, acc 0.658830
+time 14423.679, acc 0.659228
+time 14431.025, acc 0.659539
+time 14439.394, acc 0.659900
+time 14446.777, acc 0.661160
+time 14454.336, acc 0.661038
+time 14462.631, acc 0.660927
+time 14470.242, acc 0.661809
+time 14477.918, acc 0.661740
+time 14485.482, acc 0.662176
+time 14493.760, acc 0.661468
+time 14501.312, acc 0.661940
+time 14508.816, acc 0.661681
+time 14516.387, acc 0.661440
+time 14524.770, acc 0.660410
+time 14532.729, acc 0.660125
+time 14540.225, acc 0.660150
+time 14547.719, acc 0.660269
+time 14555.654, acc 0.659600
+time 14563.862, acc 0.659660
+time 14571.227, acc 0.659414
+time 14578.902, acc 0.659308
+time 14586.797, acc 0.659823
+time 14594.336, acc 0.660671
+time 14605.887, acc 0.562500
+time 14613.993, acc 0.666667
+time 14621.666, acc 0.676067
+time 14629.189, acc 0.670850
+time 14636.649, acc 0.667631
+time 14644.366, acc 0.670019
+time 14652.288, acc 0.662448
+time 14660.119, acc 0.663342
+time 14667.483, acc 0.663529
+time 14674.912, acc 0.662897
+time 14682.923, acc 0.662469
+time 14690.421, acc 0.662755
+time 14697.811, acc 0.662928
+time 14705.271, acc 0.662117
+time 14712.803, acc 0.659976
+time 14720.431, acc 0.660922
+time 14728.728, acc 0.661020
+time 14736.120, acc 0.661336
+time 14743.514, acc 0.661054
+time 14750.979, acc 0.661704
+time 14759.049, acc 0.662017
+time 14766.531, acc 0.661557
+time 14773.862, acc 0.661919
+time 14781.247, acc 0.660317
+time 14788.833, acc 0.659726
+time 14796.352, acc 0.658963
+time 14803.995, acc 0.658859
+time 14812.082, acc 0.659398
+time 14819.490, acc 0.659676
+time 14826.842, acc 0.659397
+time 14834.405, acc 0.658720
+time 14841.670, acc 0.658766
+time 14849.935, acc 0.658517
+time 14857.345, acc 0.658283
+time 14864.814, acc 0.658040
+time 14872.210, acc 0.657521
+time 14879.767, acc 0.657074
+time 14887.691, acc 0.657220
+time 14895.334, acc 0.657420
+time 14902.909, acc 0.657390
+time 14914.332, acc 0.703125
+time 14922.525, acc 0.676339
+time 14930.843, acc 0.666921
+time 14938.502, acc 0.664191
+time 14946.133, acc 0.666667
+time 14953.798, acc 0.666770
+time 14961.425, acc 0.671229
+time 14969.036, acc 0.672318
+time 14977.253, acc 0.670516
+time 14984.756, acc 0.668508
+time 14992.233, acc 0.669387
+time 14999.568, acc 0.670602
+time 15007.004, acc 0.671097
+time 15014.552, acc 0.672055
+time 15022.960, acc 0.672765
+time 15030.497, acc 0.673277
+time 15038.009, acc 0.673919
+time 15045.471, acc 0.672791
+time 15052.890, acc 0.672481
+time 15061.028, acc 0.672408
+time 15068.603, acc 0.671018
+time 15076.047, acc 0.669091
+time 15083.354, acc 0.670529
+time 15091.103, acc 0.669435
+time 15098.848, acc 0.669016
+time 15106.315, acc 0.668195
+time 15113.842, acc 0.667796
+time 15121.549, acc 0.667889
+time 15129.638, acc 0.666945
+time 15137.870, acc 0.666416
+time 15145.457, acc 0.666311
+time 15152.951, acc 0.666088
+time 15160.534, acc 0.665879
+time 15168.264, acc 0.665162
+time 15176.419, acc 0.664602
+time 15183.894, acc 0.664586
+time 15191.450, acc 0.664572
+time 15198.892, acc 0.664980
+time 15206.359, acc 0.664258
+time 15213.800, acc 0.663412
+time 15226.060, acc 0.671875
+time 15233.739, acc 0.652530
+time 15241.450, acc 0.662729
+time 15249.047, acc 0.667008
+time 15256.936, acc 0.666281
+time 15264.751, acc 0.661355
+time 15272.464, acc 0.665289
+time 15280.165, acc 0.665226
+time 15287.854, acc 0.662073
+time 15296.046, acc 0.663588
+time 15303.559, acc 0.664179
+time 15311.044, acc 0.664876
+time 15318.645, acc 0.666040
+time 15326.897, acc 0.664511
+time 15334.279, acc 0.663923
+time 15341.598, acc 0.664037
+time 15349.056, acc 0.663308
+time 15357.068, acc 0.663444
+time 15365.095, acc 0.663045
+time 15372.774, acc 0.664206
+time 15380.215, acc 0.664316
+time 15387.827, acc 0.665454
+time 15395.257, acc 0.665497
+time 15403.649, acc 0.666113
+time 15411.294, acc 0.665768
+time 15418.928, acc 0.666199
+time 15426.498, acc 0.666477
+time 15434.081, acc 0.666301
+time 15442.349, acc 0.666472
+time 15449.820, acc 0.666846
+time 15457.371, acc 0.666493
+time 15465.081, acc 0.666792
+time 15472.972, acc 0.667292
+time 15480.539, acc 0.667242
+time 15488.113, acc 0.667126
+time 15496.313, acc 0.667150
+time 15503.807, acc 0.666826
+time 15511.308, acc 0.666751
+time 15519.156, acc 0.666372
+time 15526.847, acc 0.666413
+time 15538.439, acc 0.640625
+time 15546.191, acc 0.645089
+time 15553.939, acc 0.675305
+time 15562.467, acc 0.669057
+time 15569.876, acc 0.673997
+time 15577.398, acc 0.673267
+time 15585.246, acc 0.674458
+time 15593.417, acc 0.675754
+time 15600.934, acc 0.674592
+time 15608.484, acc 0.674637
+time 15616.424, acc 0.675140
+time 15623.939, acc 0.675834
+time 15631.290, acc 0.673820
+time 15638.995, acc 0.671815
+time 15646.734, acc 0.671263
+time 15654.852, acc 0.669954
+time 15662.528, acc 0.670561
+time 15669.931, acc 0.670042
+time 15677.433, acc 0.670230
+time 15685.140, acc 0.668512
+time 15693.366, acc 0.667978
+time 15700.907, acc 0.667941
+time 15708.223, acc 0.668226
+time 15715.617, acc 0.667367
+time 15723.594, acc 0.666872
+time 15731.270, acc 0.666604
+time 15738.716, acc 0.666987
+time 15746.097, acc 0.666416
+time 15753.514, acc 0.666945
+time 15761.929, acc 0.666873
+time 15769.353, acc 0.666155
+time 15776.693, acc 0.665207
+time 15784.090, acc 0.664928
+time 15792.149, acc 0.664547
+time 15799.865, acc 0.664923
+time 15807.238, acc 0.664341
+time 15814.793, acc 0.663337
+time 15822.328, acc 0.663230
+time 15829.739, acc 0.662307
+time 15837.269, acc 0.662452
+At shutdown cleaning _copy_device2host_stream
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1817.56 seconds
+Decompress time: 42.9062 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1785.38 seconds
+Decompress time: 42.9862 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1767.07 seconds
+Decompress time: 42.7952 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1827.53 seconds
+Decompress time: 41.4682 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1825.41 seconds
+Decompress time: 39.401 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1782.44 seconds
+Decompress time: 37.5189 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1751.5 seconds
+Decompress time: 34.7814 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1647.1 seconds
+Decompress time: 34.0798 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1576.06 seconds
+Decompress time: 32.9631 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1545.09 seconds
+Decompress time: 33.4083 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1543.79 seconds
+Decompress time: 34.1321 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1504.12 seconds
+Decompress time: 34.0767 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1529.34 seconds
+Decompress time: 35.0606 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1539.23 seconds
+Decompress time: 35.0284 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1535.06 seconds
+Decompress time: 36.195 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1525.17 seconds
+Decompress time: 36.9779 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 641.516 seconds
+Decompress time: 13.407 seconds
+The size of tensor to decompress: 314568bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2556.02 seconds
+Decompress time: 42.0089 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2465.96 seconds
+Decompress time: 42.7623 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 615.462 seconds
+Decompress time: 15.0789 seconds
+The size of tensor to decompress: 249032bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 65.2801 seconds
+Decompress time: 2.14468 seconds
+The size of tensor to decompress: 29488bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2174.03 seconds
+Decompress time: 48.1007 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2311.03 seconds
+Decompress time: 48.8024 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 640.019 seconds
+Decompress time: 14.2361 seconds
+The size of tensor to decompress: 249032bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2160.85 seconds
+Decompress time: 42.964 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2131.83 seconds
+Decompress time: 42.1132 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 64.0234 seconds
+Decompress time: 2.60835 seconds
+The size of tensor to decompress: 39320bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2328.35 seconds
+Decompress time: 45.7696 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2632.87 seconds
+Decompress time: 43.9036 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 706.419 seconds
+Decompress time: 13.6516 seconds
+The size of tensor to decompress: 249032bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 548.948 seconds
+Decompress time: 13.7953 seconds
+The size of tensor to decompress: 235928bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 272.993 seconds
+Decompress time: 20.0253 seconds
+The size of tensor to decompress: 327680bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2478.47 seconds
+Decompress time: 47.0338 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2408.93 seconds
+Decompress time: 47.1902 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 692.792 seconds
+Decompress time: 14.441 seconds
+The size of tensor to decompress: 249032bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 141.273 seconds
+Decompress time: 3.61484 seconds
+The size of tensor to decompress: 58976bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 267.636 seconds
+Decompress time: 7.10237 seconds
+The size of tensor to decompress: 117960bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2291.63 seconds
+Decompress time: 40.3222 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2423.96 seconds
+Decompress time: 40.5424 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 593.603 seconds
+Decompress time: 16.1368 seconds
+The size of tensor to decompress: 249032bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1271.54 seconds
+Decompress time: 28.5289 seconds
+The size of tensor to decompress: 471856bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 1253.27 seconds
+Decompress time: 29.1079 seconds
+The size of tensor to decompress: 471856bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 2498.66 seconds
+Decompress time: 40.0813 seconds
+The size of tensor to decompress: 819200bytes
+Bernoulli true: 0
+Compress calls: 39050
+Decompress calls: 39050
+Compress time: 281.982 seconds
+Decompress time: 7.53209 seconds
+The size of tensor to decompress: 124512bytes
+Bernoulli true: 0
+enable NUMA finetune...
+Command: numactl --physcpubind 8-31 python3 ../example/mxnet/train_cifar100_byteps_gc.py --model vgg16 --lr 0.01 --batch-size 64 --num-epochs 50 --compressor topk --k 0.1
+
