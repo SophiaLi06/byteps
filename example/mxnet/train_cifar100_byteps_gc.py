@@ -311,8 +311,10 @@ def main():
             name, train_acc = train_metric.get()
             throughput = int(batch_size * nworker * i / (time.time() - tic))
 
-            logger.info('[Epoch %d] speed: %d samples/sec\ttime cost: %f lr=%f' %
+            print('[Epoch %d] speed: %d samples/sec\ttime cost: %f lr=%f' %
                         (epoch, throughput, time.time()-tic, trainer.learning_rate))
+            # logger.info('[Epoch %d] speed: %d samples/sec\ttime cost: %f lr=%f' %
+            #             (epoch, throughput, time.time()-tic, trainer.learning_rate))
 
             name, val_acc = test(ctx, val_data)
             acc = mx.nd.array([train_acc, val_acc], ctx=ctx[0])
@@ -320,10 +322,14 @@ def main():
             acc /= bps.size()
             train_acc, val_acc = acc[0].asscalar(), acc[1].asscalar()
             if bps.rank() == 0:
-                logger.info('[Epoch %d] training: %s=%f' %
+                print('[Epoch %d] training: %s=%f' %
                             (epoch, name, train_acc))
-                logger.info('[Epoch %d] validation: %s=%f' %
+                print('[Epoch %d] validation: %s=%f' %
                             (epoch, name, val_acc))
+                # logger.info('[Epoch %d] training: %s=%f' %
+                #             (epoch, name, train_acc))
+                # logger.info('[Epoch %d] validation: %s=%f' %
+                #             (epoch, name, val_acc))
 
             if val_acc > best_val_score:
                 best_val_score = val_acc
