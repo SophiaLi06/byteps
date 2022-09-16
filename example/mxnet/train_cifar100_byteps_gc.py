@@ -326,8 +326,8 @@ def main():
                             (epoch, name, train_acc))
                 print('[Epoch %d] validation: %s=%f' %
                             (epoch, name, val_acc))
-                # logger.info('[Epoch %d] training: %s=%f' %
-                #             (epoch, name, train_acc))
+                logger.info('[Epoch %d] training: %s=%f' %
+                            (epoch, name, train_acc))
                 # logger.info('[Epoch %d] validation: %s=%f' %
                 #             (epoch, name, val_acc))
 
