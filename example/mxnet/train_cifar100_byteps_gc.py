@@ -33,6 +33,9 @@ from mxnet.gluon.data.vision import transforms
 
 import byteps.mxnet as bps
 
+####### import models
+from models.vgg import VGG11, VGG16, VGG19
+#######
 matplotlib.use('Agg')
 
 
@@ -164,7 +167,16 @@ def main():
                   'drop_rate': opt.drop_rate}
     else:
         kwargs = {'classes': classes}
-    net = get_model(model_name, **kwargs)
+    if model_name.startswith("vgg"):
+        if model_name == "vgg16":
+            net = VGG16
+        elif model_name == "vgg16":
+            net = VGG19
+        else:
+            print("default to model VGG11")
+            net = VGG11
+    else:
+        net = get_model(model_name, **kwargs)
     if opt.resume_from:
         net.load_parameters(opt.resume_from, ctx=context)
 
