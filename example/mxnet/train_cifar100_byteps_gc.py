@@ -34,7 +34,7 @@ from mxnet.gluon.data.vision import transforms
 import byteps.mxnet as bps
 
 ####### import models
-from models.vgg import VGG11, VGG16, VGG19
+from models import VGG11, VGG16, VGG19
 #######
 matplotlib.use('Agg')
 
