@@ -34,7 +34,7 @@ from mxnet.gluon.data.vision import transforms
 import byteps.mxnet as bps
 
 ####### import models
-from models import VGG11, VGG16, VGG19
+from models.vgg import VGG11, VGG16, VGG19
 #######
 matplotlib.use('Agg')
 
@@ -169,12 +169,12 @@ def main():
         kwargs = {'classes': classes}
     if model_name.startswith("vgg"):
         if model_name == "vgg16":
-            net = VGG16
+            net = VGG16()
         elif model_name == "vgg16":
-            net = VGG19
+            net = VGG19()
         else:
             print("default to model VGG11")
-            net = VGG11
+            net = VGG11()
     else:
         net = get_model(model_name, **kwargs)
     if opt.resume_from:
