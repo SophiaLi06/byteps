@@ -108,21 +108,21 @@ resnet_archs = {
 }
 
 
-def ResNet18(nclasses):
+def ResNet18(nclasses=100):
     return get_resnet(*resnet_archs[18], nclasses)
 
 
-def ResNet34(nclasses):
+def ResNet34(nclasses=100):
     return get_resnet(*resnet_archs[34], nclasses)
 
 
-def ResNet50(nclasses):
+def ResNet50(nclasses=100):
     return get_resnet(*resnet_archs[50], nclasses)
 
 
-def ResNet101(nclasses):
+def ResNet101(nclasses=100):
     return get_resnet(*resnet_archs[101], nclasses)
 
 
-def ResNet152(nclasses):
+def ResNet152(nclasses=100):
     return get_resnet(*resnet_archs[152], nclasses)
