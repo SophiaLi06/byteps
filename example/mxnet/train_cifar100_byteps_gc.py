@@ -35,6 +35,7 @@ import byteps.mxnet as bps
 
 ####### import models
 from models.vgg import VGG11, VGG16, VGG19
+from models.resnet import ResNet50
 #######
 matplotlib.use('Agg')
 
@@ -175,6 +176,8 @@ def main():
         else:
             print("default to model VGG11")
             net = VGG11()
+    elif model_name == 'resnet50':
+        net = ResNet50()
     else:
         net = get_model(model_name, **kwargs)
     if opt.resume_from:
